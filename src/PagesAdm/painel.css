@@ -1,0 +1,214 @@
+.painel-container {
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+}
+
+.painel-titulo {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.painel-subtitulo {
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.painel-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.painel-card {
+  background: white;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+
+.painel-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0px 8px 20px rgba(0, 102, 255, 0.2);
+  background: #f8faff;
+  border: 1px solid #0066ff33;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 0.5rem;
+}
+
+.badge {
+  background: #0066ff;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.card-numero {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 0.3rem 0;
+}
+
+.card-info {
+  font-size: 14px;
+  color: #666;
+}
+
+.progress-bar {
+  background: #eee;
+  border-radius: 8px;
+  height: 8px;
+  margin-top: 0.5rem;
+  overflow: hidden;
+}
+
+.progress-fill {
+  background: #0066ff;
+  height: 100%;
+  width: 80%;
+  border-radius: 8px;
+  transition: width 0.3s ease;
+}
+
+
+.painel-card:hover .progress-fill {
+  width: 90%;
+}
+
+.painel-graficos {
+  margin-top: 2rem;
+  display: flex;       
+  gap: 1.5rem;        
+  flex-wrap: wrap;     
+}
+
+.grafico-card {
+  flex: 1;             
+  min-width: 300px;    
+  background: white;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+
+.grafico-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.grafico-titulo {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 0.2rem;
+}
+
+.grafico-subtitulo {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+
+.performance-container {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
+}
+
+.performance-titulo {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 0.2rem;
+}
+
+.performance-subtitulo {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.departamento {
+  margin-bottom: 1.2rem;
+}
+
+.departamento-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 0.4rem;
+}
+
+.departamento-barra {
+  background: #f0f2f5;
+  border-radius: 6px;
+  height: 10px;
+  overflow: hidden;
+}
+
+.departamento-fill {
+  background: #001a40;
+  height: 100%;
+  width: 0%;
+  border-radius: 6px;
+  transition: width 0.4s ease;
+}
+
+
+.departamento-fill.ativo {
+  width: var(--percent, 0%);
+}
+.department-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0.5rem 0;
+}
+
+.department-name {
+  font-weight: bold;
+  color: #000; 
+  min-width: 120px; 
+}
+
+.progress-wrapper {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 0.5rem;
+}
+
+.progress-bar {
+  flex: 1;
+  background: #eee;
+  border-radius: 8px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  background: #0066ff;
+  height: 100%;
+  border-radius: 8px;
+  transition: width 0.3s ease;
+}
+
+.department-info {
+  font-size: 13px;
+  color: #333; 
+  white-space: nowrap; 
+}
+

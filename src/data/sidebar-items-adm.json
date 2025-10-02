@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Menu",
+    "isTitle": true
+  },
+
+  {
+    "name":"Início",
+    "url": "/admin/",
+    "icon": "house"
+  },
+  {
+    "name": "Lista de Pacientes",
+    "icon": "clipboard-heart-fill",
+    "url": "/admin/pacientes"
+  },
+
+  {
+    "name": "Lista de Médico",
+    "icon": "hospital-fill",
+    "url": "/admin/medicos"
+  },
+  {
+    "name": "Agendar consulta",
+    "icon": "calendar-plus-fill",
+    "url": "/admin/agendamento"
+  },
+
+  {
+    "name": "Gestão de Usuários",
+    "icon": "person-badge-fill",
+    "url": "/admin/gestao"
+  },
+  
+  {
+    "name": "Painel Administrativo",
+    "icon": "file-bar-graph-fill",
+    "url": "/admin/painel"
+  },
+
+  {
+    "name": "Laudo do Paciente",
+    "icon": "table",
+    "url": "/admin/laudo"
+  }
+
+]

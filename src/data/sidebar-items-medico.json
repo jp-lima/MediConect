@@ -1,0 +1,43 @@
+[
+  {
+    "name": "Menu",
+    "isTitle": true
+  },
+  
+  {
+    "name":"Início",
+    "url": "/medico/",
+    "icon": "house"
+  },
+
+  {
+    "name": "Prontuário",
+    "icon": "calendar-plus-fill",
+    "url": "/medico/prontuario"
+  },
+
+  {
+    "name": "Laudos",
+    "icon": "table",
+    "url": "/medico/laudo"
+  },
+{
+  "name": "Seus Agendamentos",
+  "icon": "calendar",
+  "url": "/medico/agendamentoMedico"
+},
+
+ {
+    "name": "Relatórios",
+    "icon": "file-earmark-text-fill",
+    "url": "/medico/relatorios"
+  },
+
+   {
+    "name": "Chat com pacientes",
+    "icon": "chat-dots-fill",
+    "url": "/medico/chat"
+  }
+
+
+]

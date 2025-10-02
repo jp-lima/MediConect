@@ -1,0 +1,151 @@
+/* --- Esconde a barra de unidade e profissional --- */
+.unidade-selecionarprofissional {
+  display: none;
+}
+
+/* --- Posiciona a barra de busca corretamente --- */
+.busca-atendimento {
+  display: flex;
+  align-items: center; /* Alinha os itens verticalmente */
+  margin-top: 20px; /* Espaço acima da barra de busca */
+  padding: 0 10px; /* Adiciona um padding lateral para alinhar com o resto */
+  gap: 15px;
+}
+
+.busca-atendimento > div:first-child {
+    width: 400px; /* Define um tamanho para a barra de pesquisa */
+    display: flex;
+    align-items: center;
+}
+
+.busca-atendimento input {
+  margin-left: 8px;
+  border-radius: 8px;
+  padding: 8px;
+  width: 100%;
+  border: 1px solid #ccc;
+}
+
+.busca-atendimento select {
+  padding: 8px;
+  border-radius: 8px;
+  background-color: #0078d7;
+  color: white;
+  font-weight: bold;
+  border: none;
+}
+
+/* --- Estilos dos botões de Dia, Semana, Mês --- */
+.btn-selecionar-tabeladia,
+.btn-selecionar-tabelasemana,
+.btn-selecionar-tabelames {
+  background-color: rgba(231, 231, 231, 0.808);
+  padding: 8px 10px;
+  font-size: larger;
+  font-weight: bold;
+  border-style: hidden;
+  cursor: pointer;
+}
+
+.btn-selecionar-tabeladia {
+  border-radius: 10px 0px 0px 10px;
+}
+
+.btn-selecionar-tabelames {
+  border-radius: 0px 10px 10px 0px;
+}
+
+.btn-selecionar-tabeladia.ativo,
+.btn-selecionar-tabelasemana.ativo,
+.btn-selecionar-tabelames.ativo {
+  background-color: lightcyan;
+  border-color: darkcyan;
+  font-weight: bolder;
+}
+
+/* --- Container dos botões e legenda --- */
+.btns-e-legenda-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  padding: 0 10px;
+}
+
+/* --- Legendas --- */
+.legenda-tabela {
+  display: flex;
+  gap: 15px;
+}
+
+#status-card-consulta-realizado, .legenda-item-realizado {
+  background-color: #b7ffbd;
+  border: 3px solid #91d392;
+  padding: 5px;
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+#status-card-consulta-cancelado, .legenda-item-cancelado {
+  background-color: #ffb7cc;
+  border: 3px solid #ff6c84;
+  padding: 5px;
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+#status-card-consulta-confirmado, .legenda-item-confirmado {
+  background-color: #eef8fb;
+  border: 3px solid #d8dfe7;
+  padding: 5px;
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+#status-card-consulta-agendado, .legenda-item-agendado {
+  background-color: #f7f7c4;
+  border: 3px solid #f3ce67;
+  padding: 5px;
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+/* --- Estrutura Geral --- */
+.calendario {
+  border-collapse: collapse;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eee;
+  background-color: #ffffff;
+}
+
+.calendario-ou-filaespera {
+  margin-top: 0;
+}
+
+.container-btns-agenda-fila_esepera {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  margin-left: 20px;
+}
+
+.btn-fila-espera,
+.btn-agenda {
+  background-color: transparent;
+  border: 0px;
+  border-bottom: 3px solid transparent;
+  padding: 8px;
+  border-radius: 10px 10px 0px 0px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.opc-filaespera-ativo,
+.opc-agenda-ativo {
+  color: white;
+  background-color: #5980fd;
+}

@@ -1,0 +1,182 @@
+/* Container Principal */
+.dashboard-container {
+    padding: 2rem;
+    background-color: #f7f9fc;
+    flex-grow: 1; /* Permite que o container ocupe o espaço restante */
+}
+
+/* Header */
+.dashboard-header h1 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.25rem;
+}
+
+.dashboard-header p {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+/* Seção de Estatísticas (Cartões) */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.stat-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #888;
+    margin-bottom: 0.25rem;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #444;
+}
+
+.stat-icon-wrapper {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.stat-icon {
+    font-size: 1.25rem;
+    color: #fff;
+}
+
+/* Cores dos ícones */
+.stat-icon-wrapper.blue { background-color: #5d5dff; }
+.stat-icon-wrapper.green { background-color: #30d158; }
+.stat-icon-wrapper.purple { background-color: #a272ff; }
+.stat-icon-wrapper.orange { background-color: #f1952e; }
+
+/* Seção de Ações Rápidas */
+.quick-actions h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.action-button {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.action-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.action-icon {
+    font-size: 2.25rem;
+    margin-right: 1rem;
+    color: #a272ff; /* Cor padrão para os ícones das ações */
+}
+
+.action-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.action-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #444;
+}
+
+.action-desc {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+/* Seção de Próximos Agendamentos */
+.appointments-section {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.appointments-section h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+.no-appointments-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+    padding: 2rem 0;
+}
+
+.no-appointments-icon {
+    font-size: 3rem;
+    color: #bbb;
+    margin-bottom: 1rem;
+}
+
+.no-appointments-content p {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 1.5rem;
+}
+
+.manage-button {
+    background-color: #5d5dff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.manage-button:hover {
+    background-color: #4444ff;
+}

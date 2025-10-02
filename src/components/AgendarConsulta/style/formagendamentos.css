@@ -1,0 +1,223 @@
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
+
+.icons-container {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-bottom: -7px;
+}
+
+.acessibilidade-ativado{
+  background-color: #1e3a8a;
+  border: none;
+}
+.acessibilidade-ativado svg, .acessibilidade-ativado .icon{
+  color: white;
+}
+
+
+.icons-div{
+  border: 1px solid #607080;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.icons-div:hover{
+  background-color: #1e3a8a; 
+  }
+ .icons-div:hover svg, .icons-div:hover .icon{
+  color:white;
+ }
+
+svg{
+  color:black;
+ 
+}
+.icon {
+  font-family: 'Material Symbols Outlined';
+  font-size: 20px;
+  color:black  
+  
+  
+}
+
+.form-container {
+  /*max-width: 800px;*/
+  margin: 20px auto;
+  padding: 25px;
+  background: #f5f8ff;
+  border-radius: 12px;
+  font-family: Arial, sans-serif;
+}
+
+.form-title {
+  font-size: 26px;
+  font-weight: bold;
+  color: #1e3a8a;
+  margin-bottom: 20px;
+}
+
+.form-agendamento label {
+  display: block;
+  margin-top: 12px;
+  font-weight: bold;
+  color: #333;
+}
+
+.form-agendamento input,
+.form-agendamento select,
+.form-agendamento textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.section-title {
+  font-size: 20px;
+  margin-top: 25px;
+  color: #1e40af;
+}
+
+.section-subtitle {
+  font-size: 16px;
+  margin-top: 20px;
+  color: #374151;
+}
+
+.btn-group button {
+  margin-right: 8px;
+  padding: 8px 12px;
+  border: 1px solid #1e3a8a;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.btn-group button:hover {
+  background: #e0e7ff;
+}
+
+.form-actions {
+  margin-top: 25px;
+  display: flex;
+  gap: 12px;
+}
+
+.btn-primary {
+  background: #1e3a8a;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: #172554;
+}
+
+.btn-cancel {
+  background: #e5e7eb;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-cancel:hover {
+  background: #d1d5db;
+}
+
+.btn-secondary {
+  margin: 10px 0;
+  background: #4d78cd;
+  padding: 8px 14px;
+  border: 1px solid #5d739a;
+  border-radius: 6px;
+  cursor: pointer;
+  max-width: 200px;
+}
+
+.btn-secondary:hover {
+  background: #e5e7eb;
+}
+
+
+.cardconsulta-infosecundaria{
+  font-size: small;
+}
+
+.campos-informacoes-paciente,.campo-informacoes-atendimento{
+  display: flex;
+  gap: 10px;
+  flex-direction: row;
+}
+
+.campo-de-input{
+  display: flex;
+  flex-direction: column;
+  
+}
+
+
+#informacoes-atendimento-segunda-linha{
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  gap: 4rem;
+}
+
+textarea{
+  width: 30px;
+  resize: both;
+}
+
+.campos-informacoes-paciente,
+.campo-informacoes-atendimento {
+  display: flex;
+  gap: 16px;              /* espaço entre campos */
+}
+
+.campo-de-input {
+  flex: 1;                /* todos os filhos ocupam mesmo espaço */
+  display: flex;
+  flex-direction: column; /* mantém label em cima do input */
+}
+
+#informacoes-atendimento-segunda-linha-esquerda select[name="unidade"]{
+  width: 300px;
+}
+
+input[type="time"]{
+  width: 150px;
+}
+
+select[name=solicitante]{
+  width: 190px;
+}
+
+.campo-de-input{
+  width:120%
+}
+
+.form-container {
+  width: 100%;
+  max-width: none;
+  margin: 0;                  /* >>> sem espaço para encostar no topo <<< */
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border: 10px solid #ffffff;
+  box-sizing: border-box;
+}

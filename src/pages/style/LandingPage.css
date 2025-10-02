@@ -1,0 +1,105 @@
+/* src/pages/style/LandingPage.css */
+
+/* O seletor .landing-page-public-view ajuda a isolar os estilos */
+.landing-page-public-view {
+    min-height: 100vh;
+    background-color: #f0f2f5;
+}
+
+/* --- Cabeçalho --- */
+.landing-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    background-color: white;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+/* Estilo para a logo DENTRO do cabeçalho da Landing Page */
+.landing-header .logo h1 {
+    font-size: 1.8em;
+    color: #25396f; 
+    font-weight: 700;
+    margin: 0; /* Remove margem que pode quebrar o layout */
+    padding: 0; /* Remove padding */
+}
+
+.nav-menu a {
+    text-decoration: none;
+    color: #333;
+    margin-left: 25px;
+    font-size: 1em;
+    transition: color 0.2s;
+}
+
+.nav-menu a:hover {
+    color: #5b56f8;
+}
+.nav-menu button:hover {
+    background-color: #4540d6;
+}
+
+.access-button {
+    background-color: #5b56f8;
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 5px;
+    margin-left: 25px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* --- Área de Destaque (Hero Section) --- */
+.hero-section {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 100px 50px;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://picsum.photos/1200/600?random=4') center/cover;
+    color: white;
+    min-height: 600px;
+    padding-top: 100px; 
+}
+
+.hero-content {
+    max-width: 700px; 
+    text-align: left; 
+}
+
+/* Título Branco e Legível */
+.hero-content .hero-title { 
+    font-size: 3.5em; 
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #ffffff; 
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
+}
+
+.hero-content p {
+    font-size: 1.2em; 
+    margin-bottom: 30px;
+    color: #ddd;
+}
+
+.main-action-button {
+    background-color: #5b56f8; 
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 5px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.main-action-button:hover {
+    background-color: #4540d6;
+}

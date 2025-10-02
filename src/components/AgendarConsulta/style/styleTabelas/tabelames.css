@@ -1,0 +1,156 @@
+.tabelamensal {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+  border-radius: 10px;
+  overflow: hidden; /* mantém o arredondado */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 4px solid #4a90e2; /* borda azul, altere para a cor desejada */
+}
+
+/* Células da tabela */
+.tabelamensal th, .tabelamensal td {
+  padding: 9px;
+  text-align: left;
+  border: 1px solid #e0e0e0;
+}
+
+/* Cabeçalho */
+.tabelamensal thead th {
+  background-color: #0078d7;
+  color: #0078d7;
+  font-weight: 600;
+  border-bottom: 2px solid #0078d7; /* borda inferior mais forte no cabeçalho */
+}
+
+/* Remover bordas laterais do cabeçalho (se quiser) */
+.tabelamensal thead th:first-child {
+  border-left: none;
+}
+
+.tabelamensal thead th:last-child {
+  border-right: none;
+}
+
+/* Linhas pares do corpo */
+.tabelamensal tbody tr:nth-child(even) {
+  background-color: #e7e7e7a6;
+}
+
+/* Hover nas linhas */
+.tabelamensal tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Card dentro da tabela */
+.tabelamensal .cardconsulta {
+  border-radius: 10px;
+  color: black;
+  height: 80px;
+  width: 100%;
+  padding: 12px;
+}
+
+/* Ajuste para a classe .diadia, se for usada */
+.diadia {
+  margin-top: 20px;
+  border-collapse: collapse;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgb(255, 255, 255);
+  border: 10px solid #ffffffc5;
+  background-color: rgb(253, 253, 253);
+}
+  
+.tabelamensal {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+  border-radius: 10px;
+  overflow: hidden; /* mantém o arredondado */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 4px solid #4a90e2; /* borda azul, altere para a cor desejada */
+}
+
+.tabelamensal th, .tabelamensal td {
+  padding: 9px;
+  text-align: left;
+  border: 1px solid #e0e0e0;
+}
+
+.tabelamensal th {
+  background-color: #0078d7;
+  color: #ffffff;
+  font-weight: 600;
+  border-bottom: 2px solid #005a9e; /* borda inferior mais forte no cabeçalho */
+}
+
+.tabelamensal td {
+  background-color: #f7f7f7;
+}
+
+.tabelamensal td:hover {
+  background-color: #f1f1f1;
+}
+
+/* Estilo geral do card de consulta */
+.tabelamensal .cardconsulta {
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 6px;
+  margin: 4px 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  border-left: 5px solid transparent; /* espaço da borda colorida */
+}
+
+
+
+
+.usuario-azul {
+  background-color: #E3F2FD;
+  border-left: 4px solid #2196F3;
+  padding: 4px 8px;
+  margin-bottom: 5px;
+  border-radius: 4px;
+}
+
+.usuario-verde {
+  background-color: #E8F5E9;
+  border-left: 4px solid #4CAF50;
+  padding: 4px 8px;
+  margin-bottom: 5px;
+  border-radius: 4px;
+}
+
+.usuario-roxo {
+  background-color: #F3E5F5;
+  border-left: 4px solid #9C27B0;
+  padding: 4px 8px;
+  margin-bottom: 5px;
+  border-radius: 4px;
+}
+
+.usuario-laranja {
+  background-color: #FFF3E0;
+  border-left: 4px solid #FF9800;
+  padding: 4px 8px;
+  margin-bottom: 5px;
+  border-radius: 4px;
+}
+
+.usuario-default {
+  background-color: #FAFAFA;
+  border-left: 4px solid #BDBDBD;
+  padding: 4px 8px;
+  margin-bottom: 5px;
+  border-radius: 4px;
+}
+
+.cards-que-faltam{
+  color: #005a9e;
+  font-weight: bold;
+  font-size: larger;
+}

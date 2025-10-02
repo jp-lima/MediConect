@@ -1,0 +1,189 @@
+/* --- Estilos Gerais e Reset Básico --- */
+:root {
+  --cor-primaria: #0078d7; /* Azul principal */
+  --cor-fundo: #f4f7f9;     /* Cinza bem claro para o fundo da página */
+  --cor-card: #ffffff;      /* Branco para os cards */
+  --cor-texto: #333333;      /* Cor principal do texto */
+  --cor-borda: #e1e5e8;    /* Cor suave para bordas */
+  --sombra-card: 0 4px 12px rgba(0, 0, 0, 0.08); /* Sombra sutil */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+}
+
+h1 {
+  color: var(--cor-primaria);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--cor-borda);
+  font-size: 1.8rem;
+}
+
+h2 {
+  color: var(--cor-texto);
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
+}
+
+/* --- Estilos da Página de Prontuários --- */
+
+.prontuario-container {
+  background-color: var(--cor-card);
+  border-radius: 10px;
+  box-shadow: var(--sombra-card);
+  margin: 2rem;
+  padding: 2rem;
+  border: 1px solid var(--cor-borda);
+}
+
+.prontuario-sections {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap; /* Permite que as seções quebrem a linha em telas menores */
+}
+
+.prontuario-section {
+  flex: 1; /* Faz com que as seções dividam o espaço igualmente */
+  min-width: 300px; /* Largura mínima antes de quebrar a linha */
+  background-color: #fdfdfd;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.prontuario-section ul {
+  list-style-type: none; /* Remove os marcadores da lista */
+}
+
+.prontuario-section li {
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0; /* Linha separadora entre os itens */
+}
+
+.prontuario-section li:last-child {
+  border-bottom: none; /* Remove a linha do último item */
+}
+
+.prontuario-section p {
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.prontuario-section strong {
+  color: #555;
+}
+
+
+/* --- Estilos da Página de Relatórios --- */
+
+.relatorios-container {
+  background-color: var(--cor-card);
+  border-radius: 10px;
+  box-shadow: var(--sombra-card);
+  margin: 2rem;
+  padding: 2rem;
+  border: 1px solid var(--cor-borda);
+}
+
+.filtros-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-end; /* Alinha os itens na base, fica ótimo com o botão */
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  border: 1px solid var(--cor-borda);
+}
+
+.filtro-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+  min-width: 180px;
+}
+
+.filtro-item label {
+  font-weight: 600;
+  font-size: 0.9em;
+  color: #555;
+}
+
+.filtro-item input[type="date"],
+.filtro-item select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.btn-gerar {
+  padding: 10px 25px;
+  background-color: var(--cor-primaria);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-gerar:hover {
+  background-color: #005a9e; /* Um tom de azul mais escuro */
+}
+
+.resultado-container {
+  margin-top: 2rem;
+}
+
+.info-text {
+  text-align: center;
+  padding: 2rem;
+  color: #777;
+  font-style: italic;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+/* Estilização da Tabela de Resultados */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+thead th {
+  background-color: var(--cor-primaria);
+  color: white;
+  font-weight: 600;
+  padding: 12px;
+  text-align: left;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f8f9fa; /* Linhas zebradas */
+}
+
+tbody tr:hover {
+  background-color: #e9ecef; /* Efeito ao passar o mouse */
+}
+
+td {
+  padding: 12px;
+  border-bottom: 1px solid var(--cor-borda);
+}

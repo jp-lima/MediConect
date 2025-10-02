@@ -1,0 +1,61 @@
+
+
+// Bootstrap (se estiver usando)
+@import 'bootstrap/scss/bootstrap';
+@import 'bootstrap-icons/font/bootstrap-icons.css'; // se estiver instalado
+
+// App
+@import './app';
+@import './iconly';
+@import './bootstrap';
+// Variáveis e temas
+@import 'themes/dark/variables-dark';
+@import 'themes/dark/root';
+@import 'themes/dark/mazer-dark';
+@import 'themes/dark/app-dark';
+
+// Mixins
+@import 'mixins/navbar';
+
+// Componentes
+@import 'components/alert';
+@import 'components/avatar';
+@import 'components/badge';
+@import 'components/breadcrumb';
+@import 'components/buttons';
+@import 'components/card';
+@import 'components/carousel';
+@import 'components/comment';
+@import 'components/divider';
+@import 'components/dropdowns';
+@import 'components/forms';
+@import 'components/icons';
+@import 'components/modal';
+@import 'components/navbar';
+@import 'components/navs';
+@import 'components/pagination';
+@import 'components/placeholders';
+@import 'components/progress';
+@import 'components/sidebar';
+@import 'components/table';
+
+// Layout (se tiver arquivos, mas você mencionou que só tem main.scss aqui)
+@import 'layouts/main';
+
+// Páginas
+@import 'pages/auth';
+@import 'pages/chat';
+@import 'pages/datatables';
+@import 'pages/dripicons';
+@import 'pages/email';
+@import 'pages/error';
+@import 'pages/flag';
+@import 'pages/form-element-select';
+@import 'pages/glightbox';
+@import 'pages/simple-datatables';
+@import 'pages/summernote';
+@import 'pages/sweetalert2';
+
+// Widgets
+@import 'widgets/chat';
+@import 'widgets/todo';

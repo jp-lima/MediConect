@@ -1,0 +1,81 @@
+.tabeladiaria {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+  border-radius: 10px;
+  overflow: hidden; /* mantém o arredondado */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 4px solid #4a90e2; /* borda azul, altere para a cor desejada */
+}
+
+/* Células da tabela */
+.tabeladiaria th, .tabeladiaria td {
+  padding: 9px;
+  text-align: left;
+  border: 1px solid #e0e0e0;
+}
+
+/* Cabeçalho */
+.tabeladiaria thead th {
+  background-color: #0078d7;
+  color: #ffffff;
+font-weight: 600;
+  border-bottom: 2px solid #005a9e; /* borda inferior mais forte no cabeçalho */
+}
+
+/* Remover bordas laterais do cabeçalho (se quiser) */
+.tabeladiaria thead th:first-child {
+  border-left: none;
+}
+
+.tabeladiaria thead th:last-child {
+  border-right: none;
+}
+
+/* Linhas pares do corpo */
+.tabeladiaria tbody tr:nth-child(even) {
+  background-color: #e7e7e7a6;
+}
+
+/* Hover nas linhas */
+.tabeladiaria tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Card dentro da tabela */
+.tabeladiaria .cardconsulta {
+  border-radius: 10px;
+  color: black;
+  height: 80px;
+  width: 100%;
+  padding: 8px;
+}
+
+/* Ajuste para a classe calendario, se for usada */
+/*
+.calendario {
+  margin-top: 20px;
+  border-collapse: collapse;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgb(255, 255, 255);
+  border: 10px solid #ffffffc5;
+  background-color: rgb(253, 253, 253);
+}*/
+
+
+.mostrar-horario td, .mostrar-horario th {
+  padding: 4px 6px;
+  height: 30px;
+  border: 1px solid #e0e0e0;
+  text-align: center;
+}
+
+.container-cardconsulta-dia {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  height: 70px;
+}
