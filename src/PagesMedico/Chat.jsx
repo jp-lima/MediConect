@@ -91,6 +91,7 @@ const App = () => {
     const [conversations, setConversations] = useState(conversationsData);
     const [activeConversationId, setActiveConversationId] = useState(1);
     const [newMessage, setNewMessage] = useState('');
+    const [searchTerm, setSearchTerm] = useState(''); // ✅ 1. Estado para a busca
     const chatEndRef = useRef(null);
 
     const activeConversation = conversations.find(c => c.id === activeConversationId);
@@ -134,6 +135,11 @@ const App = () => {
         setConversations(updatedConversations);
     };
 
+    // ✅ 2. Lógica para filtrar as conversas
+    const filteredConversations = conversations.filter(conversation =>
+        conversation.patientName.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
         <div className="chat-app-container">
             {/* Barra Lateral de Conversas */}
@@ -141,12 +147,20 @@ const App = () => {
                 <header className="sidebar-header">
                     <h1>Mensagens</h1>
                     <div className="search-container">
-                        <input type="text" placeholder="Pesquisar paciente..." className="search-input" />
+                        {/* ✅ 3. Conecta o input ao estado e à função de atualização */}
+                        <input
+                            type="text"
+                            placeholder="Pesquisar paciente..."
+                            className="search-input"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
                         <svg className="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
                 </header>
                 <div className="conversation-list">
-                    {conversations.map(convo => (
+                    {/* ✅ 4. Usa a lista filtrada para renderizar os itens */}
+                    {filteredConversations.map(convo => (
                         <ConversationListItem
                             key={convo.id}
                             conversation={convo}
@@ -192,7 +206,12 @@ const App = () => {
                     </>
                 ) : (
                     <div className="no-conversation-selected">
-                        <p>Selecione uma conversa para começar.</p>
+                        {/* Adicionado uma verificação para quando a busca não encontra resultados */}
+                        {searchTerm && filteredConversations.length === 0 ? (
+                             <p>Nenhum paciente encontrado com o nome "{searchTerm}".</p>
+                        ) : (
+                            <p>Selecione uma conversa para começar.</p>
+                        )}
                     </div>
                 )}
             </main>
@@ -201,4 +220,3 @@ const App = () => {
 };
 
 export default App;
-

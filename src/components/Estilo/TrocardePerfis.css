@@ -1,0 +1,45 @@
+.perfil-button, .selecionado{
+    margin: 8px;
+    margin-left:0px;
+    padding: 10px 19px;
+    font-size: 15px;
+
+    width:70%;
+    border: 2px solid #25396f;
+    border-radius: 20px;
+    cursor: pointer;
+    border-radius: 20px;
+    flex-wrap: nowrap;
+    background-color: transparent;
+    color: #25396f;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.container-perfis{
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    justify-content: flex-end;
+    margin-left: 0px;
+    margin-left: 18px;
+}
+
+#primeiro-conjunto-botoes, #segundo-conjunto-botoes{
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.perfil-button:hover{
+    background-color: #5d5dff;
+    border-color: #5d5dff;
+    color: white;
+    transition: 0.5s;
+}
+
+.selecionado{
+    background-color: #5d5dff;
+    border-color: #5d5dff;
+    color: white;
+}

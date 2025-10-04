@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from "react";
 import avatarPlaceholder from '../assets/images/avatar_placeholder.png';
-import { useParams,Link } from "react-router-dom";
+import { useParams,Link, useNavigate, useLocation } from "react-router-dom";
 import { GetDoctorByID } from "../components/utils/Functions-Endpoints/Doctor";
 import { useAuth } from "../components/utils/AuthProvider";
-
-const Details = ({setCurrentPage }) => {
-  const {getAuthorizationHeader, isAuthenticated} = useAuth(); 
+  
+const Details = () => {
+  const {getAuthorizationHeader} = useAuth(); 
   const [doctor, setDoctor] = useState({});
   const Parametros = useParams()
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const Voltar = () => {
+   const prefixo = location.pathname.split("/")[1]; 
+    navigate(`/${prefixo}/medicos`);
+  }
 
   const doctorID = Parametros.id
   useEffect(() => {
@@ -34,11 +41,10 @@ const Details = ({setCurrentPage }) => {
       <h3 className="mb-3 text-center">MediConnect</h3>
       <hr />
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <Link to={'/medicos'}>
-          <button className="btn btn-success me-2" >
-            <i className="bi bi-chevron-left"></i> Voltar
-          </button>
-        </Link>
+        <button className="btn btn-success me-2" onClick={() => Voltar()}>
+          <i className="bi bi-chevron-left"></i> Voltar
+        </button>
+
         <div className="d-flex mb-3">
           <div className="avatar avatar-xl">
             <img src={avatarPlaceholder} alt="" />
@@ -48,7 +54,7 @@ const Details = ({setCurrentPage }) => {
             <p>{doctor.cpf || "CPF"}</p>
           </div>
         </div>
-        <Link to={`/medicos/${doctor.id}/edit`}>
+        <Link to={`edit`}>
           <button className="btn btn-light" onClick={() => {console.log(doctor.id)}} >
             <i className="bi bi-pencil-square"></i> Editar
           </button>

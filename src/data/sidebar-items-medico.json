@@ -3,12 +3,6 @@
     "name": "Menu",
     "isTitle": true
   },
-  
-  {
-    "name":"Início",
-    "url": "/medico/",
-    "icon": "house"
-  },
 
   {
     "name": "Prontuário",

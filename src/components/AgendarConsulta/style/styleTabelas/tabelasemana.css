@@ -15,13 +15,11 @@
   border: 1px solid #e0e0e0;
 }
 
-/* Cabeçalho da semanal */
+/* Estilo aplicado APENAS às células do cabeçalho da tabela */
 .tabelasemanal thead th,
-.tabelasemanal thead td,
-.tabelasemanal tr:first-child th,
-.tabelasemanal tr:first-child td {
-  background-color: #0078d7 !important;
-  color: #ffffff !important;
+.tabelasemanal thead td {
+  background-color: #0078d7;
+  color: #ffffff;
   font-weight: 600;
   text-align: center;
   border-bottom: 2px solid #005a9e;

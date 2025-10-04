@@ -131,20 +131,19 @@ function TablePaciente({ setCurrentPage, setPatientID }) {
     );
   };
 
-  const pacientesFiltrados = pacientes.filter((paciente) => {
-    const texto = `${paciente.nome}`.toLowerCase();
+const pacientesFiltrados = pacientes.filter((paciente) => {
+  const textoCompletoPaciente = `${paciente.nome} ${paciente.cpf} ${paciente.email} ${paciente.telefone}`.toLowerCase();
+  const passaBusca = textoCompletoPaciente.includes(search.toLowerCase());
+  const passaVIP = filtroVIP ? paciente.vip === true : true;
+  const passaConvenio = filtroConvenio === "Todos" || paciente.convenio === filtroConvenio;
+  const passaAniversario = filtroAniversariante
+    ? ehAniversariante(paciente.data_nascimento)
+    : true;
 
-    const passaBusca = texto.includes(search.toLowerCase());
-    const passaVIP = filtroVIP ? paciente.vip === true : true;
-    const passaConvenio =
-      filtroConvenio === "Todos" || paciente.convenio === filtroConvenio;
-    const passaAniversario = filtroAniversariante
-      ? ehAniversariante(paciente.data_nascimento)
-      : true;
+  return passaBusca && passaVIP && passaConvenio && passaAniversario;
+});
 
-    return passaBusca && passaVIP && passaConvenio && passaAniversario;
-  });
-
+ 
   return (
     <>
       <div className="page-heading">
@@ -265,7 +264,7 @@ function TablePaciente({ setCurrentPage, setPatientID }) {
                             </td>
                             <td>
                               <div className="d-flex gap-2">
-                                <Link to={`/pacientes/${paciente.id}`}>
+                                <Link to={`${paciente.id}`}>
                                   <button
                                     className="btn btn-sm"
                                     style={{
@@ -281,7 +280,7 @@ function TablePaciente({ setCurrentPage, setPatientID }) {
                                   </button>
                                 </Link>
 
-                                <Link to={`/pacientes/${paciente.id}/edit`}>
+                                <Link to={`${paciente.id}/edit`}>
                                   <button
                                     className="btn btn-sm"
                                     style={{

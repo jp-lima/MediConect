@@ -3,8 +3,8 @@ import API_KEY from "../components/utils/apiKeys";
 import { useAuth } from "../components/utils/AuthProvider";
 import { Link } from "react-router-dom";
 
-function TableDoctor({ setCurrentPage, setPatientID }) {
-  const {getAuthorizationHeader, isAuthenticated} = useAuth(); 
+function TableDoctor() {
+  const { getAuthorizationHeader, isAuthenticated } = useAuth();
 
   const [medicos, setMedicos] = useState([]);
   const [search, setSearch] = useState("");
@@ -163,7 +163,7 @@ function TableDoctor({ setCurrentPage, setPatientID }) {
                             <td>
                               <div className="d-flex gap-2">
                                 {/* Ver Detalhes */}
-                                <Link to={`/medicos/${medico.id}`}>
+                                <Link to={`${medico.id}`}>
                                   <button
                                     className="btn btn-sm"
                                     style={{
@@ -181,7 +181,7 @@ function TableDoctor({ setCurrentPage, setPatientID }) {
                                 </Link>
 
                                 {/*  Editar */}
-                                <Link to={`/medicos/${medico.id}/edit`}>
+                                <Link to={`${medico.id}/edit`}>
                                     <button
                                       className="btn btn-sm"
                                       style={{

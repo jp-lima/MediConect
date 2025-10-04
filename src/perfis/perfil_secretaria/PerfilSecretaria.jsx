@@ -24,7 +24,6 @@ function PerfilSecretaria({ onLogout }) {
         <div id="main">
           <Routes>
             <Route path="/" element={<Inicio/>}/>
-            <Route path="inicio" element={<Inicio />} />
             <Route path="pacientes/cadastro" element={<PatientCadastroManager />} />
             <Route path="medicos/cadastro" element={<DoctorCadastroManager />} />
             <Route path="pacientes" element={<TablePaciente />} />
@@ -35,7 +34,6 @@ function PerfilSecretaria({ onLogout }) {
             <Route path="medicos/:id/edit" element={<DoctorEditPage />} />
             <Route path="agendamento" element={<Agendamento />} />
             <Route path="laudo" element={<LaudoManager />} />
-           
             <Route path="*" element={<h2>Página não encontrada</h2>} />
           </Routes>
         </div>

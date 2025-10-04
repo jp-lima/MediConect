@@ -1,7 +1,6 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
 
-import Inicio from "../../pages/Inicio";
 import LaudoManager from "../../pages/LaudoManager";
 import Prontuario from "../../PagesMedico/prontuario";
 import Relatorio from "../../PagesMedico/relatorio";
@@ -17,7 +16,7 @@ function PerfilMedico() {
         <Sidebar menuItems={DoctorItems} />
         <div id="main">
           <Routes>
-            <Route path="/" element={<Inicio />} />
+            <Route path="/" element={<LaudoManager />} />
             <Route path="/laudo" element={<LaudoManager />} />
             <Route path="/prontuario" element={<Prontuario />} />
             <Route path="/relatorios" element={<Relatorio />} />

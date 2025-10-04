@@ -22,7 +22,7 @@ function Perfiladm() {
        <Sidebar menuItems={admItems} />
         <div id="main">
           <Routes>
-            <Route path="/" element={<Inicio />} />
+            <Route path="/" element={<UserDashboard />} />
             <Route path="/pacientes/cadastro" element={<PatientCadastroManager />} />
             <Route path="/medicos/cadastro" element={<DoctorCadastroManager />} />
             <Route path="/pacientes" element={<TablePaciente />} />
@@ -33,7 +33,7 @@ function Perfiladm() {
             <Route path="/medicos/:id/edit" element={<DoctorEditPage />} />
             <Route path="/agendamento" element={<Agendamento />} />
             <Route path="/laudo" element={<LaudoManager />} />
-            <Route path="/laudo" element={<LaudoManager />} />
+            
             <Route path="/gestao" element={<UserDashboard />} />
             <Route path="/painel" element={<PainelAdministrativo />} />
             <Route path="*" element={<h2>Página não encontrada</h2>} />

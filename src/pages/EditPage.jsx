@@ -53,11 +53,10 @@ const HandlePutPatient = async () => {
   try {
     const response = await fetch(`https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/patients?id=eq.${PatientID}`,requestOptions);
 
-    // se o backend retorna JSON
-    console.log("Resposta do servidor:", response.ok);
+    
+   
     if(response.ok === false){
-      const errorText = await response.text();
-      console.error("Erro ao atualizar paciente:", errorText);
+      console.error("Erro ao atualizar paciente:");
     }
     else{
       
@@ -79,7 +78,7 @@ const HandlePutPatient = async () => {
 
     <PatientForm
     onSave={HandlePutPatient}
-    onCancel={() => {navigate('/secretaria/pacientes')}}
+    
     formData={PatientToPUT}
     setFormData={setPatientPUT}
     />

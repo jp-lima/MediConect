@@ -11,33 +11,6 @@ function Inicio() {
   const [pacientes, setPacientes] = useState([]);
   const [agendamentos, setAgendamentos] = useState([]);
 
-  useEffect(() => {
-
-    /*const fetchPacientes = async () => {
-      try {
-        const res = await fetch("https://mock.apidog.com/m1/1053378-0-default/pacientes");
-        const data = await res.json();
-        console.log(data)
-        //setPacientes(data.data);
-      } catch (error) {
-        console.error("Erro ao buscar pacientes:", error);
-      }
-    };
-
-    const fetchAgendamentos = async () => {
-      return; // <===serve para que nao cause erro
-      // try {
-      //   const res = await fetch();
-      //   const data = await res.json();
-      //   setAgendamentos(data.data);
-      // } catch (error) {
-      //   console.error("Erro ao buscar agendamentos:", error);
-      // }
-    };
-
-    fetchPacientes();
-    fetchAgendamentos();*/
-  }, []);
 
   const totalPacientes = pacientes.length;
   const novosEsseMes = pacientes.filter(p => p.createdAt && new Date(p.createdAt).getMonth() === new Date().getMonth()).length;

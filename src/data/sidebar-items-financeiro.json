@@ -3,25 +3,6 @@
     "name": "Menu-Financeiro",
     "isTitle": true
   },
-
-  {
-    "name":"Início",
-    "url": "/financeiro/inicio",
-    "icon": "house"
-  },
-
-  {
-    "name": "Lista de Pacientes",
-    "icon": "clipboard-heart-fill",
-    "url": "/financeiro/pacientes"
-  },
-
-  {
-    "name": "Lista de Médico",
-    "icon": "hospital-fill",
-    "url": "/financeiro/medicos"
-  }, 
-  
   {
     "name": "Controle Financeiro",
     "icon": "cash-coin",

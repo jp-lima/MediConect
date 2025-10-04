@@ -1,9 +1,11 @@
 import React, { useState, useEffect, use } from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import {Link, useNavigate } from "react-router-dom";
 import { useAuth } from '../components/utils/AuthProvider';   
 import API_KEY from '../components/utils/apiKeys';
+import { UserInfos } from '../components/utils/Functions-Endpoints/General';
+
 function Login({ onEnterSystem }) {
-    const { authTokens, setAuthTokens } = useAuth();
+    const {setAuthTokens } = useAuth();
     const navigate = useNavigate();
     const [form, setForm] = useState({
         username: "",
@@ -11,15 +13,16 @@ function Login({ onEnterSystem }) {
     });
     const [alert, setAlert] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-
-    useEffect(() => {
+/*
+    useEffect(async () => {
+        
       var myHeaders = new Headers();
             myHeaders.append("apikey", API_KEY);
             myHeaders.append("Content-Type", "application/json");
             
             var raw = JSON.stringify({
-            "email": "riseup@popcode.com.br",
-            "password": "riseup"
+            "email": form.username,
+            "password": form.password
             });
             
             var requestOptions = {
@@ -29,15 +32,53 @@ function Login({ onEnterSystem }) {
             
             redirect: 'follow'
             };
-            
-            fetch("https://yuanqfswhberkoevtmfr.supabase.co/auth/v1/token?grant_type=password", requestOptions)
+
+            const response = await fetch("https://yuanqfswhberkoevtmfr.supabase.co/auth/v1/token?grant_type=password", requestOptions);
+            const data = await response.json();
+            setAuthTokens(data);
+            console.log(data);
+
+        if(data.access_token){
+            console.log('jasja')
+            /*var myHeaders = new Headers();
+            myHeaders.append("Authorization", `Bearer ${data.access_token}`);
+            myHeaders.append("apikey", API_KEY);
+
+            var raw = JSON.stringify({
+            "email": "secretaria@squad23.com",
+            "password": "squad23!",
+            "full_name": "Secretaria",
+            "phone": "(11) 99999-9999",
+            "role": "secretaria"
+            });
+
+            var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+            };
+
+            fetch("https://yuanqfswhberkoevtmfr.supabase.co/functions/v1/create-user", requestOptions)
             .then(response => response.json())
-            .then(data => {
-                setAuthTokens(data);
-                console.log(data);
-            })
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));*/
+
+            /* var myHeaders = new Headers();
+            myHeaders.append("Authorization", `Bearer ${data.access_token}`);
+            myHeaders.append("apikey", API_KEY);
+            var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+            };
+
+            fetch("https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/user_roles", requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
             .catch(error => console.log('error', error));
-    }, []);
+        }
+    }, []);*/
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -47,30 +88,45 @@ function Login({ onEnterSystem }) {
         e.preventDefault();
         console.log("Tentando logar com:", form);
         if (form.username && form.password) {
-
-          
-           /* if (data.access_token) {
-                console.log("Login bem-sucedido!");
-                var myHeaders = new Headers();
+             var myHeaders = new Headers();
             myHeaders.append("apikey", API_KEY);
-            myHeaders.append("Authorization", `Bearer ${data.access_token}`);
-
+            myHeaders.append("Content-Type", "application/json");
+            
+            var raw = JSON.stringify({
+            "email": form.username,
+            "password": form.password
+            });
+            
             var requestOptions = {
-            method: 'GET',
+            method: 'POST',
             headers: myHeaders,
+            body: raw,
+            
             redirect: 'follow'
             };
 
-            console.log(data.user.id)
+            const response = await fetch("https://yuanqfswhberkoevtmfr.supabase.co/auth/v1/token?grant_type=password", requestOptions);
+            const data = await response.json();
+            setAuthTokens(data);
+            console.log(data);
 
-            fetch(`https://yuanqfswhberkoevtmfr.supabase.co/functions/v1/user-info`, requestOptions)
-            .then(response => response.text())
-            .then(result => console.log(result, "vamo ver se da certo"))
-            .catch(error => console.log('error', error));
-            }*/
+          
+            if (data.access_token){
+             
 
-            navigate(`/${form.username}/`);
+               const UserData = await UserInfos(`bearer ${data.access_token}`);
+               console.log(UserData, 'Dados do usuário');
 
+            if(UserData?.roles?.includes('admin')){
+            navigate(`/admin/`);
+        } else if(UserData?.roles?.includes('secretaria')){
+            navigate(`/secretaria/`);
+        } else if(UserData?.roles?.includes('medico')){
+            navigate(`/medico/`);
+        } else if(UserData?.roles?.includes('financeiro')){
+            navigate(`/financeiro/`);
+        }
+        }
 
         } else {
             setAlert("Preencha todos os campos!");

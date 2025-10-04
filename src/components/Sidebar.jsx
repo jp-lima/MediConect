@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import menuItems from "../data/sidebar-items-medico.json"; // Use "sidebar-items-secretaria.json" para secretaria e "sidebar-items-adm.json" para ADM
+import TrocardePerfis from "./TrocardePerfis"; 
+
 
 // 1. Recebe 'menuItems' e 'onLogout' como props
 function Sidebar({ menuItems, onLogout }) { 
@@ -119,6 +121,8 @@ function Sidebar({ menuItems, onLogout }) {
                     <span>Sair (Logout)</span>
                 </button>
             </li>
+
+            <TrocardePerfis />
 
      </ul>
     </div>

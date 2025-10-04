@@ -3,12 +3,6 @@
     "name": "Menu",
     "isTitle": true
   },
-
-  {
-    "name":"Início",
-    "url": "/admin/",
-    "icon": "house"
-  },
   {
     "name": "Lista de Pacientes",
     "icon": "clipboard-heart-fill",
@@ -20,12 +14,7 @@
     "icon": "hospital-fill",
     "url": "/admin/medicos"
   },
-  {
-    "name": "Agendar consulta",
-    "icon": "calendar-plus-fill",
-    "url": "/admin/agendamento"
-  },
-
+  
   {
     "name": "Gestão de Usuários",
     "icon": "person-badge-fill",

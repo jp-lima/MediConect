@@ -1,22 +1,25 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react';
 
 import TabelaAgendamentoDia from '../components/AgendarConsulta/TabelaAgendamentoDia';
 import TabelaAgendamentoSemana from '../components/AgendarConsulta/TabelaAgendamentoSemana';
 import TabelaAgendamentoMes from '../components/AgendarConsulta/TabelaAgendamentoMes';
 import FormNovaConsulta from '../components/AgendarConsulta/FormNovaConsulta';
 
-import dayjs from 'dayjs'
+// ✨ NOVO: Caminho de importação corrigido com base na sua estrutura de pastas
+import AgendamentosMes from '../components/AgendarConsulta/DadosConsultasMock.js';
+
+import dayjs from 'dayjs';
 import "./style/Agendamento.css";
 import './style/FilaEspera.css';
 
 const Agendamento = () => {
 
-  const [FiladeEspera, setFiladeEspera] = useState(false)
-  const [tabela, setTabela] = useState('diario')
-  const [PageNovaConsulta, setPageConsulta] = useState(false)
-  const [searchTerm, setSearchTerm] = useState('') // 🔹 Estado da busca
+  const [FiladeEspera, setFiladeEspera] = useState(false);
+  const [tabela, setTabela] = useState('diario');
+  const [PageNovaConsulta, setPageConsulta] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  // 🔹 Dados da fila de espera
+  // Dados da fila de espera (sem alteração)
   const filaEsperaData = [
     { nome: 'Ricardo Pereira', email: 'ricardo.pereira@gmail.com', cpf: '444.777.666-55', telefone: '(79) 99123-4567', entrada: '25/09/2025 às 08:00' },
     { nome: 'Ana Costa', email: 'ana.costa@gmail.com', cpf: '321.654.987-00', telefone: '(79) 97777-3333', entrada: '25/09/2025 às 08:30' },
@@ -28,7 +31,7 @@ const Agendamento = () => {
     { nome: 'Juliana Oliveira', email: 'juliana.o@gmail.com', cpf: '111.222.333-44', telefone: '(79) 98765-1234', entrada: '26/09/2025 às 11:30' },
   ];
 
-  // 🔹 Filtra a fila de espera com base no searchTerm
+  // Filtro da fila de espera (sem alteração)
   const filteredFila = filaEsperaData.filter(item =>
     item.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
     item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -36,16 +39,34 @@ const Agendamento = () => {
     item.telefone.includes(searchTerm)
   );
 
+  // Lógica para filtrar os dados da AGENDA (AgendamentosMes)
+  const filteredAgendamentos = useMemo(() => {
+    if (!searchTerm.trim()) {
+      return AgendamentosMes;
+    }
+
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+    const filteredData = {};
+
+    for (const semana in AgendamentosMes) {
+      filteredData[semana] = {};
+      for (const dia in AgendamentosMes[semana]) {
+        filteredData[semana][dia] = AgendamentosMes[semana][dia].filter(agendamento =>
+          agendamento.status === 'vazio' ||
+          (agendamento.paciente && agendamento.paciente.toLowerCase().includes(lowerCaseSearchTerm))
+        );
+      }
+    }
+    return filteredData;
+  }, [searchTerm]);
+
   const ListarDiasdoMes = (ano, mes) => {
     let segundas = []; let tercas = []; let quartas = []; let quintas = []; let sextas = []
-
     const base = dayjs(`${ano}-${mes}-01`)
     const DiasnoMes = base.daysInMonth()
-
     for (let d = 1; d <= DiasnoMes; d++) {
       const data = dayjs(`${ano}-${mes}-${d}`)
       const dia = data.format('dddd')
-
       switch (dia) {
         case 'Monday': segundas.push(d); break
         case 'Tuesday': tercas.push(d); break
@@ -55,7 +76,6 @@ const Agendamento = () => {
         default: break
       }
     }
-
     let ListaDiasDatas = [segundas, tercas, quartas, quintas, sextas]
     return ListaDiasDatas
   }
@@ -72,16 +92,17 @@ const Agendamento = () => {
       <h1>Agendar nova consulta</h1>
 
       {!PageNovaConsulta ? (
-
         <div className='atendimento-eprocura'>
-
-          {/* 🔍 Busca e filtro */}
           <div className='busca-atendimento'>
             <div>
               <i className="fa-solid fa-calendar-day"></i>
-              <input type="text" placeholder="Buscar atendimento" />
+              <input
+                type="text"
+                placeholder="Buscar atendimento por paciente..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
-
             <div>
               <select>
                 <option value="" disabled selected>Agendar</option>
@@ -92,7 +113,6 @@ const Agendamento = () => {
             </div>
           </div>
 
-          {/* 🏥 Unidade e profissional */}
           <div className='unidade-selecionarprofissional'>
             <select>
               <option value="" disabled selected >Unidade</option>
@@ -100,22 +120,25 @@ const Agendamento = () => {
               <option value="">Unidade Zona Norte</option>
               <option value="">Unidade Zona Oeste</option>
             </select>
-
             <input type="text" placeholder='Selecionar profissional' />
           </div>
 
-          {/* Botões para alternar Agenda / Fila de Espera */}
           <div className='container-btns-agenda-fila_esepera'>
             <button
               className={`btn-agenda ${FiladeEspera === false ? "opc-agenda-ativo" : ""}`}
-              onClick={() => setFiladeEspera(false)}
+              onClick={() => {
+                setFiladeEspera(false);
+                setSearchTerm('');
+              }}
             >
               Agenda
             </button>
-
             <button
               className={`btn-fila-espera ${FiladeEspera === true ? "opc-filaespera-ativo" : ""}`}
-              onClick={() => setFiladeEspera(true)}
+              onClick={() => {
+                setFiladeEspera(true);
+                setSearchTerm('');
+              }}
             >
               Fila de espera
             </button>
@@ -128,63 +151,43 @@ const Agendamento = () => {
                   <div>
                     <section className='btns-e-legenda-container'>
                       <div>
-                        <button
-                          className={`btn-selecionar-tabeladia ${tabela === "diario" ? "ativo" : ""}`}
-                          onClick={() => setTabela("diario")}
-                        >
-                          <i className="fa-solid fa-calendar-day"></i>
-                          Dia
+                        <button className={`btn-selecionar-tabeladia ${tabela === "diario" ? "ativo" : ""}`} onClick={() => setTabela("diario")}>
+                          <i className="fa-solid fa-calendar-day"></i> Dia
                         </button>
-
-                        <button
-                          className={`btn-selecionar-tabelasemana ${tabela === 'semanal' ? 'ativo' : ""}`}
-                          onClick={() => setTabela("semanal")}
-                        >
-                          <i className="fa-solid fa-calendar-day"></i>
-                          Semana
+                        <button className={`btn-selecionar-tabelasemana ${tabela === 'semanal' ? 'ativo' : ""}`} onClick={() => setTabela("semanal")}>
+                          <i className="fa-solid fa-calendar-day"></i> Semana
                         </button>
-
-                        <button
-                          className={`btn-selecionar-tabelames ${tabela === 'mensal' ? 'ativo' : ''}`}
-                          onClick={() => setTabela("mensal")}
-                        >
-                          <i className="fa-solid fa-calendar-day"></i>
-                          Mês
+                        <button className={`btn-selecionar-tabelames ${tabela === 'mensal' ? 'ativo' : ''}`} onClick={() => setTabela("mensal")}>
+                          <i className="fa-solid fa-calendar-day"></i> Mês
                         </button>
                       </div>
-
                       <div className='legenda-tabela'>
                         <div className='legenda-item-realizado'><span>Realizado</span></div>
                         <div className='legenda-item-confirmado'><span>Confirmado</span></div>
                         <div className='legenda-item-agendado'><span>Agendado</span></div>
                         <div className='legenda-item-cancelado'><span>Cancelado</span></div>
                       </div>
-
                     </section>
-
-                    {tabela === "diario" && <TabelaAgendamentoDia handleClickAgendamento={handleClickAgendamento} />}
-                    {tabela === 'semanal' && <TabelaAgendamentoSemana />}
-                    {tabela === 'mensal' && <TabelaAgendamentoMes ListarDiasdoMes={ListarDiasdoMes} aplicarCores={true} />}
+                    
+                    {tabela === "diario" && <TabelaAgendamentoDia handleClickAgendamento={handleClickAgendamento} agendamentos={filteredAgendamentos} />}
+                    {tabela === 'semanal' && <TabelaAgendamentoSemana agendamentos={filteredAgendamentos} />}
+                    {tabela === 'mensal' && <TabelaAgendamentoMes ListarDiasdoMes={ListarDiasdoMes} aplicarCores={true} agendamentos={filteredAgendamentos} />}
                   </div>
                 </div>
               )
               :
               (
                 <div className="fila-container">
-                <div className="fila-header">
-  <input
-    type="text"
-    placeholder="Pesquisar..."
-    className="busca-fila-espera"
-    value={searchTerm}
-    onChange={(e) => setSearchTerm(e.target.value)}
-  />
-
-  <h2 className="fila-titulo">Fila de Espera</h2>
-</div>
-
-
-
+                  <div className="fila-header">
+                    <input
+                      type="text"
+                      placeholder="Pesquisar na fila de espera..."
+                      className="busca-fila-espera"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    <h2 className="fila-titulo">Fila de Espera</h2>
+                  </div>
                   <table className="fila-tabela">
                     <thead>
                       <tr>
@@ -212,7 +215,6 @@ const Agendamento = () => {
             }
           </section>
         </div>
-
       ) : (
         <FormNovaConsulta onCancel={handleClickCancel} />
       )}
@@ -220,4 +222,4 @@ const Agendamento = () => {
   )
 }
 
-export default Agendamento
+export default Agendamento;

@@ -1,4 +1,4 @@
-/*import React from 'react';
+import React from 'react';
 
 function ProfileCard() {
   return (
@@ -18,4 +18,4 @@ function ProfileCard() {
   );
 }
 
-export default ProfileCard;*/
+export default ProfileCard;

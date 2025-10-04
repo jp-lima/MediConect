@@ -1,37 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FaUser, FaUserPlus, FaCalendarAlt, FaCalendarCheck } from 'react-icons/fa';
 import './style/Inicio.css';
-
-function Inicio({ setCurrentPage }) {
+import { useNavigate } from 'react-router-dom';
+function Inicio() {
   const [pacientes, setPacientes] = useState([]);
   const [agendamentos, setAgendamentos] = useState([]);
-
-  useEffect(() => {
-    const fetchPacientes = async () => {
-      try {
-        const res = await fetch("https://mock.apidog.com/m1/1053378-0-default/pacientes");
-        const data = await res.json();
-        console.log(data)
-        //setPacientes(data.data);
-      } catch (error) {
-        console.error("Erro ao buscar pacientes:", error);
-      }
-    };
-
-    const fetchAgendamentos = async () => {
-      return; // <===serve para que nao cause erro
-      // try {
-      //   const res = await fetch();
-      //   const data = await res.json();
-      //   setAgendamentos(data.data);
-      // } catch (error) {
-      //   console.error("Erro ao buscar agendamentos:", error);
-      // }
-    };
-
-    fetchPacientes();
-    fetchAgendamentos();
-  }, []);
+  const navigate = useNavigate();
 
   const totalPacientes = pacientes.length;
   const novosEsseMes = pacientes.filter(p => p.createdAt && new Date(p.createdAt).getMonth() === new Date().getMonth()).length;
@@ -87,21 +61,21 @@ function Inicio({ setCurrentPage }) {
       <div className="quick-actions">
         <h2>Ações Rápidas</h2>
         <div className="actions-grid">
-          <div className="action-button" onClick={() => setCurrentPage('form-layout')}>
+          <div className="action-button" onClick={() => navigate('/form-layout')}>
             <FaUserPlus className="action-icon" />
             <div className="action-info">
-              <span className="action-title">Novo Paciente</span>
+              <span className="action-title">Novo Pacient</span>
               <span className="action-desc">Cadastrar um novo paciente</span>
             </div>
           </div>
-          <div className="action-button" onClick={() => setCurrentPage('table')}>
+          <div className="action-button" onClick={() => navigate('/table')}>
             <FaUser className="action-icon" />
             <div className="action-info">
               <span className="action-title">Lista de Pacientes</span>
               <span className="action-desc">Ver todos os pacientes</span>
             </div>
           </div>
-          <div className="action-button" onClick={() => setCurrentPage('agendamento')}>
+          <div className="action-button" onClick={() => navigate('agendamento')}>
             <FaCalendarCheck className="action-icon" />
             <div className="action-info">
               <span className="action-title">Agendamentos</span>
@@ -126,7 +100,7 @@ function Inicio({ setCurrentPage }) {
           <div className="no-appointments-content">
             <FaCalendarCheck className="no-appointments-icon" />
             <p>Nenhum agendamento para hoje</p>
-            <button className="manage-button" onClick={() => setCurrentPage('agendamento')}>
+            <button className="manage-button" onClick={() => navigate('/medico/agendamento')}>
               Gerenciar Agendamentos
             </button>
           </div>

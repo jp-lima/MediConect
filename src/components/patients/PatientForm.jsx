@@ -1,42 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import {Link} from 'react-router-dom'
-// formatar número 
-// formatar CPF
-import { FormatTelefones,FormatPeso, FormatCPF } from '../utils/Formatar/Format';
+import { Link,useNavigate, useLocation } from 'react-router-dom';
+import { FormatTelefones, FormatPeso, FormatCPF } from '../utils/Formatar/Format';
 
-function PatientForm({ onSave, onCancel, formData, setFormData }) {
+function PatientForm({ onSave, formData, setFormData }) {
+  
+  
   const [errorModalMsg, setErrorModalMsg] = useState("");
-  // Estado para controlar a exibição do modal e os dados do paciente existente
   const [showModal, setShowModal] = useState(false);
-  const [showModal404, setShowModal404] = useState(false);
   const [pacienteExistente, setPacienteExistente] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-
-
-  // Estado para armazenar a URL da foto do avatar
   const [avatarUrl, setAvatarUrl] = useState(null);
-
-  // Estado para controlar quais seções estão colapsadas
   const [collapsedSections, setCollapsedSections] = useState({
-    dadosPessoais: true, // Alterado para true para a seção ficar aberta por padrão
+    dadosPessoais: true,
     infoMedicas: false,
     infoConvenio: false,
     endereco: false,
     contato: false,
   });
 
-  // Função para alternar o estado de colapso de uma seção
   const handleToggleCollapse = (section) => {
-    setCollapsedSections(prevState => ({
-      ...prevState,
-      [section]: !prevState[section]
+    setCollapsedSections(prev => ({
+      ...prev,
+      [section]: !prev[section],
     }));
   };
 
-  // Lógica para calcular o IMC
   useEffect(() => {
-    const peso = parseFloat(formData.peso);
+    const peso = parseFloat(formData.weight_kg);
     const altura = parseFloat(formData.height_m);
     if (peso > 0 && altura > 0) {
       const imcCalculado = peso / (altura * altura);
@@ -44,83 +35,63 @@ function PatientForm({ onSave, onCancel, formData, setFormData }) {
     } else {
       setFormData(prev => ({ ...prev, bmi: '' }));
     }
-  }, [formData.peso, formData.altura]);
+  }, [formData.weight_kg, formData.height_m, setFormData]);
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
 
-    console.log(formData, name, checked)
-
     if (type === 'file') {
-      setFormData({ ...formData, [name]: files[0] });
+      setFormData(prev => ({ ...prev, [name]: files[0] }));
 
-      // Lógica para pré-visualizar a imagem no avatar
-     if (name === 'foto' && files[0]) {
+      if (name === 'foto' && files[0]) {
         const reader = new FileReader();
-        reader.onloadend = () => {
-          setAvatarUrl(reader.result);
-        };
+        reader.onloadend = () => setAvatarUrl(reader.result);
         reader.readAsDataURL(files[0]);
       } else if (name === 'foto' && !files[0]) {
-        setAvatarUrl(null); // Limpa o avatar se nenhum arquivo for selecionado
-      }}
-      
-
-    else if (name.includes('cpf')) {
-      setFormData({...formData, cpf:FormatCPF(value) });
-    } else if (name.includes('phone')) {
-      setFormData({ ...formData, [name]: FormatTelefones(value) });      
-    }else if(name.includes('weight') || name.includes('bmi') || name.includes('height')){
-      setFormData({...formData,[name]: FormatPeso(value) })
-    }else if(name.includes('rn') || name.includes('vip')){
-      setFormData({ ...formData, [name]: checked });
-    }
-    else{
-      setFormData({ ...formData, [name]: value });
-    }
-  };
-  
-  const handleCepBlur = async () => {
-    const cep = formData.cep.replace(/\D/g, '');
-    if (cep.length === 8) {
-      try {
-        const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-        const data = await response.json();
-        if (!data.erro) {
-          setFormData((prev) => ({
-            ...prev,
-            street: data.logradouro || '',
-            neighborhood: data.bairro || '',
-            city: data.localidade || '',
-            state: data.uf || ''
-          }));
-        } else {
-          alert('CEP não encontrado!');
-        }
-      } catch (error) {
-        alert('Erro ao buscar o CEP.');
+        setAvatarUrl(null);
       }
+    } else if (name === 'cpf') {
+      setFormData(prev => ({ ...prev, cpf: FormatCPF(value) }));
+    } else if (name.includes('phone')) {
+      setFormData(prev => ({ ...prev, [name]: FormatTelefones(value) }));
+    } else if (name.includes('weight_kg') || name.includes('height_m')) {
+      setFormData(prev => ({ ...prev, [name]: FormatPeso(value) }));
+    } else if (name === 'rn_in_insurance' || name === 'vip' || name === 'validadeIndeterminada') {
+      setFormData(prev => ({ ...prev, [name]: checked }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
     }
   };
 
   const handleSubmit = async () => {
-    if (!formData.full_name || !formData.cpf || !formData.sex || !formData.birth_date){
-      console.log(formData.full_name, formData.cpf, formData.sex, formData.birth_date)
-      setErrorModalMsg('Por favor, preencha Nome, CPF, Gênero e data de nascimento.');
-      setShowModal404(true); 
-      return
+    // ALTERADO: Nome, CPF, Email e Telefone
+    if (!formData.full_name || !formData.cpf || !formData.email || !formData.phone_mobile) {
+      setErrorModalMsg('Por favor, preencha Nome, CPF, Email e Telefone.');
+      setShowModal(true);
+      return;
     }
-   
-    onSave({
-      ...formData,bmi:12.0
-    });
-  
+
+    const cpfLimpo = formData.cpf.replace(/\D/g, '');
+    if (cpfLimpo.length !== 11) {
+      setErrorModalMsg('CPF inválido. Por favor, verifique o número digitado.');
+      setShowModal(true);
+      return;
+    }
+
+    try {
+      await onSave({ ...formData, bmi: parseFloat(formData.bmi) || 0 });
+      setShowSuccessModal(true);
+    } catch (error) {
+      setErrorModalMsg('Erro ao salvar paciente. Tente novamente.');
+      setShowModal(true);
+    }
   };
+
   return (
     <div className="card p-3">
       <h3 className="mb-4 text-center" style={{ fontSize: '2.5rem' }}>MediConnect</h3>
 
-      {/* DADOS PESSOAIS */}
+      {/* DADOS PESSOAIS - MANTIDO O LAYOUT ORIGINAL */}
       <div className="mb-5 p-4 border rounded shadow-sm">
         <h4 className="mb-4 cursor-pointer d-flex justify-content-between align-items-center" onClick={() => handleToggleCollapse('dadosPessoais')} style={{ fontSize: '1.8rem' }}>
           Dados Pessoais
@@ -134,58 +105,58 @@ function PatientForm({ onSave, onCancel, formData, setFormData }) {
             <div className="col-md-6 mb-3 d-flex align-items-center">
               <div className="me-3">
                 {avatarUrl ? (
-                  <img 
-                    src={avatarUrl} 
-                    alt="Avatar do Paciente" 
-                    style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover' }} 
+                  <img
+                    src={avatarUrl}
+                    alt="Avatar do Paciente"
+                    style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover' }}
                   />
                 ) : (
-                  <div 
-                    style={{ 
-                      width: '100px', 
-                      height: '100px', 
-                      borderRadius: '50%', 
-                      backgroundColor: '#e0e0e0', 
-                      display: 'flex', 
-                      alignItems: 'center', 
+                  <div
+                    style={{
+                      width: '100px',
+                      height: '100px',
+                      borderRadius: '50%',
+                      backgroundColor: '#e0e0e0',
+                      display: 'flex',
+                      alignItems: 'center',
                       justifyContent: 'center',
                       fontSize: '3.5rem',
                       color: '#9e9e9e'
                     }}
                   >
-                    &#x2624; 
+                    &#x2624;
                   </div>
                 )}
               </div>
               <div>
                 <label htmlFor="foto-input" className="btn btn-primary" style={{ fontSize: '1rem' }}>Carregar Foto</label>
-                <input 
-                  type="file" 
-                  className="form-control d-none" 
-                  name="foto" 
-                  id="foto-input" 
-                  onChange={handleChange} 
+                <input
+                  type="file"
+                  className="form-control d-none"
+                  name="foto"
+                  id="foto-input"
+                  onChange={handleChange}
                   accept="image/*"
                 />
                 {formData.foto && <span className="ms-2" style={{ fontSize: '1rem' }}>{formData.foto.name}</span>}
               </div>
             </div>
-            {/* CADASTRO */}
+            {/* CADASTRO - MANTIDO O LAYOUT ORIGINAL COM COLUNAS */}
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Nome: *</label>
-              <input type="text" className="form-control" name="full_name" value={formData.full_name} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="full_name" value={formData.full_name || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Nome social:</label>
-              <input type="text" className="form-control" name="social_name" value={formData.social_name} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="social_name" value={formData.social_name || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-6 mb-3">
-              <label style={{ fontSize: '1.1rem' }}>Data de nascimento: *</label>
-              <input type="date" className="form-control" name="birth_date" value={formData.birth_date} onChange={handleChange} style={{ fontSize: '1.1rem' }}  />
+              <label style={{ fontSize: '1.1rem' }}>Data de nascimento:</label>
+              <input type="date" className="form-control" name="birth_date" value={formData.birth_date || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-6 mb-3">
-              <label style={{ fontSize: '1.1rem' }}>Gênero: *</label>
-              <select className="form-control" name="sex" value={formData.sex} onChange={handleChange} style={{ fontSize: '1.1rem' }}>
+              <label style={{ fontSize: '1.1rem' }}>Gênero:</label>
+              <select className="form-control" name="sex" value={formData.sex || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }}>
                 <option value="">Selecione</option>
                 <option value="Masculino">Masculino</option>
                 <option value="Feminino">Feminino</option>
@@ -194,15 +165,15 @@ function PatientForm({ onSave, onCancel, formData, setFormData }) {
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>CPF: *</label>
-              <input type="text" className="form-control" name="cpf" value={formData.cpf} onChange={ handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="cpf" value={formData.cpf || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>RG:</label>
-              <input type="text" className="form-control" name="rg" value={formData.rg} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="rg" value={formData.rg || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Outros documentos:</label>
-              <select className="form-control" name="document_type" value={formData.document_type} onChange={handleChange} style={{ fontSize: '1.1rem' }}>
+              <select className="form-control" name="document_type" value={formData.document_type || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }}>
                 <option value="">Selecione</option>
                 <option value="CNH">CNH</option>
                 <option value="Passaporte">Passaporte</option>
@@ -211,11 +182,11 @@ function PatientForm({ onSave, onCancel, formData, setFormData }) {
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Número do documento:</label>
-              <input type="text" className="form-control" name="document_number" value={formData.document_number} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="document_number" value={formData.document_number || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Etnia e Raça:</label>
-              <select className="form-control" name="race" value={formData.race} onChange={handleChange} style={{ fontSize: '1.1rem' }}>
+              <select className="form-control" name="race" value={formData.race || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }}>
                 <option value="">Selecione</option>
                 <option value="Branca">Branca</option>
                 <option value="Preta">Preta</option>
@@ -226,20 +197,20 @@ function PatientForm({ onSave, onCancel, formData, setFormData }) {
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Naturalidade:</label>
-              <input type="text" className="form-control" name="naturality" value={formData.naturalidade} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="naturality" value={formData.naturalidade || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Nacionalidade:</label>
-              <input type="text" className="form-control" name="nationality" value={formData.nationality} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="nationality" value={formData.nationality || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Profissão:</label>
-              <input type="text" className="form-control" name="profession" value={formData.profession} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="profession" value={formData.profession || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Estado civil:</label>
-              <select className="form-control" name="marital_status" value={formData.marital_status} onChange={handleChange} style={{ fontSize: '1.1rem' }}>
-                <option value="" selected disabled invisible>Selecione</option>
+              <select className="form-control" name="marital_status" value={formData.marital_status || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }}>
+                <option value="" disabled>Selecione</option>
                 <option value="Solteiro">Solteiro(a)</option>
                 <option value="Casado">Casado(a)</option>
                 <option value="Divorciado">Divorciado(a)</option>
@@ -248,35 +219,35 @@ function PatientForm({ onSave, onCancel, formData, setFormData }) {
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Nome da Mãe:</label>
-              <input type="text" className="form-control" name="mother_name" value={formData.mother_name} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="mother_name" value={formData.mother_name || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Profissão da mãe:</label>
-              <input type="text" className="form-control" name="mother_profession" value={formData.mother_profession} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="mother_profession" value={formData.mother_profession || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Nome do Pai:</label>
-              <input type="text" className="form-control" name="father_name" value={formData.father_name} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="father_name" value={formData.father_name || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Profissão do pai:</label>
-              <input type="text" className="form-control" name="father_profession" value={formData.father_profession} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="father_profession" value={formData.father_profession || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Nome do responsável:</label>
-              <input type="text" className="form-control" name="guardian_name" value={formData.guardian_name} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="guardian_name" value={formData.guardian_name || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>CPF do responsável:</label>
-              <input type="text" className="form-control" name="guardian_cpf" value={formData.guardian_cpf} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="guardian_cpf" value={formData.guardian_cpf || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Identificador de outro sistema:</label>
-              <input type="text" className="form-control" name="legacy_code" value={formData.legacy_code} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="legacy_code" value={formData.legacy_code || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-12 mb-3">
               <div className="form-check">
-                <input className="form-check-input" type="checkbox" name="rn_in_insurance" checked={formData.rn_in_insurance} onChange={handleChange} id="rn_in_insurance" style={{ transform: 'scale(1.2)' }} />
+                <input className="form-check-input" type="checkbox" name="rn_in_insurance" checked={formData.rn_in_insurance || false} onChange={handleChange} id="rn_in_insurance" style={{ transform: 'scale(1.2)' }} />
                 <label className="form-check-label ms-2" htmlFor="rn_in_insurance" style={{ fontSize: '1.1rem' }}>
                   RN na Guia do convênio
                 </label>
@@ -286,7 +257,7 @@ function PatientForm({ onSave, onCancel, formData, setFormData }) {
             {/* CAMPOS MOVIDOS */}
             <div className="col-md-12 mb-3 mt-3">
               <label style={{ fontSize: '1.1rem' }}>Observações:</label>
-              <textarea className="form-control" name="notes" value={formData.notes} onChange={handleChange} style={{ fontSize: '1.1rem' }} placeholder='alergias, doenças crônicas, informações sobre porteses ou marca-passo, etc'></textarea>
+              <textarea className="form-control" name="notes" value={formData.notes || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} placeholder='alergias, doenças crônicas, informações sobre porteses ou marca-passo, etc'></textarea>
             </div>
             <div className="col-md-12 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Anexos do Paciente:</label>
@@ -300,8 +271,8 @@ function PatientForm({ onSave, onCancel, formData, setFormData }) {
           </div>
         </div>
       </div>
-      
-      {/* INFORMAÇÕES MÉDICAS */}
+
+      {/* INFORMAÇÕES MÉDICAS - MANTIDO O LAYOUT ORIGINAL */}
       <div className="mb-5 p-4 border rounded shadow-sm">
         <h4 className="mb-4 cursor-pointer d-flex justify-content-between align-items-center" onClick={() => handleToggleCollapse('infoMedicas')} style={{ fontSize: '1.8rem' }}>
           Informações Médicas
@@ -313,7 +284,7 @@ function PatientForm({ onSave, onCancel, formData, setFormData }) {
           <div className="row mt-3">
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Tipo Sanguíneo:</label>
-              <select className="form-control" name="blood_type" value={formData.blood_type} onChange={handleChange} style={{ fontSize: '1.1rem' }}>
+              <select className="form-control" name="blood_type" value={formData.blood_type || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }}>
                 <option value="">Selecione</option>
                 <option value="A+">A+</option>
                 <option value="A-">A-</option>
@@ -327,22 +298,22 @@ function PatientForm({ onSave, onCancel, formData, setFormData }) {
             </div>
             <div className="col-md-2 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Peso (kg):</label>
-              <input type="text" step="0.1" className="form-control" name="weight_kg" value={formData.weight_kg} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" step="0.1" className="form-control" name="weight_kg" value={formData.weight_kg || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-2 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Altura (m):</label>
-              <input type="text" step="0.01" className="form-control" name="height_m" value={formData.height_m} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" step="0.01" className="form-control" name="height_m" value={formData.height_m || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-2 mb-3">
               <label style={{ fontSize: '1.1rem' }}>IMC (kg/m²):</label>
-              <input type="text" className="form-control" name="bmi" value={formData.bmi} readOnly disabled style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="bmi" value={formData.bmi || ''} readOnly disabled style={{ fontSize: '1.1rem' }} />
             </div>
-           
+
           </div>
         </div>
       </div>
 
-      {/* INFORMAÇÕES DE CONVÊNIO */}
+      {/* INFORMAÇÕES DE CONVÊNIO - MANTIDO O LAYOUT ORIGINAL */}
       <div className="mb-5 p-4 border rounded shadow-sm">
         <h4 className="mb-4 cursor-pointer d-flex justify-content-between align-items-center" onClick={() => handleToggleCollapse('infoConvenio')} style={{ fontSize: '1.8rem' }}>
           Informações de convênio
@@ -354,7 +325,7 @@ function PatientForm({ onSave, onCancel, formData, setFormData }) {
           <div className="row mt-3">
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Convênio:</label>
-              <select className="form-control" name="convenio" value={formData.convenio} onChange={handleChange} style={{ fontSize: '1.1rem' }}>
+              <select className="form-control" name="convenio" value={formData.convenio || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }}>
                 <option value="">Selecione</option>
                 <option value="Amil">Amil</option>
                 <option value="Bradesco Saúde">Bradesco Saúde</option>
@@ -364,19 +335,19 @@ function PatientForm({ onSave, onCancel, formData, setFormData }) {
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Plano:</label>
-              <input type="text" className="form-control" name="plano" value={formData.plano} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="plano" value={formData.plano || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Nº de matrícula:</label>
-              <input type="text" className="form-control" name="numeroMatricula" value={formData.numeroMatricula} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="numeroMatricula" value={formData.numeroMatricula || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-4 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Validade da Carteira:</label>
-              <input type="date" className="form-control" name="validadeCarteira" value={formData.validadeCarteira} onChange={handleChange} disabled={formData.validadeIndeterminada} style={{ fontSize: '1.1rem' }} />
+              <input type="date" className="form-control" name="validadeCarteira" value={formData.validadeCarteira || ''} onChange={handleChange} disabled={formData.validadeIndeterminada} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-2 d-flex align-items-end mb-3">
               <div className="form-check">
-                <input className="form-check-input" type="checkbox" name="validadeIndeterminada" checked={formData.validadeIndeterminada} onChange={handleChange} id="validadeIndeterminada" style={{ transform: 'scale(1.2)' }} />
+                <input className="form-check-input" type="checkbox" name="validadeIndeterminada" checked={formData.validadeIndeterminada || false} onChange={handleChange} id="validadeIndeterminada" style={{ transform: 'scale(1.2)' }} />
                 <label className="form-check-label ms-2" htmlFor="validadeIndeterminada" style={{ fontSize: '1.1rem' }}>
                   Validade indeterminada
                 </label>
@@ -385,7 +356,7 @@ function PatientForm({ onSave, onCancel, formData, setFormData }) {
             {/* PACIENTE VIP */}
             <div className="col-md-12 mb-3 mt-3">
               <div className="form-check">
-                <input className="form-check-input" type="checkbox" name="vip" checked={formData.vip} onChange={handleChange} id="vip" style={{ transform: 'scale(1.2)' }} />
+                <input className="form-check-input" type="checkbox" name="vip" checked={formData.vip || false} onChange={handleChange} id="vip" style={{ transform: 'scale(1.2)' }} />
                 <label className="form-check-label ms-2" htmlFor="vip" style={{ fontSize: '1.1rem' }}>
                   Paciente VIP
                 </label>
@@ -395,7 +366,7 @@ function PatientForm({ onSave, onCancel, formData, setFormData }) {
         </div>
       </div>
 
-      {/* ENDEREÇO */}
+      {/* ENDEREÇO - MANTIDO O LAYOUT ORIGINAL */}
       <div className="mb-5 p-4 border rounded shadow-sm">
         <h4 className="mb-4 cursor-pointer d-flex justify-content-between align-items-center" onClick={() => handleToggleCollapse('endereco')} style={{ fontSize: '1.8rem' }}>
           Endereço
@@ -407,37 +378,37 @@ function PatientForm({ onSave, onCancel, formData, setFormData }) {
           <div className="row mt-3">
             <div className="col-md-4 mb-3">
               <label style={{ fontSize: '1.1rem' }}>CEP:</label>
-              <input type="text" className="form-control" name="cep" value={formData.cep} onChange={handleChange} onBlur={handleCepBlur} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="cep" value={formData.cep || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-8 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Rua:</label>
-              <input type="text" className="form-control" name="street" value={formData.street} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="street" value={formData.street || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Bairro:</label>
-              <input type="text" className="form-control" name="neighborhood" value={formData.neighborhood} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="neighborhood" value={formData.neighborhood || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-4 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Cidade:</label>
-              <input type="text" className="form-control" name="city" value={formData.city} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="city" value={formData.city || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-2 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Estado:</label>
-              <input type="text" className="form-control" name="state" value={formData.state} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="state" value={formData.state || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-4 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Número:</label>
-              <input type="text" className="form-control" name="number" value={formData.number} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="number" value={formData.number || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-8 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Complemento:</label>
-              <input type="text" className="form-control" name="complement" value={formData.complement} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="complement" value={formData.complement || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
           </div>
         </div>
       </div>
 
-      {/* CONTATO */}
+      {/* CONTATO - MANTIDO O LAYOUT ORIGINAL */}
       <div className="mb-5 p-4 border rounded shadow-sm">
         <h4 className="mb-4 cursor-pointer d-flex justify-content-between align-items-center" onClick={() => handleToggleCollapse('contato')} style={{ fontSize: '1.8rem' }}>
           Contato
@@ -448,88 +419,213 @@ function PatientForm({ onSave, onCancel, formData, setFormData }) {
         <div className={`collapse${collapsedSections.contato ? ' show' : ''}`}>
           <div className="row mt-3">
             <div className="col-md-6 mb-3">
-              <label style={{ fontSize: '1.1rem' }}>Email:</label>
+              <label style={{ fontSize: '1.1rem' }}>Email: *</label>
               <input type="email" className="form-control" name="email" value={formData.email || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-6 mb-3">
-              <label style={{ fontSize: '1.1rem' }}>Telefone:</label>
-              <input type="text" className="form-control" name="phone_mobile" value={formData.phone_mobile} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <label style={{ fontSize: '1.1rem' }}>Telefone: *</label>
+              <input type="text" className="form-control" name="phone_mobile" value={formData.phone_mobile || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Telefone 2:</label>
-              <input type="text" className="form-control" name="phone1" value={formData.phone1} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="phone1" value={formData.phone1 || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Telefone 3:</label>
-              <input type="text" className="form-control" name="phone2" value={formData.phone2} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input type="text" className="form-control" name="phone2" value={formData.phone2 || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
             </div>
           </div>
         </div>
       </div>
-      
+
       {/* Botões */}
       <div className="mt-3 text-center">
         <button className="btn btn-success me-3" onClick={handleSubmit} style={{ fontSize: '1.2rem', padding: '0.75rem 1.5rem' }}>
           Salvar Paciente
         </button>
-       
-       <Link to='/pacientes'>
-          <button className="btn btn-light"  style={{ fontSize: '1.2rem', padding: '0.75rem 1.5rem' }}>
-            Cancelar
-          </button>
-        </Link>
+        
       </div>
 
+      {/* Modal de erro - EXATAMENTE COMO NA IMAGEM */}
+      {showModal && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0,0,0,0.5)",
+            zIndex: 9999,
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "#fff",
+              borderRadius: "10px",
+              width: "400px",
+              maxWidth: "90%",
+              boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
+              overflow: "hidden",
+            }}
+          >
+            {/* Header */}
+            <div
+              style={{
+                backgroundColor: "#1e3a8a",
+                padding: "15px 20px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <h5 style={{ color: "#fff", margin: 0, fontSize: "1.2rem", fontWeight: "bold" }}>Atenção</h5>
+              <button
+                onClick={() => setShowModal(false)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  fontSize: "20px",
+                  color: "#fff",
+                  cursor: "pointer",
+                }}
+              >
+                ×
+              </button>
+            </div>
 
-      {/* Modal para paciente existente */}
-      {showModal && pacienteExistente && (
-        <div></div>
+            {/* Body */}
+            <div style={{ padding: "25px 20px" }}>
+              <p style={{ color: "#111", fontSize: "1.1rem", margin: "0 0 15px 0", fontWeight: "bold" }}>
+                Por favor, preencha:
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginLeft: '10px' }}>
+                {!formData.full_name && <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>- Nome</p>}
+                {!formData.cpf && <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>- CPF</p>}
+                {!formData.email && <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>- Email</p>}
+                {!formData.phone_mobile && <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>- Telefone</p>}
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                padding: "15px 20px",
+                borderTop: "1px solid #ddd",
+              }}
+            >
+              <button
+                onClick={() => setShowModal(false)}
+                style={{
+                  backgroundColor: "#1e3a8a",
+                  color: "#fff",
+                  border: "none",
+                  padding: "8px 20px",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  fontSize: "1rem",
+                  fontWeight: "bold",
+                }}
+              >
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
-      {/* Modal de sucesso ao salvar paciente */}
+      {/* Modal de sucesso */}
       {showSuccessModal && (
-        <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header" style={{ backgroundColor: '#f2fa0dff' }}>
-                <h5 className="modal-title">Paciente salvo com sucesso!</h5>
-                <button type="button" className="btn-close btn-close-white" onClick={() => setShowSuccessModal(false)}></button>
-              </div>
-              <div className="modal-body">
-                <p style={{ color: '#111', fontSize: '1.4rem' }}>O cadastro do paciente foi realizado com sucesso.</p>
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn" style={{ backgroundColor: '#1e3a8a', color: '#fff' }} onClick={() => setShowSuccessModal(false)}>
-                  Fechar
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+          <div
+    style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      backgroundColor: "rgba(0,0,0,0.5)",
+      zIndex: 9999,
+    }}
+  >
+    <div
+      style={{
+        backgroundColor: "#fff",
+        borderRadius: "10px",
+        width: "400px",
+        maxWidth: "90%",
+        boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
+        overflow: "hidden",
+      }}
+    >
+      {/* Header */}
+      <div
+        style={{
+          backgroundColor: "#1e3a8a",
+          padding: "15px 20px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <h5 style={{ color: "#fff", margin: 0, fontSize: "1.2rem", fontWeight: "bold" }}>Sucesso</h5>
+        <button
+          onClick={() => setShowSuccessModal(false)}
+          style={{
+            background: "none",
+            border: "none",
+            fontSize: "20px",
+            color: "#fff",
+            cursor: "pointer",
+            fontWeight: "bold",
+          }}
+        >
+          ×
+        </button>
+      </div>
 
-      {showModal404 && (
-        <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header" style={{ backgroundColor: '#f2fa0dff' }}>
-                <h5 className="modal-title"><span className="text-dark">Atenção</span></h5>
-                <button type="button" className="btn-close btn-close-black" onClick={() => setShowModal404(false)}></button>
-              </div>
-              <div className="modal-body">
-                <p style={{ color: '#111', fontSize: '1.4rem' }}>{errorModalMsg || '(Erro 404).Por favor, tente novamente mais tarde'}</p>
-              </div>
-              <div className="modal-footer">
-                
-                
-                <button type="button" className="btn btn-primary" onClick={() => setShowModal404(false)}>
-                  Fechar
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Body */}
+      <div style={{ padding: "25px 20px" }}>
+        <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>
+          O cadastro do paciente foi realizado com sucesso.
+        </p>
+      </div>
+
+      {/* Footer */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          padding: "15px 20px",
+          borderTop: "1px solid #ddd",
+        }}
+      >
+        <button
+          onClick={() => setShowSuccessModal(false)}
+          style={{
+            backgroundColor: "#1e3a8a",
+            color: "#fff",
+            border: "none",
+            padding: "8px 20px",
+            borderRadius: "6px",
+            cursor: "pointer",
+            fontSize: "1rem",
+            fontWeight: "bold",
+          }}
+        >
+          Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 }

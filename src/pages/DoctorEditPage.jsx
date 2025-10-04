@@ -5,7 +5,7 @@ import { useAuth } from '../components/utils/AuthProvider'
 import {useEffect, useState} from 'react'
 import { useParams } from 'react-router-dom'
 import API_KEY from '../components/utils/apiKeys'
-const DoctorEditPage = ( {id, setCurrentPage}) => {
+const DoctorEditPage = () => {
   const {getAuthorizationHeader, isAuthenticated} = useAuth();
   const [DoctorToPUT, setDoctorPUT] = useState({})
   
@@ -48,13 +48,8 @@ const authHeader = getAuthorizationHeader()
   };
 
   try {
-    const response = await fetch(`https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/doctors?id=eq.${DoctorID}`,requestOptions);
-
-    // se o backend retorna JSON
-    const result = await response.json(); 
-    console.log("ATUALIZADO COM SUCESSO", result);
-    
-    return result; 
+    const response = await fetch(`https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/doctors?id=eq.${DoctorID}`,requestOptions);    
+     
   } catch (error) {
     console.error("Erro ao atualizar paciente:", error);
     throw error;
@@ -68,7 +63,7 @@ const authHeader = getAuthorizationHeader()
 
     <DoctorForm
     onSave={HandlePutDoctor}
-    onCancel={console.log('Não atualizar')}
+    
     formData={DoctorToPUT}
     setFormData={setDoctorPUT}
     
