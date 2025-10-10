@@ -10,13 +10,13 @@ function TableDoctor() {
   const [search, setSearch] = useState("");
   const [filtroAniversariante, setFiltroAniversariante] = useState(false);
 
-  //  estados do modal
+  //   estados do modal
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedDoctorId, setSelectedDoctorId] = useState(null);
 
   // Função para excluir médicos
   const deleteDoctor = async (id) => {
-     
+      
     const authHeader = getAuthorizationHeader()
     console.log(id, 'teu id')
     
@@ -56,11 +56,11 @@ function TableDoctor() {
   // Buscar médicos da API
   useEffect(() => {
 
-     const authHeader = getAuthorizationHeader()
+      const authHeader = getAuthorizationHeader()
 
-     console.log(authHeader, 'aqui autorização')
+      console.log(authHeader, 'aqui autorização')
 
-   var myHeaders = new Headers();
+    var myHeaders = new Headers();
   myHeaders.append("apikey", API_KEY);
   myHeaders.append("Authorization", `${authHeader}`);
   var requestOptions = {
@@ -75,14 +75,14 @@ function TableDoctor() {
     .catch(error => console.log('error', error));
   }, []);
 
-  // Filtrar médicos pelo campo de pesquisa e aniversariantes
-  const medicosFiltrados = medicos.filter(
+  // ✨ CORREÇÃO AQUI: Verificamos se 'medicos' é um array antes de filtrar.
+  const medicosFiltrados = Array.isArray(medicos) ? medicos.filter(
     (medico) =>
       `${medico.nome} ${medico.cpf} ${medico.email} ${medico.telefone}`
         .toLowerCase()
         .includes(search.toLowerCase()) &&
       (filtroAniversariante ? ehAniversariante(medico.data_nascimento) : true)
-  );
+  ) : []; // Se não for um array, usamos um array vazio como fallback.
 
   return (
     <>
@@ -180,7 +180,7 @@ function TableDoctor() {
                                   </button>
                                 </Link>
 
-                                {/*  Editar */}
+                                {/* Editar */}
                                 <Link to={`${medico.id}/edit`}>
                                     <button
                                       className="btn btn-sm"
@@ -231,7 +231,7 @@ function TableDoctor() {
         </section>
       </div>
 
-      {/*  Modal de confirmação de exclusão */}
+      {/* Modal de confirmação de exclusão */}
       {showDeleteModal && (
         <div
           className="modal fade show"

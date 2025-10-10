@@ -208,7 +208,60 @@
 
 .department-info {
   font-size: 13px;
-  color: #333; 
+  color: #333;
   white-space: nowrap; 
 }
 
+html[data-bs-theme="dark"] .painel-container {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+html[data-bs-theme="dark"] .painel-titulo,
+html[data-bs-theme="dark"] .painel-subtitulo,
+html[data-bs-theme="dark"] .card-info,
+html[data-bs-theme="dark"] .grafico-titulo,
+html[data-bs-theme="dark"] .grafico-subtitulo,
+html[data-bs-theme="dark"] .performance-titulo,
+html[data-bs-theme="dark"] .performance-subtitulo,
+html[data-bs-theme="dark"] .department-name,
+html[data-bs-theme="dark"] .department-info {
+  color: #e0e0e0;
+}
+
+html[data-bs-theme="dark"] .painel-card,
+html[data-bs-theme="dark"] .grafico-card,
+html[data-bs-theme="dark"] .performance-container {
+  background: #1a1a1a;
+  box-shadow: 0px 2px 8px rgba(0,0,0,0.5);
+  border-color: #222;
+  color: #fff;
+}
+
+html[data-bs-theme="dark"] .painel-card:hover {
+  background: #232a36;
+  border: 1px solid #0066ff33;
+  box-shadow: 0px 8px 24px rgba(0,102,255,0.12);
+  color: #fff;
+}
+
+html[data-bs-theme="dark"] .badge {
+  background: #0050cc;
+  color: #fff;
+}
+
+html[data-bs-theme="dark"] .progress-bar,
+html[data-bs-theme="dark"] .departamento-barra {
+  background: #222;
+  color: #fff;
+}
+
+html[data-bs-theme="dark"] .progress-fill {
+  background: #3388ff;
+  color: #fff;
+}
+
+html[data-bs-theme="dark"] .departamento-fill {
+  background: #3388ff;
+  color: #fff;
+}

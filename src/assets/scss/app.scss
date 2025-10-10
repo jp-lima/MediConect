@@ -19,3 +19,9 @@ body .bi::before, [class^=bi-]::before, [class*=" bi-"]::before {
 
 // Mazer CSS
 @import "./mazer";
+
+@import './_variables.scss'; // Light variables
+
+@import './themes/dark/_variables-dark.scss'; // Dark variables
+@import './themes/dark/_mazer-dark.scss';     // Dark theme overrides
+

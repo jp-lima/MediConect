@@ -149,3 +149,83 @@
   color: white;
   background-color: #5980fd;
 }
+
+
+/* Dark mode styles */
+html[data-bs-theme="dark"] {
+  background-color: #181a1b;
+  color: #e0e0e0;
+}
+
+html[data-bs-theme="dark"] .calendario {
+  background-color: #23272a;
+  border: 1px solid #333;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+html[data-bs-theme="dark"] .busca-atendimento input {
+  background-color: #23272a;
+  color: #e0e0e0;
+  border: 1px solid #444;
+}
+
+html[data-bs-theme="dark"] .busca-atendimento select {
+  background-color: #5980fd;
+  color: #fff;
+}
+
+html[data-bs-theme="dark"] .btn-selecionar-tabeladia,
+html[data-bs-theme="dark"] .btn-selecionar-tabelasemana,
+html[data-bs-theme="dark"] .btn-selecionar-tabelames {
+  background-color: #23272a;
+  color: #e0e0e0;
+}
+
+html[data-bs-theme="dark"] .btn-selecionar-tabeladia.ativo,
+html[data-bs-theme="dark"] .btn-selecionar-tabelasemana.ativo,
+html[data-bs-theme="dark"] .btn-selecionar-tabelames.ativo {
+  background-color: #5980fd;
+  color: #fff;
+  border-color: #3a5ccc;
+}
+
+html[data-bs-theme="dark"] .btn-fila-espera,
+html[data-bs-theme="dark"] .btn-agenda {
+  background-color: #23272a;
+  color: #e0e0e0;
+  border-bottom: 3px solid transparent;
+}
+
+html[data-bs-theme="dark"] .opc-filaespera-ativo,
+html[data-bs-theme="dark"] .opc-agenda-ativo {
+  background-color: #5980fd;
+  color: #fff;
+}
+
+html[data-bs-theme="dark"] #status-card-consulta-realizado,
+html[data-bs-theme="dark"] .legenda-item-realizado {
+  background-color: #1e2e1e;
+  border: 3px solid #2e4d2e;
+  color: #b7ffbd;
+}
+
+html[data-bs-theme="dark"] #status-card-consulta-cancelado,
+html[data-bs-theme="dark"] .legenda-item-cancelado {
+  background-color: #2e1e23;
+  border: 3px solid #4d2e36;
+  color: #ffb7cc;
+}
+
+html[data-bs-theme="dark"] #status-card-consulta-confirmado,
+html[data-bs-theme="dark"] .legenda-item-confirmado {
+  background-color: #1e2327;
+  border: 3px solid #2e3a4d;
+  color: #eef8fb;
+}
+
+html[data-bs-theme="dark"] #status-card-consulta-agendado,
+html[data-bs-theme="dark"] .legenda-item-agendado {
+  background-color: #2e2e1e;
+  border: 3px solid #4d4d2e;
+  color: #f7f7c4;
+}

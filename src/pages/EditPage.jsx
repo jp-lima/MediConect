@@ -3,7 +3,7 @@ import React from 'react'
 import PatientForm from '../components/patients/PatientForm'
 
 import {useEffect, useState} from 'react'
-import { GetByID } from '../components/utils/Functions-Endpoints/Patient'
+import { GetPatientByID } from '../components/utils/Functions-Endpoints/Patient'
 import API_KEY from '../components/utils/apiKeys'
 import {useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../components/utils/AuthProvider'
@@ -19,7 +19,7 @@ const PatientID = Parametros.id
 useEffect(() => {
    const authHeader = getAuthorizationHeader()
 
-   GetByID(PatientID, authHeader)
+   GetPatientByID(PatientID, authHeader)
   .then((data) => {
         console.log(data[0], "paciente vindo da API");
         setPatientPUT(data[0]); // supabase retorna array

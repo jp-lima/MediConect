@@ -180,3 +180,52 @@
 .manage-button:hover {
     background-color: #4444ff;
 }
+
+html[data-bs-theme="dark"] .dashboard-container {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+html[data-bs-theme="dark"] .dashboard-header h1,
+html[data-bs-theme="dark"] .dashboard-header p,
+html[data-bs-theme="dark"] .quick-actions h2,
+html[data-bs-theme="dark"] .appointments-section h2,
+html[data-bs-theme="dark"] .action-title,
+html[data-bs-theme="dark"] .stat-value {
+    color: #e0e0e0;
+}
+
+html[data-bs-theme="dark"] .stat-card,
+html[data-bs-theme="dark"] .action-button,
+html[data-bs-theme="dark"] .appointments-section {
+    background-color: #1e1e1e;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+html[data-bs-theme="dark"] .stat-label,
+html[data-bs-theme="dark"] .action-desc,
+html[data-bs-theme="dark"] .no-appointments-content p {
+    color: #b0b0b0;
+}
+
+html[data-bs-theme="dark"] .stat-icon-wrapper.blue { background-color: #3a3aff; }
+html[data-bs-theme="dark"] .stat-icon-wrapper.green { background-color: #1e7d3a; }
+html[data-bs-theme="dark"] .stat-icon-wrapper.purple { background-color: #6c3bbf; }
+html[data-bs-theme="dark"] .stat-icon-wrapper.orange { background-color: #b36b1e; }
+
+html[data-bs-theme="dark"] .action-icon {
+    color: #a272ff;
+}
+
+html[data-bs-theme="dark"] .no-appointments-icon {
+    color: #666;
+}
+
+html[data-bs-theme="dark"] .manage-button {
+    background-color: #3a3aff;
+    color: #fff;
+}
+
+html[data-bs-theme="dark"] .manage-button:hover {
+    background-color: #2323b0;
+}

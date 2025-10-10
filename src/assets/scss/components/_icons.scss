@@ -46,3 +46,24 @@
 .burger-btn {
     display:none;
 }
+
+html[data-bs-theme="dark"] {
+    .stats-icon {
+        background-color: #333 !important;
+        i {
+            color: #e0e0e0 !important;
+        }
+        &.purple {
+            background-color: #6c63ff !important;
+        }
+        &.blue {
+            background-color: #379ecb !important;
+        }
+        &.red {
+            background-color: #d9534f !important;
+        }
+        &.green {
+            background-color: #3bb78f !important;
+        }
+    }
+}

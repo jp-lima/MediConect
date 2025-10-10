@@ -16,3 +16,45 @@ table.dataTable td {
 div.dataTables_wrapper div.dataTables_info {
 	padding-top: .4em
 }
+
+html[data-bs-theme="dark"] {
+	table.dataTable {
+		color: #e0e0e0 !important;
+		background-color: #232323 !important;
+	}
+	table.dataTable th {
+		color: #e0e0e0 !important;
+		background-color: #232323 !important;
+	}
+	table.dataTable td {
+		color: #e0e0e0 !important;
+		background-color: #232323 !important;
+	}
+	.dataTables_wrapper .dataTables_paginate .paginate_button {
+		color: #e0e0e0 !important;
+		background-color: #232323 !important;
+		border: 1px solid #333 !important;
+	}
+	.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+	.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+		background-color: #5A8DEE !important;
+		color: white !important;
+		border: none !important;
+	}
+	.dataTables_wrapper .dataTables_filter input {
+		background-color: #232323 !important;
+		color: #e0e0e0 !important;
+		border: 1px solid #333 !important;
+	}
+	.dataTables_wrapper .dataTables_length select {
+		background-color: #232323 !important;
+		color: #e0e0e0 !important;
+		border: 1px solid #333 !important;
+	}
+	.dataTables_wrapper .dataTables_info {
+		color: #e0e0e0 !important;
+	}
+	.dataTables_wrapper .dataTables_filter label {
+		color: #e0e0e0 !important;
+	}
+}

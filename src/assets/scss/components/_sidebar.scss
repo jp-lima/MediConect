@@ -1,9 +1,10 @@
-@mixin sidebar-active {
+@mixin sidebar-active($sidebar-width: 300px) {
     .sidebar-wrapper {
         left: 0;
+        width: $sidebar-width;
     }
     & ~ #main {
-        margin-left: 300px;
+        margin-left: $sidebar-width;
     }
 }
 @mixin sidebar-inactive {
@@ -17,9 +18,37 @@
 
 #sidebar {
     @include sidebar-inactive();
-    
-    @media screen and (min-width: 1200px) {
-        @include sidebar-active();
+
+    // Desktop grande (1920px+)
+    @media screen and (min-width: 1400px) {
+        @include sidebar-active(300px);
+    }
+
+    // Desktop padrão (1200px-1399px)
+    @media screen and (min-width: 1200px) and (max-width: 1399px) {
+        @include sidebar-active(280px);
+    }
+
+    // Tablet grande (992px-1199px)
+    @media screen and (min-width: 992px) and (max-width: 1199px) {
+        @include sidebar-active(260px);
+    }
+
+    // Tablet (768px-991px) - sidebar colapsada por padrão
+    @media screen and (min-width: 768px) and (max-width: 991px) {
+        @include sidebar-inactive();
+
+        &.active {
+            .sidebar-wrapper {
+                left: 0;
+                width: 280px;
+                z-index: 1050;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            }
+            & ~ #main {
+                margin-left: 0;
+            }
+        }
     }
 
     &.inactive {
@@ -31,7 +60,7 @@
             left: 0;
         }
     }
-    
+
 }
 .sidebar-wrapper {
     width: 300px;
@@ -42,21 +71,56 @@
     overflow-y: auto;
     background-color: $sidebar-bg;
     bottom: 0;
-    transition: left .7s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: left .7s cubic-bezier(0.22, 1, 0.36, 1), width .3s ease;
+
+    // Responsividade da largura
+    @media screen and (min-width: 1200px) and (max-width: 1399px) {
+        width: 280px;
+    }
+
+    @media screen and (min-width: 992px) and (max-width: 1199px) {
+        width: 260px;
+    }
+
+    @media screen and (max-width: 991px) {
+        width: 280px;
+        z-index: 1050;
+    }
+
     .sidebar-header {
-        padding: 2rem 2rem 1rem;
-        font-size: 2rem;
+        padding: 2rem 1.5rem 1rem;
+        font-size: 1.8rem;
         font-weight: bold;
+
+        // Responsividade do header
+        @media screen and (max-width: 1199px) {
+            padding: 1.5rem 1rem 0.5rem;
+            font-size: 1.6rem;
+        }
+
+        @media screen and (max-width: 767px) {
+            padding: 1rem 1rem 0.5rem;
+            font-size: 1.4rem;
+        }
 
         img {
             height: 1.2rem;
+
+            @media screen and (max-width: 767px) {
+                height: 1rem;
+            }
         }
     }
     .sidebar-toggler.x {
         position: absolute;
         right: 1.75rem;
         top: .25rem;
-        display:none;
+        display: none;
+
+        @media screen and (max-width: 991px) {
+            right: 1rem;
+            top: 0.5rem;
+        }
     }
 
     .menu {
@@ -64,6 +128,18 @@
         margin-top: 2rem;
         padding: 0 2rem;
         font-weight: 600;
+
+        // Responsividade do menu
+        @media screen and (max-width: 1199px) {
+            padding: 0 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        @media screen and (max-width: 767px) {
+            padding: 0 1rem;
+            margin-top: 1rem;
+        }
+
         .sidebar-title {
             padding: 0 1rem;
             margin: 1.5rem 0 1rem;
@@ -71,8 +147,20 @@
             list-style: none;
             font-weight: 600;
             color:  $sidebar-link-color;
+
+            @media screen and (max-width: 1199px) {
+                margin: 1rem 0 0.5rem;
+                font-size: 0.9rem;
+                padding: 0 0.5rem;
+            }
+
+            @media screen and (max-width: 767px) {
+                margin: 0.8rem 0 0.4rem;
+                font-size: 0.85rem;
+                padding: 0 0.3rem;
+            }
         }
-        
+
         .sidebar-link {
             display: block;
             padding: .7rem 1rem;
@@ -83,14 +171,39 @@
             transition: all .5s;
             text-decoration: none;
             color: $sidebar-link-color;
+
+            // Responsividade dos links
+            @media screen and (max-width: 1199px) {
+                padding: 0.6rem 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            @media screen and (max-width: 767px) {
+                padding: 0.8rem 0.6rem;
+                font-size: 0.85rem;
+            }
+
             svg,i {
                 color:#7c8db5;
+                flex-shrink: 0;
+
+                @media screen and (max-width: 767px) {
+                    font-size: 1.1em;
+                }
             }
             i:before {
                 vertical-align: top;
             }
             span {
                 margin-left: 1rem;
+
+                @media screen and (max-width: 1199px) {
+                    margin-left: 0.8rem;
+                }
+
+                @media screen and (max-width: 767px) {
+                    margin-left: 0.6rem;
+                }
             }
             &:hover {
                 background-color: $sidebar-link-hover-bg;
@@ -192,13 +305,78 @@
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 9;
 }
+// Media queries para diferentes dispositivos
 @media screen and (max-width: 1199px) {
     .sidebar-wrapper {
         position: fixed;
         left: -300px;
         .sidebar-toggler.x  {
-            display:block;
+            display: block;
         }
+    }
+}
+
+// Tablet específico
+@media screen and (min-width: 768px) and (max-width: 991px) {
+    .sidebar-wrapper {
+        left: -280px;
+
+        .menu {
+            .sidebar-link {
+                padding: 0.7rem 0.8rem;
+            }
+        }
+    }
+
+    #sidebar.active ~ #main {
+        margin-left: 0 !important;
+    }
+}
+
+// Mobile específico
+@media screen and (max-width: 767px) {
+    .sidebar-wrapper {
+        left: -280px;
+        width: 280px !important;
+
+        .sidebar-header {
+            .logo h1 {
+                font-size: 1.3rem;
+            }
+        }
+
+        .menu {
+            .sidebar-link {
+                padding: 0.9rem 0.7rem;
+
+                span {
+                    font-size: 0.9rem;
+                }
+            }
+
+            .submenu {
+                .submenu-item a {
+                    padding: 0.6rem 1.5rem;
+                    font-size: 0.8rem;
+                }
+            }
+        }
+    }
+
+    #sidebar.active ~ #main {
+        margin-left: 0 !important;
+    }
+
+    // Backdrop para mobile
+    #sidebar.active::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1040;
     }
 }
 @keyframes slideDown {
@@ -215,5 +393,53 @@
     }
     to {
         max-height: 0;
+    }
+}
+
+html[data-bs-theme="dark"] {
+    .sidebar-wrapper {
+        background-color: #181818 !important;
+        color: #e0e0e0 !important;
+        border-color: #333 !important;
+        .sidebar-header {
+            color: #e0e0e0 !important;
+        }
+        .menu {
+            .sidebar-title {
+                color: #b0b0b0 !important;
+            }
+            .sidebar-link {
+                color: #e0e0e0 !important;
+                &:hover {
+                    background-color: #222 !important;
+                }
+                svg, i {
+                    color: #b0b0b0 !important;
+                }
+            }
+            .sidebar-item.active > .sidebar-link {
+                background-color: #333 !important;
+                span {
+                    color: #fff !important;
+                }
+                svg, i {
+                    color: #fff !important;
+                }
+            }
+            .submenu {
+                .submenu-item a {
+                    color: #b0b0b0 !important;
+                    &:hover {
+                        color: #fff !important;
+                    }
+                }
+                .submenu-item.active > a {
+                    color: #fff !important;
+                }
+            }
+        }
+    }
+    .sidebar-backdrop {
+        background-color: rgba(0, 0, 0, 0.7) !important;
     }
 }

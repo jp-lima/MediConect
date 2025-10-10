@@ -90,3 +90,27 @@
         }
     }
 }
+
+html[data-bs-theme="dark"] {
+    .avatar {
+        background-color: #232323;
+        color: #e0e0e0;
+
+        .avatar-content {
+            color: #e0e0e0;
+            background-color: #232323;
+            svg, i {
+                color: #e0e0e0;
+            }
+        }
+
+        img {
+            background-color: #232323;
+        }
+
+        .avatar-status {
+            border-color: #232323;
+            background-color: #444;
+        }
+    }
+}

@@ -50,8 +50,26 @@
 // Dark theme
 html[data-bs-theme="dark"] .comment {
     border: 1px solid #404053 !important;
+    background-color: #232336 !important;
+    color: #e0e0f0 !important;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+
+    &-header {
+        .avatar-content {
+            background-color: #404053;
+        }
+    }
+
+    &-body {
+        // Optional: adjust text color if needed
+        color: #e0e0f0;
+    }
 
     &-time {
-        color:#6a9cd2 !important;
+        color: #6a9cd2 !important;
     }
+
+    // &-actions {
+    //     // Optional: adjust button/link color if needed
+    // }
 }

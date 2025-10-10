@@ -10,7 +10,7 @@
     min-width: 400px;
 }
 
-[data-bs-theme="dark"] .widget-todo-item:hover {
+.widget-todo-item:hover {
     background-color: $gray-900;
 }
 .widget-todo-title-wrapper {
@@ -39,4 +39,19 @@
         cursor: move;
         height: 1rem
     }
+}
+
+html[data-bs-theme="dark"] .widget-todo-item:hover {
+    background-color: $gray-800;
+}
+html[data-bs-theme="dark"] .widget-todo-item {
+    background-color: $gray-900;
+    color: $gray-100;
+
+    &:hover {
+        background-color: $gray-800;
+    }
+}
+html[data-bs-theme="dark"] .widget-todo-title-area svg {
+    fill: $gray-100;
 }

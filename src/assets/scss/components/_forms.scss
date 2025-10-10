@@ -245,3 +245,29 @@ $choices-highlight-bg: #e9ecef;
 .choices__list--dropdown .choices__item--selectable.is-highlighted {
     background-color: $choices-highlight-bg;
 }
+
+html[data-bs-theme="dark"] {
+  .form-control {
+    background-color: #232323 !important;
+    color: #e0e0e0 !important;
+    border-color: #333 !important;
+  }
+  .form-label {
+    color: #e0e0e0 !important;
+  }
+}
+
+html[data-bs-theme="dark"] .form-select,
+html[data-bs-theme="dark"] .form-control {
+  background-color: #232323 !important;
+  color: #e0e0e0 !important;
+  border-color: #333 !important;
+}
+
+html[data-bs-theme="dark"] .form-select:focus,
+html[data-bs-theme="dark"] .form-control:focus {
+  background-color: #232323 !important;
+  color: #e0e0e0 !important;
+  border-color: #1976d2 !important;
+  box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.25) !important;
+}

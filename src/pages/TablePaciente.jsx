@@ -15,7 +15,7 @@ function TablePaciente({ setCurrentPage, setPatientID }) {
   const [filtroVIP, setFiltroVIP] = useState(false);
   const [filtroAniversariante, setFiltroAniversariante] = useState(false);
 
-  //  estados do modal
+  //   estados do modal
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedPatientId, setSelectedPatientId] = useState(null);
 
@@ -100,11 +100,11 @@ function TablePaciente({ setCurrentPage, setPatientID }) {
   // Requisição inicial para buscar pacientes
   useEffect(() => {
 
-     const authHeader = getAuthorizationHeader()
+      const authHeader = getAuthorizationHeader()
 
-     console.log(authHeader, 'aqui autorização')
+      console.log(authHeader, 'aqui autorização')
 
-   var myHeaders = new Headers();
+    var myHeaders = new Headers();
   myHeaders.append("apikey", API_KEY);
   myHeaders.append("Authorization", `${authHeader}`);
   var requestOptions = {
@@ -131,7 +131,8 @@ function TablePaciente({ setCurrentPage, setPatientID }) {
     );
   };
 
-const pacientesFiltrados = pacientes.filter((paciente) => {
+// ✨ CORREÇÃO AQUI: Verificamos se 'pacientes' é um array antes de filtrar.
+const pacientesFiltrados = Array.isArray(pacientes) ? pacientes.filter((paciente) => {
   const textoCompletoPaciente = `${paciente.nome} ${paciente.cpf} ${paciente.email} ${paciente.telefone}`.toLowerCase();
   const passaBusca = textoCompletoPaciente.includes(search.toLowerCase());
   const passaVIP = filtroVIP ? paciente.vip === true : true;
@@ -141,7 +142,7 @@ const pacientesFiltrados = pacientes.filter((paciente) => {
     : true;
 
   return passaBusca && passaVIP && passaConvenio && passaAniversario;
-});
+}) : []; // Se não for um array, usamos um array vazio como fallback.
 
  
   return (
@@ -345,7 +346,7 @@ const pacientesFiltrados = pacientes.filter((paciente) => {
         >
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
-          
+            
               <div className="modal-header bg-danger bg-opacity-25">
                 <h5 className="modal-title text-danger">
                   Confirmação de Exclusão
@@ -364,7 +365,7 @@ const pacientesFiltrados = pacientes.filter((paciente) => {
               </div>
 
               <div className="modal-footer">
-         
+              
                 <button
                   type="button"
                   className="btn btn-primary"
@@ -373,7 +374,7 @@ const pacientesFiltrados = pacientes.filter((paciente) => {
                   Cancelar
                 </button>
 
-         
+              
                 <button
                   type="button"
                   className="btn btn-danger"

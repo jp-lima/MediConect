@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+html[data-bs-theme="dark"] .App-header {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+html[data-bs-theme="dark"] .App-link {
+  color: #bb86fc;
+}

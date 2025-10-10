@@ -9,12 +9,6 @@
     "icon": "calendar-plus-fill",
     "url": "/medico/prontuario"
   },
-
-  {
-    "name": "Laudos",
-    "icon": "table",
-    "url": "/medico/laudo"
-  },
 {
   "name": "Seus Agendamentos",
   "icon": "calendar",

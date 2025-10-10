@@ -1,16 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Link,useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { FormatTelefones, FormatPeso, FormatCPF } from '../utils/Formatar/Format';
 
-function PatientForm({ onSave, formData, setFormData }) {
-  
-  
-  const [errorModalMsg, setErrorModalMsg] = useState("");
-  const [showModal, setShowModal] = useState(false);
-  const [pacienteExistente, setPacienteExistente] = useState(null);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-
+function PatientForm({ onSave, onCancel, formData, setFormData, isLoading }) {
   const [avatarUrl, setAvatarUrl] = useState(null);
+  const [showRequiredModal, setShowRequiredModal] = useState(false);
+  const [emptyFields, setEmptyFields] = useState([]);
+  const [cpfError, setCpfError] = useState('');
   const [collapsedSections, setCollapsedSections] = useState({
     dadosPessoais: true,
     infoMedicas: false,
@@ -18,6 +14,41 @@ function PatientForm({ onSave, formData, setFormData }) {
     endereco: false,
     contato: false,
   });
+
+  const nomeRef = useRef(null);
+  const cpfRef = useRef(null);
+  const emailRef = useRef(null);
+  const telefoneRef = useRef(null);
+
+
+  const validarCPF = (cpf) => {
+    const cpfLimpo = cpf.replace(/\D/g, '');
+
+
+    if (cpfLimpo.length !== 11) return false;
+
+
+    if (/^(\d)\1+$/.test(cpfLimpo)) return false;
+
+
+    let soma = 0;
+    for (let i = 0; i < 9; i++) {
+      soma += parseInt(cpfLimpo.charAt(i)) * (10 - i);
+    }
+    let resto = 11 - (soma % 11);
+    let digito1 = resto === 10 || resto === 11 ? 0 : resto;
+
+
+    soma = 0;
+    for (let i = 0; i < 10; i++) {
+      soma += parseInt(cpfLimpo.charAt(i)) * (11 - i);
+    }
+    resto = 11 - (soma % 11);
+    let digito2 = resto === 10 || resto === 11 ? 0 : resto;
+
+
+    return digito1 === parseInt(cpfLimpo.charAt(9)) && digito2 === parseInt(cpfLimpo.charAt(10));
+  };
 
   const handleToggleCollapse = (section) => {
     setCollapsedSections(prev => ({
@@ -40,6 +71,16 @@ function PatientForm({ onSave, formData, setFormData }) {
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
 
+
+    if (value && emptyFields.includes(name)) {
+      setEmptyFields(prev => prev.filter(field => field !== name));
+    }
+
+
+    if (name === 'cpf' && cpfError) {
+      setCpfError('');
+    }
+
     if (type === 'file') {
       setFormData(prev => ({ ...prev, [name]: files[0] }));
 
@@ -51,7 +92,17 @@ function PatientForm({ onSave, formData, setFormData }) {
         setAvatarUrl(null);
       }
     } else if (name === 'cpf') {
-      setFormData(prev => ({ ...prev, cpf: FormatCPF(value) }));
+      const cpfFormatado = FormatCPF(value);
+      setFormData(prev => ({ ...prev, cpf: cpfFormatado }));
+
+      const cpfLimpo = cpfFormatado.replace(/\D/g, '');
+      if (cpfLimpo.length === 11) {
+        if (!validarCPF(cpfFormatado)) {
+          setCpfError('CPF inválido');
+        } else {
+          setCpfError('');
+        }
+      }
     } else if (name.includes('phone')) {
       setFormData(prev => ({ ...prev, [name]: FormatTelefones(value) }));
     } else if (name.includes('weight_kg') || name.includes('height_m')) {
@@ -63,35 +114,114 @@ function PatientForm({ onSave, formData, setFormData }) {
     }
   };
 
+  const scrollToEmptyField = (fieldName) => {
+    let fieldRef = null;
+
+    switch (fieldName) {
+      case 'full_name':
+        fieldRef = nomeRef;
+ 
+        setCollapsedSections(prev => ({ ...prev, dadosPessoais: true }));
+        break;
+      case 'cpf':
+        fieldRef = cpfRef;
+        setCollapsedSections(prev => ({ ...prev, dadosPessoais: true }));
+        break;
+      case 'email':
+        fieldRef = emailRef;
+        setCollapsedSections(prev => ({ ...prev, contato: true }));
+        break;
+      case 'phone_mobile':
+        fieldRef = telefoneRef;
+        setCollapsedSections(prev => ({ ...prev, contato: true }));
+        break;
+      default:
+        return;
+    }
+
+ 
+    setTimeout(() => {
+      if (fieldRef.current) {
+        fieldRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+        fieldRef.current.focus();
+
+      
+        fieldRef.current.style.border = '2px solid #dc3545';
+        fieldRef.current.style.boxShadow = '0 0 0 0.2rem rgba(220, 53, 69, 0.25)';
+
+
+        setTimeout(() => {
+          if (fieldRef.current) {
+            fieldRef.current.style.border = '';
+            fieldRef.current.style.boxShadow = '';
+          }
+        }, 3000);
+      }
+    }, 300);
+  };
+
   const handleSubmit = async () => {
-    // ALTERADO: Nome, CPF, Email e Telefone
-    if (!formData.full_name || !formData.cpf || !formData.email || !formData.phone_mobile) {
-      setErrorModalMsg('Por favor, preencha Nome, CPF, Email e Telefone.');
-      setShowModal(true);
+
+    const missingFields = [];
+    if (!formData.full_name) missingFields.push('full_name');
+    if (!formData.cpf) missingFields.push('cpf');
+    if (!formData.email) missingFields.push('email');
+    if (!formData.phone_mobile) missingFields.push('phone_mobile');
+
+    if (missingFields.length > 0) {
+      setEmptyFields(missingFields);
+      setShowRequiredModal(true);
+
+     
+      setTimeout(() => {
+        if (missingFields.length > 0) {
+          scrollToEmptyField(missingFields[0]);
+        }
+      }, 500); 
+
       return;
     }
 
+ 
     const cpfLimpo = formData.cpf.replace(/\D/g, '');
     if (cpfLimpo.length !== 11) {
-      setErrorModalMsg('CPF inválido. Por favor, verifique o número digitado.');
-      setShowModal(true);
+      setShowRequiredModal(true);
+      setEmptyFields(['cpf']);
+      setCpfError('CPF deve ter 11 dígitos');
+      setTimeout(() => scrollToEmptyField('cpf'), 500);
       return;
     }
 
-    try {
-      await onSave({ ...formData, bmi: parseFloat(formData.bmi) || 0 });
-      setShowSuccessModal(true);
-    } catch (error) {
-      setErrorModalMsg('Erro ao salvar paciente. Tente novamente.');
-      setShowModal(true);
+   
+    if (!validarCPF(formData.cpf)) {
+      setShowRequiredModal(true);
+      setEmptyFields(['cpf']);
+      setCpfError('CPF inválido');
+      setTimeout(() => scrollToEmptyField('cpf'), 500);
+      return;
     }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  /*  if (!emailRegex.test(formData.email)) {
+      throw new Error('Email inválido. Por favor, verifique o email digitado.');
+    }*/
+
+   
+    await onSave({ ...formData, bmi: parseFloat(formData.bmi) || null });
+  };
+
+  const handleModalClose = () => {
+    setShowRequiredModal(false);
   };
 
   return (
     <div className="card p-3">
       <h3 className="mb-4 text-center" style={{ fontSize: '2.5rem' }}>MediConnect</h3>
 
-      {/* DADOS PESSOAIS - MANTIDO O LAYOUT ORIGINAL */}
+      {/* DADOS PESSOAIS */}
       <div className="mb-5 p-4 border rounded shadow-sm">
         <h4 className="mb-4 cursor-pointer d-flex justify-content-between align-items-center" onClick={() => handleToggleCollapse('dadosPessoais')} style={{ fontSize: '1.8rem' }}>
           Dados Pessoais
@@ -141,10 +271,20 @@ function PatientForm({ onSave, formData, setFormData }) {
                 {formData.foto && <span className="ms-2" style={{ fontSize: '1rem' }}>{formData.foto.name}</span>}
               </div>
             </div>
-            {/* CADASTRO - MANTIDO O LAYOUT ORIGINAL COM COLUNAS */}
+
+            {/* CAMPOS OBRIGATÓRIOS */}
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Nome: *</label>
-              <input type="text" className="form-control" name="full_name" value={formData.full_name || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input
+                ref={nomeRef}
+                type="text"
+                className="form-control"
+                name="full_name"
+                value={formData.full_name || ''}
+                onChange={handleChange}
+                style={{ fontSize: '1.1rem' }}
+                required
+              />
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Nome social:</label>
@@ -152,11 +292,25 @@ function PatientForm({ onSave, formData, setFormData }) {
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Data de nascimento:</label>
-              <input type="date" className="form-control" name="birth_date" value={formData.birth_date || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input
+                type="date"
+                className="form-control"
+                name="birth_date"
+                value={formData.birth_date || ''}
+                onChange={handleChange}
+                style={{ fontSize: '1.1rem' }}
+                min="1900-01-01" max="2025-09-24"
+              />
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Gênero:</label>
-              <select className="form-control" name="sex" value={formData.sex || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }}>
+              <select
+                className="form-control"
+                name="sex"
+                value={formData.sex || ''}
+                onChange={handleChange}
+                style={{ fontSize: '1.1rem' }}
+              >
                 <option value="">Selecione</option>
                 <option value="Masculino">Masculino</option>
                 <option value="Feminino">Feminino</option>
@@ -165,7 +319,21 @@ function PatientForm({ onSave, formData, setFormData }) {
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>CPF: *</label>
-              <input type="text" className="form-control" name="cpf" value={formData.cpf || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input
+                ref={cpfRef}
+                type="text"
+                className={`form-control ${cpfError ? 'is-invalid' : ''}`}
+                name="cpf"
+                value={formData.cpf || ''}
+                onChange={handleChange}
+                style={{ fontSize: '1.1rem' }}
+                required
+              />
+              {cpfError && (
+                <div className="invalid-feedback" style={{ display: 'block' }}>
+                  {cpfError}
+                </div>
+              )}
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>RG:</label>
@@ -254,7 +422,7 @@ function PatientForm({ onSave, formData, setFormData }) {
               </div>
             </div>
 
-            {/* CAMPOS MOVIDOS */}
+            {/* CAMPOS ADICIONAIS */}
             <div className="col-md-12 mb-3 mt-3">
               <label style={{ fontSize: '1.1rem' }}>Observações:</label>
               <textarea className="form-control" name="notes" value={formData.notes || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} placeholder='alergias, doenças crônicas, informações sobre porteses ou marca-passo, etc'></textarea>
@@ -272,7 +440,7 @@ function PatientForm({ onSave, formData, setFormData }) {
         </div>
       </div>
 
-      {/* INFORMAÇÕES MÉDICAS - MANTIDO O LAYOUT ORIGINAL */}
+      {/* INFORMAÇÕES MÉDICAS */}
       <div className="mb-5 p-4 border rounded shadow-sm">
         <h4 className="mb-4 cursor-pointer d-flex justify-content-between align-items-center" onClick={() => handleToggleCollapse('infoMedicas')} style={{ fontSize: '1.8rem' }}>
           Informações Médicas
@@ -313,7 +481,7 @@ function PatientForm({ onSave, formData, setFormData }) {
         </div>
       </div>
 
-      {/* INFORMAÇÕES DE CONVÊNIO - MANTIDO O LAYOUT ORIGINAL */}
+      {/* INFORMAÇÕES DE CONVÊNIO */}
       <div className="mb-5 p-4 border rounded shadow-sm">
         <h4 className="mb-4 cursor-pointer d-flex justify-content-between align-items-center" onClick={() => handleToggleCollapse('infoConvenio')} style={{ fontSize: '1.8rem' }}>
           Informações de convênio
@@ -366,7 +534,7 @@ function PatientForm({ onSave, formData, setFormData }) {
         </div>
       </div>
 
-      {/* ENDEREÇO - MANTIDO O LAYOUT ORIGINAL */}
+      {/* ENDEREÇO */}
       <div className="mb-5 p-4 border rounded shadow-sm">
         <h4 className="mb-4 cursor-pointer d-flex justify-content-between align-items-center" onClick={() => handleToggleCollapse('endereco')} style={{ fontSize: '1.8rem' }}>
           Endereço
@@ -408,7 +576,6 @@ function PatientForm({ onSave, formData, setFormData }) {
         </div>
       </div>
 
-      {/* CONTATO - MANTIDO O LAYOUT ORIGINAL */}
       <div className="mb-5 p-4 border rounded shadow-sm">
         <h4 className="mb-4 cursor-pointer d-flex justify-content-between align-items-center" onClick={() => handleToggleCollapse('contato')} style={{ fontSize: '1.8rem' }}>
           Contato
@@ -420,11 +587,29 @@ function PatientForm({ onSave, formData, setFormData }) {
           <div className="row mt-3">
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Email: *</label>
-              <input type="email" className="form-control" name="email" value={formData.email || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input
+                ref={emailRef}
+                type="email"
+                className="form-control"
+                name="email"
+                value={formData.email || ''}
+                onChange={handleChange}
+                style={{ fontSize: '1.1rem' }}
+                required
+              />
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Telefone: *</label>
-              <input type="text" className="form-control" name="phone_mobile" value={formData.phone_mobile || ''} onChange={handleChange} style={{ fontSize: '1.1rem' }} />
+              <input
+                ref={telefoneRef}
+                type="text"
+                className="form-control"
+                name="phone_mobile"
+                value={formData.phone_mobile || ''}
+                onChange={handleChange}
+                style={{ fontSize: '1.1rem' }}
+                required
+              />
             </div>
             <div className="col-md-6 mb-3">
               <label style={{ fontSize: '1.1rem' }}>Telefone 2:</label>
@@ -438,16 +623,8 @@ function PatientForm({ onSave, formData, setFormData }) {
         </div>
       </div>
 
-      {/* Botões */}
-      <div className="mt-3 text-center">
-        <button className="btn btn-success me-3" onClick={handleSubmit} style={{ fontSize: '1.2rem', padding: '0.75rem 1.5rem' }}>
-          Salvar Paciente
-        </button>
-        
-      </div>
-
-      {/* Modal de erro - EXATAMENTE COMO NA IMAGEM */}
-      {showModal && (
+  
+      {showRequiredModal && (
         <div
           style={{
             display: "flex",
@@ -472,7 +649,7 @@ function PatientForm({ onSave, formData, setFormData }) {
               overflow: "hidden",
             }}
           >
-            {/* Header */}
+ 
             <div
               style={{
                 backgroundColor: "#1e3a8a",
@@ -484,7 +661,7 @@ function PatientForm({ onSave, formData, setFormData }) {
             >
               <h5 style={{ color: "#fff", margin: 0, fontSize: "1.2rem", fontWeight: "bold" }}>Atenção</h5>
               <button
-                onClick={() => setShowModal(false)}
+                onClick={handleModalClose}
                 style={{
                   background: "none",
                   border: "none",
@@ -497,20 +674,26 @@ function PatientForm({ onSave, formData, setFormData }) {
               </button>
             </div>
 
-            {/* Body */}
+    
             <div style={{ padding: "25px 20px" }}>
               <p style={{ color: "#111", fontSize: "1.1rem", margin: "0 0 15px 0", fontWeight: "bold" }}>
-                Por favor, preencha:
+                {cpfError ? 'Problema com o CPF:' : 'Por favor, preencha:'}
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginLeft: '10px' }}>
-                {!formData.full_name && <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>- Nome</p>}
-                {!formData.cpf && <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>- CPF</p>}
-                {!formData.email && <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>- Email</p>}
-                {!formData.phone_mobile && <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>- Telefone</p>}
+                {cpfError ? (
+                  <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>{cpfError}</p>
+                ) : (
+                  <>
+                    {!formData.full_name && <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>- Nome</p>}
+                    {!formData.cpf && <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>- CPF</p>}
+                    {!formData.email && <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>- Email</p>}
+                    {!formData.phone_mobile && <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>- Telefone</p>}
+                  </>
+                )}
               </div>
             </div>
 
-            {/* Footer */}
+      
             <div
               style={{
                 display: "flex",
@@ -520,7 +703,7 @@ function PatientForm({ onSave, formData, setFormData }) {
               }}
             >
               <button
-                onClick={() => setShowModal(false)}
+                onClick={handleModalClose}
                 style={{
                   backgroundColor: "#1e3a8a",
                   color: "#fff",
@@ -539,93 +722,17 @@ function PatientForm({ onSave, formData, setFormData }) {
         </div>
       )}
 
-      {/* Modal de sucesso */}
-      {showSuccessModal && (
-          <div
-    style={{
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      position: "fixed",
-      top: 0,
-      left: 0,
-      width: "100%",
-      height: "100%",
-      backgroundColor: "rgba(0,0,0,0.5)",
-      zIndex: 9999,
-    }}
-  >
-    <div
-      style={{
-        backgroundColor: "#fff",
-        borderRadius: "10px",
-        width: "400px",
-        maxWidth: "90%",
-        boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
-        overflow: "hidden",
-      }}
-    >
-      {/* Header */}
-      <div
-        style={{
-          backgroundColor: "#1e3a8a",
-          padding: "15px 20px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <h5 style={{ color: "#fff", margin: 0, fontSize: "1.2rem", fontWeight: "bold" }}>Sucesso</h5>
-        <button
-          onClick={() => setShowSuccessModal(false)}
-          style={{
-            background: "none",
-            border: "none",
-            fontSize: "20px",
-            color: "#fff",
-            cursor: "pointer",
-            fontWeight: "bold",
-          }}
-        >
-          ×
-        </button>
-      </div>
 
-      {/* Body */}
-      <div style={{ padding: "25px 20px" }}>
-        <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>
-          O cadastro do paciente foi realizado com sucesso.
-        </p>
-      </div>
-
-      {/* Footer */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          padding: "15px 20px",
-          borderTop: "1px solid #ddd",
-        }}
-      >
-        <button
-          onClick={() => setShowSuccessModal(false)}
-          style={{
-            backgroundColor: "#1e3a8a",
-            color: "#fff",
-            border: "none",
-            padding: "8px 20px",
-            borderRadius: "6px",
-            cursor: "pointer",
-            fontSize: "1rem",
-            fontWeight: "bold",
-          }}
-        >
-          Fechar
+      <div className="mt-3 text-center">
+        <button className="btn btn-success me-3" onClick={handleSubmit} disabled={isLoading} style={{ fontSize: '1.2rem', padding: '0.75rem 1.5rem' }}>
+          {isLoading ? 'Salvando...' : 'Salvar Paciente'}
         </button>
+        <Link to='/secretaria/pacientes'>
+          <button className="btn btn-light" style={{ fontSize: '1.2rem', padding: '0.75rem 1.5rem' }}>
+            Cancelar
+          </button>
+        </Link>
       </div>
-    </div>
-  </div>
-)}
     </div>
   );
 }

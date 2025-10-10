@@ -30,3 +30,19 @@
         }
     }
 }
+
+html[data-bs-theme="dark"] {
+    .progress {
+        background-color: #232323 !important;
+
+        .progress-bar {
+            color: #e0e0e0 !important;
+            // Optionally adjust background for bars if needed
+            // background-color: darken($value, 10%) !important;
+        }
+
+        .progress-bar.progress-label:before {
+            color: #e0e0e0 !important;
+        }
+    }
+}

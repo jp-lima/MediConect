@@ -1,0 +1,62 @@
+.container-perfis {
+  position: absolute;
+  top: 80px;
+  left: 30px;
+  width: calc(100% - 60px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  z-index: 60;
+}
+
+.acesso-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e2b57;
+  margin-bottom: 6px;
+}
+
+/* estilo visual refinado do select */
+.perfil-select {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1.8px solid #d0d5dd;
+  background-color: #f9fafc;
+  color: #1e2b57;
+  font-weight: 600;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(30, 43, 87, 0.08);
+}
+
+.perfil-select:hover {
+  border-color: #7a85ff;
+  background-color: #ffffff;
+  box-shadow: 0 2px 6px rgba(30, 43, 87, 0.1);
+}
+
+.perfil-select:focus {
+  border-color: #5a46ff;
+  box-shadow: 0 0 0 3px rgba(90, 70, 255, 0.2);
+}
+
+.perfil-select option[value=""] {
+  color: #777;
+  font-weight: 500;
+}
+
+/* responsivo */
+@media (max-width: 780px) {
+  .container-perfis {
+    top: 60px;
+    left: 20px;
+    width: calc(100% - 40px);
+  }
+  .perfil-select {
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+}

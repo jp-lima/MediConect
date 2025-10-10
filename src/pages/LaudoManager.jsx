@@ -1,40 +1,6 @@
 // src/pages/LaudoManager.jsx
 import React, { useState, useEffect } from "react";
-
-/* ===== Estilos embutidos ===== */
-/* Eu coloquei os estilos aqui para simplificar a edição. */
-const styles = `
-.laudo-wrap { display:flex; gap:24px; padding:18px; font-family: Inter, Roboto, Arial, sans-serif; }
-.left-col { width: 100%; max-width: 1160px; background:#ffffff; border-radius:8px; padding:18px; box-shadow: 0 1px 0 rgba(0,0,0,0.03); } /* <-- fundo branco */
-.title-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
-.page-title { font-size:20px; color:#2b4a78; font-weight:700; }
-.laudo-row { display:flex; padding:14px 12px; align-items:center; border-bottom:1px solid #eef3f8; position:relative; overflow:visible; background: transparent; }
-.col { flex:1; padding:0 8px; font-size:14px; color:#2e3a4b; }
-.col.small { flex:0 0 90px; text-align:right; }
-.row-actions { position:relative; flex: 0 0 88px; display:flex; justify-content:flex-end; }
-.action-btn { background:transparent; border:1px solid #d7e6fb; border-radius:8px; height:40px; width:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
-.dropdown { position:absolute; right:0; top:48px; background:white; border-radius:8px; box-shadow: 0 10px 30px rgba(20,30,50,0.12); min-width:220px; padding:8px 0; z-index:9999; }
-.dropdown .item { padding:12px 18px; cursor:pointer; font-size:15px; color:#244056; }
-.dropdown .item:hover { background:#f6fbff; }
-.viewer-modal, .preview-modal, .confirm-modal { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:12000; pointer-events:none; } /* deixar pointer-events none para que não bloqueie por padrão */
-.modal-backdrop { position:absolute; inset:0; background: rgba(9,20,40,0.45); pointer-events:auto; } /* usado apenas quando necessário */
-.modal-card { position:relative; width:92%; max-width:1100px; background:white; border-radius:10px; padding:18px; box-shadow: 0 10px 60px rgba(10,20,40,0.25); max-height:88vh; overflow:auto; pointer-events:auto; }
-.viewer-header { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:12px; }
-.patient-info { font-size:13px; color:#3a556b; }
-.toolbar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:12px; }
-.tool-btn { padding:8px 10px; border-radius:6px; border:1px solid #e6eef8; cursor:pointer; background:#fff; font-size:13px; }
-.editor-area { border:1px solid #e6eef8; border-radius:8px; padding:14px; min-height:360px; background: #fff; color:#1f2d3d; font-size:15px; line-height:1.5; }
-.footer-controls { display:flex; justify-content:space-between; align-items:center; margin-top:12px; }
-.toggle { display:flex; align-items:center; gap:8px; }
-.btn { padding:8px 12px; border-radius:8px; border:none; cursor:pointer; font-weight:600; }
-.btn.secondary { background:#eef6ff; color:#2f63a6; border:1px solid #d6e9ff; }
-.btn.primary { background:#2f63a6; color:white; }
-.small-muted { color:#7f95a8; font-size:13px; }
-.empty { padding:40px; text-align:center; color:#7d97b4; }
-
-/* notificação simples (centralizada) */
-.notice-card { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; border-radius:8px; padding:14px 18px; box-shadow:0 8px 30px rgba(10,20,40,0.12); z-index:13000; pointer-events:auto; max-width:720px; }
-`;
+import "./LaudoStyle.css"; // Importa o CSS externo
 
 /* ===== Mock data (simula APIDOG) ===== */
 function mockFetchLaudos() {
@@ -101,12 +67,9 @@ export default function LaudoManager() {
   const isSecretary = true; // permanece true (somente leitura)
 
   useEffect(() => {
-    const el = document.createElement("style");
-    el.innerHTML = styles;
-    document.head.appendChild(el);
+    // Importa os dados mock apenas
     const data = mockFetchLaudos();
     setLaudos(data);
-    return () => document.head.removeChild(el);
   }, []);
 
   // Fecha dropdown ao clicar fora
@@ -228,7 +191,7 @@ export default function LaudoManager() {
 
                 <div className="row-actions">
                   <div className="action-btn" onClick={(e)=> toggleDropdown(l.id, e)} title="Ações">
-                    <svg width="16" height="16" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg>
+                    <i class="bi bi-three-dots-vertical"></i>
                   </div>
 
                   {openDropdownId === l.id && (

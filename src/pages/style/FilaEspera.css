@@ -286,3 +286,40 @@ html, body {
   font-size: 1.5rem;
   text-align: center;
 }
+
+html[data-bs-theme="dark"] .fila-container {
+  background: #232323 !important;
+  color: #e0e0e0 !important;
+  border-color: #333 !important;
+}
+
+html[data-bs-theme="dark"] .fila-titulo {
+  color: #e0e0e0 !important;
+  border-bottom: 2px solid #444 !important;
+}
+
+html[data-bs-theme="dark"] .fila-tabela th {
+  background-color: #333 !important;
+  color: #e0e0e0 !important;
+}
+
+html[data-bs-theme="dark"] .fila-tabela tbody tr:nth-child(even) {
+  background-color: #2a2a2a !important;
+}
+html[data-bs-theme="dark"] .fila-tabela tbody tr:nth-child(odd) {
+  background-color: #232323 !important;
+}
+
+html[data-bs-theme="dark"] .fila-tabela tbody tr:hover {
+  background-color: #2d3540 !important;
+}
+
+html[data-bs-theme="dark"] .busca-fila-espera {
+  background: #232323 !important;
+  color: #e0e0e0 !important;
+  border-color: #444 !important;
+}
+
+html[data-bs-theme="dark"] .busca-fila-espera:focus {
+  border-color: #5980fd !important;
+}

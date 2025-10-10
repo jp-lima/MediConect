@@ -15,6 +15,13 @@
     padding: 3px;
 }
 
-a.badge:hover {
+// a.badge:hover {
     
+// }
+
+html[data-bs-theme="dark"] {
+  .badge {
+    background-color: #333 !important;
+    color: #e0e0e0 !important;
+  }
 }

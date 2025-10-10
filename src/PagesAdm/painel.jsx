@@ -150,7 +150,7 @@ export default function PainelAdministrativo() {
      
               <span
                 className="department-name"
-                style={{ flex: 1, fontWeight: "600", color: "#000" }}
+                style={{ flex: 1, fontWeight: "600" }}
               >
                 {dep.nome}
               </span>

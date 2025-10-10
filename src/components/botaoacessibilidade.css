@@ -1,0 +1,272 @@
+/* --- ESTILO PARA ESCONDER O BOTÃO ORIGINAL DO VLIBRAS --- */
+[vw-access-button] {
+  display: none !important;
+}
+
+/* --- ESTILOS GERAIS DO COMPONENTE --- */
+.container-acessibilidade {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 99998;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none; /* Impede cliques no contêiner */
+}
+
+.botao-flutuante-acessibilidade {
+  position: relative;
+  z-index: 2; /* Acima do menu */
+  background: linear-gradient(45deg, #007bff, #0056b3);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0, 91, 179, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease;
+  margin-top: 15px; /* Distância do menu */
+  pointer-events: auto; /* Permite que o botão seja clicável */
+}
+
+.botao-flutuante-acessibilidade:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(0, 91, 179, 0.5);
+}
+
+/* --- ESTILOS DO MENU "BALÃO" --- */
+.menu-opcoes {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  width: 280px;
+  z-index: 1; /* Abaixo do botão principal */
+  border: 1px solid #e9ecef;
+
+  /* Animação */
+  transform-origin: bottom center;
+  transform: translateY(10px) scale(0.95);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  pointer-events: auto; /* Permite que o menu seja clicável */
+}
+
+.menu-opcoes.aberto {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  visibility: visible;
+}
+
+.menu-titulo {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6c757d;
+  padding: 8px 12px;
+  border-bottom: 1px solid #f1f3f5;
+  margin-bottom: 5px;
+  transition: color 0.2s ease, border-bottom-color 0.2s ease;
+}
+
+/* --- ESTILOS DOS BOTÕES E DA CHECKBOX NO MENU --- */
+.menu-opcoes button,
+.checkbox-label-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: transparent;
+  border: none;
+  padding: 12px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 16px;
+  color: #212529;
+  width: 100%;
+  border-radius: 8px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.menu-opcoes button:hover,
+.checkbox-label-button:hover {
+  background-color: #f8f9fa;
+}
+
+/* --- ESTILO DO INTERRUPTOR (CHECKBOX) --- */
+.checkbox-label-button {
+  justify-content: space-between;
+}
+
+.checkbox-label-button input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background-color: #ced4da;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.checkbox-label-button input[type="checkbox"]::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease-in-out;
+}
+
+.checkbox-label-button input[type="checkbox"]:checked {
+  background-color: #0d6efd;
+}
+
+.checkbox-label-button input[type="checkbox"]:checked::before {
+  transform: translateX(20px);
+}
+
+
+/* --- ✨ NOVOS ESTILOS PARA O CONTROLE DE FONTE ✨ --- */
+
+.font-size-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  color: #212529;
+  transition: color 0.2s ease;
+  border-top: 1px solid #f1f3f5;
+  margin-top: 5px;
+}
+
+.font-size-label {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.font-size-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.font-size-buttons button {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  background-color: #e9ecef;
+  color: #495057;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  width: 36px;
+  height: 32px;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.font-size-buttons button:hover {
+  background-color: #dee2e6;
+}
+
+.font-size-buttons button:disabled {
+  background-color: #f8f9fa;
+  color: #adb5bd;
+  cursor: not-allowed;
+  border-color: #f1f3f5;
+}
+
+.font-size-display {
+  font-size: 14px;
+  font-weight: 600;
+  color: #495057;
+  min-width: 45px;
+  text-align: center;
+  transition: color 0.2s ease;
+}
+
+/* Dark mode styles */
+html[data-bs-theme="dark"] {
+
+  /* Floating button */
+  .botao-flutuante-acessibilidade {
+    background: linear-gradient(45deg, #212529, #343a40);
+    color: #f8f9fa;
+    box-shadow: 0 5px 15px rgba(33, 37, 41, 0.4);
+  }
+  .botao-flutuante-acessibilidade:hover {
+    box-shadow: 0 8px 20px rgba(33, 37, 41, 0.5);
+  }
+
+  /* Menu balloon */
+  .menu-opcoes {
+    background-color: #23272b;
+    border: 1px solid #343a40;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+  }
+  .menu-titulo {
+    color: #adb5bd;
+    border-bottom: 1px solid #343a40;
+  }
+
+  /* Menu buttons and checkbox */
+  .menu-opcoes button,
+  .checkbox-label-button {
+    color: #f8f9fa;
+  }
+  .menu-opcoes button:hover,
+  .checkbox-label-button:hover {
+    background-color: #343a40;
+  }
+
+  /* Checkbox switch */
+  .checkbox-label-button input[type="checkbox"] {
+    background-color: #495057;
+  }
+  .checkbox-label-button input[type="checkbox"]:checked {
+    background-color: #0d6efd;
+  }
+  .checkbox-label-button input[type="checkbox"]::before {
+    background-color: #f8f9fa;
+  }
+
+  /* Font size control */
+  .font-size-control {
+    color: #f8f9fa;
+    border-top: 1px solid #343a40;
+  }
+  .font-size-label {
+    color: #f8f9fa;
+  }
+  .font-size-buttons button {
+    background-color: #343a40;
+    color: #f8f9fa;
+    border: 1px solid #495057;
+  }
+  .font-size-buttons button:hover {
+    background-color: #495057;
+  }
+  .font-size-buttons button:disabled {
+    background-color: #23272b;
+    color: #6c757d;
+    border-color: #343a40;
+  }
+  .font-size-display {
+    color: #f8f9fa;
+  }
+}

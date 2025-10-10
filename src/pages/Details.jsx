@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import avatarPlaceholder from '../assets/images/avatar_placeholder.png';
 import { useParams, useNavigate, useLocation, Navigate } from "react-router-dom";
 import API_KEY from "../components/utils/apiKeys";
-import {GetByID} from "../components/utils/Functions-Endpoints/Patient"
+import {GetPatientByID} from "../components/utils/Functions-Endpoints/Patient"
 import { Link } from "react-router-dom";
 import { useAuth } from "../components/utils/AuthProvider";
 
@@ -27,7 +27,7 @@ const Details = () => {
     console.log(patientID, 'teu id')
     const authHeader = getAuthorizationHeader()
 
-    GetByID(patientID, authHeader)
+    GetPatientByID(patientID, authHeader)
       .then((data) => {
         console.log(data, "paciente vindo da API");
         setPaciente(data[0]); // supabase retorna array

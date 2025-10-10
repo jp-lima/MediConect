@@ -276,3 +276,94 @@ textarea {
     color: #7d97b4;
     font-size: 16px;
 }
+
+html[data-bs-theme="dark"] .financeiro-wrap {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+html[data-bs-theme="dark"] .list-page-card {
+    background-color: #1e1e1e;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
+}
+
+html[data-bs-theme="dark"] .table-container th {
+    background: #2c2c2c;
+    color: #cbd5e1;
+}
+
+html[data-bs-theme="dark"] .table-container th,
+html[data-bs-theme="dark"] .table-container td {
+    border-bottom: 1px solid #333;
+    color: #e0e0e0;
+}
+
+html[data-bs-theme="dark"] .table-container tr:nth-child(even) {
+    background-color: #1a1a1a;
+}
+
+html[data-bs-theme="dark"] .table-container tr:hover {
+    background-color: #333 !important;
+}
+
+html[data-bs-theme="dark"] .action-btn {
+    background: #2c2c2c;
+    border: 1px solid #444 !important;
+    color: #e0e0e0;
+}
+
+html[data-bs-theme="dark"] .action-btn:hover {
+    background: #3a3a3a !important;
+    border-color: #666 !important;
+}
+
+html[data-bs-theme="dark"] .action-btn.delete {
+    border-color: #f87171 !important;
+    color: #fca5a5 !important;
+}
+
+html[data-bs-theme="dark"] .action-btn.delete:hover {
+    background: #7f1d1d !important;
+    border-color: #f87171 !important;
+}
+
+html[data-bs-theme="dark"] .badge.pago {
+    background: #064e3b !important;
+    color: #d1fae5;
+}
+
+html[data-bs-theme="dark"] .badge.pendente {
+    background: #78350f !important; 
+    color: #fef3c7;
+}
+
+html[data-bs-theme="dark"] .badge.vencido {
+    background: #7f1d1d !important;
+    color: #fee2e2;
+}
+
+html[data-bs-theme="dark"] .modal-card {
+    background: #1e1e1e;
+    color: #e0e0e0;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
+}
+
+html[data-bs-theme="dark"] .modal-header h2 {
+    color: #e0e0e0;
+}
+
+html[data-bs-theme="dark"] .input-field,
+html[data-bs-theme="dark"] .select-field,
+html[data-bs-theme="dark"] textarea {
+    background-color: #23272f;
+    color: #e0e0e0;
+    border: 1px solid #444;
+}
+
+html[data-bs-theme="dark"] .input-field:focus,
+html[data-bs-theme="dark"] .select-field:focus,
+html[data-bs-theme="dark"] textarea:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    outline: none;
+}

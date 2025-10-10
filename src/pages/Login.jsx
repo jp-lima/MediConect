@@ -1,19 +1,19 @@
-import React, { useState, useEffect, use } from 'react';
-import {Link, useNavigate } from "react-router-dom";
-import { useAuth } from '../components/utils/AuthProvider';   
-import API_KEY from '../components/utils/apiKeys';
-import { UserInfos } from '../components/utils/Functions-Endpoints/General';
+import React, { useState, useEffect, use } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../components/utils/AuthProvider";
+import API_KEY from "../components/utils/apiKeys";
+import { UserInfos } from "../components/utils/Functions-Endpoints/General";
 
 function Login({ onEnterSystem }) {
-    const {setAuthTokens } = useAuth();
-    const navigate = useNavigate();
-    const [form, setForm] = useState({
-        username: "",
-        password: ""
-    });
-    const [alert, setAlert] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
-/*
+  const { setAuthTokens } = useAuth();
+  const navigate = useNavigate();
+  const [form, setForm] = useState({
+    username: "",
+    password: "",
+  });
+  const [alert, setAlert] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  /*
     useEffect(async () => {
         
       var myHeaders = new Headers();
@@ -64,7 +64,7 @@ function Login({ onEnterSystem }) {
             .then(result => console.log(result))
             .catch(error => console.log('error', error));*/
 
-            /* var myHeaders = new Headers();
+  /* var myHeaders = new Headers();
             myHeaders.append("Authorization", `Bearer ${data.access_token}`);
             myHeaders.append("apikey", API_KEY);
             var requestOptions = {
@@ -80,83 +80,82 @@ function Login({ onEnterSystem }) {
         }
     }, []);*/
 
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        console.log("Tentando logar com:", form);
-        if (form.username && form.password) {
-             var myHeaders = new Headers();
-            myHeaders.append("apikey", API_KEY);
-            myHeaders.append("Content-Type", "application/json");
-            
-            var raw = JSON.stringify({
-            "email": form.username,
-            "password": form.password
-            });
-            
-            var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            
-            redirect: 'follow'
-            };
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    console.log("Tentando logar com:", form);
+    if (form.username && form.password) {
+      var myHeaders = new Headers();
+      myHeaders.append("apikey", API_KEY);
+      myHeaders.append("Content-Type", "application/json");
 
-            const response = await fetch("https://yuanqfswhberkoevtmfr.supabase.co/auth/v1/token?grant_type=password", requestOptions);
-            const data = await response.json();
-            setAuthTokens(data);
-            console.log(data);
+      var raw = JSON.stringify({
+        email: form.username,
+        password: form.password,
+      });
 
-          
-            if (data.access_token){
-             
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
 
-               const UserData = await UserInfos(`bearer ${data.access_token}`);
-               console.log(UserData, 'Dados do usuário');
+        redirect: "follow",
+      };
 
-            if(UserData?.roles?.includes('admin')){
-            navigate(`/admin/`);
-        } else if(UserData?.roles?.includes('secretaria')){
-            navigate(`/secretaria/`);
-        } else if(UserData?.roles?.includes('medico')){
-            navigate(`/medico/`);
-        } else if(UserData?.roles?.includes('financeiro')){
-            navigate(`/financeiro/`);
+      const response = await fetch(
+        "https://yuanqfswhberkoevtmfr.supabase.co/auth/v1/token?grant_type=password",
+        requestOptions
+      );
+      const data = await response.json();
+      setAuthTokens(data);
+      console.log(data);
+
+      if (data.access_token) {
+        const UserData = await UserInfos(`bearer ${data.access_token}`);
+        console.log(UserData, "Dados do usuário");
+
+        if (UserData?.roles?.includes("admin")) {
+          navigate(`/admin/`);
+        } else if (UserData?.roles?.includes("secretaria")) {
+          navigate(`/secretaria/`);
+        } else if (UserData?.roles?.includes("medico")) {
+          navigate(`/medico/`);
+        } else if (UserData?.roles?.includes("financeiro")) {
+          navigate(`/financeiro/`);
         }
-        }
+      }
+    } else {
+      setAlert("Preencha todos os campos!");
+    }
+  };
 
-        } else {
-            setAlert("Preencha todos os campos!");
-        }
-    };
-
-    return (
+  return (
     <>
-    <div className="mt-3 card-position">
-        <div className="col-lg-5 col-12">
-        <div className="card shadow-sm d-flex justify-content-between align-items-center">
-            <div id="auth-left">
-                <div className="auth-logo">
-                    <br />
-                    <Link to="/">
-                        <h1 className="mb-4 text-center">MediConnect</h1>
-                    </Link>
-                </div>
-                <h3 className="auth-title">Entrar</h3>
-                <p className="auth-subtitle mb-5">
+      <div className="mt-3 card-position">
+        <div className="col-lg-5 col-md-7 col-sm-9 col-12 mx-auto">
+          <div className="card shadow-sm d-flex justify-content-between align-items-center">
+            <div id="auth-left" className="w-100">
+              <div className="auth-logo">
+                <br />
+                <Link to="/">
+                  <h1 className="mb-4 text-center">MediConnect</h1>
+                </Link>
+              </div>
+              <h3 className="auth-title">Entrar</h3>
+              <p className="auth-subtitle mb-5">
                 Entre com os dados que você inseriu durante o registro.
-                </p>
-                {alert && (
-                    <div className="alert alert-info" role="alert">
-                        {alert}
-                    </div>
-                )}
-                <form onSubmit={handleLogin}>
+              </p>
+              {alert && (
+                <div className="alert alert-info" role="alert">
+                  {alert}
+                </div>
+              )}
+              <form onSubmit={handleLogin}>
                 <div className="form-group position-relative has-icon-left mb-4">
-                    <input
+                  <input
                     type="text"
                     name="username"
                     className="form-control form-control-xl"
@@ -164,13 +163,13 @@ function Login({ onEnterSystem }) {
                     value={form.username}
                     onChange={handleChange}
                     required
-                    />
-                    <div className="form-control-icon">
+                  />
+                  <div className="form-control-icon">
                     <i className="bi bi-person" />
-                    </div>
+                  </div>
                 </div>
                 <div className="form-group position-relative has-icon-left mb-4">
-                    <input
+                  <input
                     type={showPassword ? "text" : "password"}
                     name="password"
                     className="form-control form-control-xl"
@@ -178,62 +177,75 @@ function Login({ onEnterSystem }) {
                     value={form.password}
                     onChange={handleChange}
                     required
-                    />
-                    <div className="form-control-icon">
+                  />
+                  <div className="form-control-icon">
                     <i className="bi bi-shield-lock" />
-                    </div>
-                    <button
-                        type="button"
-                        className="btn btn-sm"
-                        style={{ position: "absolute", right: "10px", top: "10px", background: "none", border: "none" }}
-                        onClick={() => setShowPassword(!showPassword)}
-                        tabIndex={-1}
-                    >
-                        <i className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
-                    </button>
+                  </div>
+                  <button
+                    type="button"
+                    className="btn btn-sm"
+                    style={{
+                      position: "absolute",
+                      right: "10px",
+                      top: "10px",
+                      background: "none",
+                      border: "none",
+                    }}
+                    onClick={() => setShowPassword(!showPassword)}
+                    tabIndex={-1}
+                  >
+                    <i
+                      className={`bi ${
+                        showPassword ? "bi-eye-slash" : "bi-eye"
+                      }`}
+                    ></i>
+                  </button>
                 </div>
                 <div className="form-check form-check-lg d-flex align-items-end">
-                    <input
+                  <input
                     className="form-check-input me-2"
                     type="checkbox"
                     defaultValue=""
                     id="flexCheckDefault"
-                    />
-                    <label
+                  />
+                  <label
                     className="form-check-label text-gray-600"
                     htmlFor="flexCheckDefault"
-                    >
+                  >
                     Manter-me conectado
-                    </label>
+                  </label>
                 </div>
-                <button type="submit" className="btn btn-primary btn-block btn-lg shadow-lg mt-5" >
-                Entrar
+                <button
+                  type="submit"
+                  className="btn btn-primary btn-block btn-lg shadow-lg mt-5"
+                >
+                  Entrar
                 </button>
-                </form>
-                <div className="text-center mt-5 text-lg fs-4">
+              </form>
+              <div className="text-center mt-5 text-lg fs-4">
                 <p className="text-gray-600">
-                    Não tem uma conta?
-                    <Link className="font-bold" to={'/register'}>
+                  Não tem uma conta?
+                  <Link className="font-bold" to={"/register"}>
                     Cadastre-se
-                    </Link>
-                    .
+                  </Link>
+                  .
                 </p>
                 <p>
-                    <Link className="font-bold" to={'/forgotPassword'}>
+                  <Link className="font-bold" to={"/forgotPassword"}>
                     Esqueceu a senha?
-                    </Link>
-                    .
+                  </Link>
+                  .
                 </p>
-                </div>
+              </div>
             </div>
             <div className="col-lg-7 d-none d-lg-block">
-            <div id="auth-right"></div>
+              <div id="auth-right"></div>
             </div>
+          </div>
         </div>
-        </div>
-    </div>
+      </div>
     </>
-    );
+  );
 }
 
 export default Login;

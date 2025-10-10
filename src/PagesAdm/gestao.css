@@ -253,3 +253,114 @@
   color: #1e3a8a;
   transform: scale(1.2);
 }
+
+html[data-bs-theme="dark"] .dashboard-container {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+html[data-bs-theme="dark"] .dashboard-header,
+html[data-bs-theme="dark"] .dashboard-title,
+html[data-bs-theme="dark"] .dashboard-subtitle {
+  color: #e0e0e0;
+}
+
+html[data-bs-theme="dark"] .new-user-btn {
+  background-color: #2563eb;
+  color: #fff;
+}
+
+html[data-bs-theme="dark"] .new-user-btn:hover {
+  background-color: #1e40af;
+}
+
+html[data-bs-theme="dark"] .filters-container,
+html[data-bs-theme="dark"] .user-table-container {
+  background: #1a1a1a;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+}
+
+html[data-bs-theme="dark"] .filters-title,
+html[data-bs-theme="dark"] .user-table-container h2 {
+  color: #e0e0e0;
+}
+
+html[data-bs-theme="dark"] .filters-subtitle,
+html[data-bs-theme="dark"] .user-table-container p {
+  color: #bdbdbd;
+}
+
+html[data-bs-theme="dark"] .filters-input,
+html[data-bs-theme="dark"] .filters-select {
+  background: #232323;
+  color: #e0e0e0;
+  border-color: #333;
+}
+
+html[data-bs-theme="dark"] .filters-input:focus,
+html[data-bs-theme="dark"] .filters-select:focus {
+  border-color: #2563eb;
+  box-shadow: 0px 0px 0px 3px rgba(37, 99, 235, 0.2);
+}
+
+html[data-bs-theme="dark"] .cards-container .card {
+  background-color: #181818;
+  color: #e0e0e0;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+}
+
+html[data-bs-theme="dark"] .highlight:hover {
+  background: #232a3a;
+  border: 1px solid #2563eb33;
+}
+
+html[data-bs-theme="dark"] .card-label {
+  color: #888;
+}
+
+html[data-bs-theme="dark"] .card-value {
+  color: #e0e0e0;
+}
+
+html[data-bs-theme="dark"] .card-extra {
+  color: #bdbdbd;
+}
+
+html[data-bs-theme="dark"] .card-extra.positive {
+  color: #2563eb;
+}
+
+html[data-bs-theme="dark"] .user-table th {
+  background-color: #232323;
+  color: #e0e0e0;
+}
+
+html[data-bs-theme="dark"] .user-table td {
+  color: #e0e0e0;
+  border-bottom: 1px solid #333;
+}
+
+html[data-bs-theme="dark"] .user-table tr:hover {
+  background-color: #232a3a;
+}
+
+html[data-bs-theme="dark"] .profile-badge {
+  background-color: #2563eb;
+  color: #fff;
+}
+
+html[data-bs-theme="dark"] .status-badge.ativo {
+  background-color: #28a745;
+}
+
+html[data-bs-theme="dark"] .status-badge.inativo {
+  background-color: #dc3545;
+}
+
+html[data-bs-theme="dark"] .action-icon {
+  color: #bdbdbd;
+}
+
+html[data-bs-theme="dark"] .action-icon:hover {
+  color: #2563eb;
+}

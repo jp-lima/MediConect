@@ -130,3 +130,86 @@
         }
     }
 }
+
+html[data-bs-theme="dark"] {
+    .card {
+        background-color: #232323 !important;
+        color: #e0e0e0 !important;
+        border-color: #333 !important;
+
+        &.card-statistic {
+            box-shadow: 1px 2px 5px rgba(#2FAAF4, .3);
+            background: linear-gradient(to bottom, #1a1a1a, #232323);
+            .card-title {
+                color: rgba(255, 255, 255, 0.8);
+            }
+            .card-right {
+                p {
+                    color: #fff;
+                }
+                span.green {
+                    color: #6fff6f;
+                }
+                span.red {
+                    color: #ff7979;
+                }
+            }
+        }
+
+        .card-header {
+            background-color: #232323 !important;
+            color: #e0e0e0 !important;
+            border-color: #333 !important;
+        }
+        .card-body {
+            background-color: #232323 !important;
+            color: #e0e0e0 !important;
+        }
+        .card-content {
+            background-color: #232323 !important;
+        }
+        .card-heading {
+            color: #e0e0e0 !important;
+        }
+        .card-img-overlay {
+            background-color: rgba(0,0,0,.7);
+            p {
+                color: #ccc;
+            }
+            .card-title {
+                color: #fff;
+            }
+        }
+    }
+
+    .pricing {
+        .card {
+            background-color: #232323 !important;
+            color: #e0e0e0 !important;
+            border-color: #333 !important;
+            box-shadow: 0 10px 10px #222;
+        }
+        .card-header {
+            background-color: #232323 !important;
+            color: #e0e0e0 !important;
+        }
+        .card-highlighted {
+            background-color: #1a1a1a !important;
+            .card-header, .card-body, .card-footer {
+                background-color: #1a1a1a !important;
+                color: #fff !important;
+            }
+            ul {
+                li {
+                    i, svg {
+                        color: $teal-400;
+                    }
+                    color: #fff;
+                }
+            }
+            .card-title {
+                color: #fff !important;
+            }
+        }
+    }
+}

@@ -21,13 +21,70 @@
     z-index: 1000;
 }
 
+/* Responsividade do cabeçalho */
+@media screen and (max-width: 1199px) {
+    .landing-header {
+        padding: 12px 30px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .landing-header {
+        padding: 10px 20px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .landing-header {
+        padding: 8px 15px;
+        flex-direction: column;
+        gap: 15px;
+        position: relative;
+        padding-bottom: 15px;
+    }
+}
+
 /* Estilo para a logo DENTRO do cabeçalho da Landing Page */
 .landing-header .logo h1 {
     font-size: 1.8em;
-    color: #25396f; 
+    color: #25396f;
     font-weight: 700;
     margin: 0; /* Remove margem que pode quebrar o layout */
     padding: 0; /* Remove padding */
+}
+
+@media screen and (max-width: 768px) {
+    .landing-header .logo h1 {
+        font-size: 1.5em;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .landing-header .logo h1 {
+        font-size: 1.3em;
+    }
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+@media screen and (max-width: 768px) {
+    .nav-menu {
+        gap: 15px;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .nav-menu {
+        justify-content: center;
+        width: 100%;
+    }
 }
 
 .nav-menu a {
@@ -36,6 +93,19 @@
     margin-left: 25px;
     font-size: 1em;
     transition: color 0.2s;
+}
+
+@media screen and (max-width: 768px) {
+    .nav-menu a {
+        margin-left: 0;
+        font-size: 0.9em;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .nav-menu a {
+        font-size: 0.85em;
+    }
 }
 
 .nav-menu a:hover {
@@ -56,6 +126,21 @@
     font-weight: 600;
 }
 
+@media screen and (max-width: 768px) {
+    .access-button {
+        margin-left: 0;
+        padding: 8px 15px;
+        font-size: 0.9em;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .access-button {
+        padding: 10px 20px;
+        font-size: 0.85em;
+    }
+}
+
 /* --- Área de Destaque (Hero Section) --- */
 .hero-section {
     display: flex;
@@ -65,31 +150,101 @@
     background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://picsum.photos/1200/600?random=4') center/cover;
     color: white;
     min-height: 600px;
-    padding-top: 100px; 
+    padding-top: 100px;
+}
+
+/* Responsividade da hero section */
+@media screen and (max-width: 1199px) {
+    .hero-section {
+        padding: 80px 30px;
+        min-height: 500px;
+        padding-top: 80px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .hero-section {
+        padding: 60px 20px;
+        min-height: 400px;
+        padding-top: 80px;
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .hero-section {
+        padding: 40px 15px;
+        min-height: 350px;
+        padding-top: 100px;
+    }
 }
 
 .hero-content {
-    max-width: 700px; 
-    text-align: left; 
+    max-width: 700px;
+    text-align: left;
+}
+
+@media screen and (max-width: 768px) {
+    .hero-content {
+        max-width: 100%;
+        text-align: center;
+    }
 }
 
 /* Título Branco e Legível */
-.hero-content .hero-title { 
-    font-size: 3.5em; 
+.hero-content .hero-title {
+    font-size: 3.5em;
     font-weight: 700;
     margin-bottom: 20px;
-    color: #ffffff; 
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+@media screen and (max-width: 1199px) {
+    .hero-content .hero-title {
+        font-size: 3em;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .hero-content .hero-title {
+        font-size: 2.5em;
+        margin-bottom: 15px;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .hero-content .hero-title {
+        font-size: 2em;
+        margin-bottom: 12px;
+        line-height: 1.2;
+    }
 }
 
 .hero-content p {
-    font-size: 1.2em; 
+    font-size: 1.2em;
     margin-bottom: 30px;
     color: #ddd;
 }
 
+@media screen and (max-width: 768px) {
+    .hero-content p {
+        font-size: 1.1em;
+        margin-bottom: 25px;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .hero-content p {
+        font-size: 1em;
+        margin-bottom: 20px;
+        line-height: 1.4;
+    }
+}
+
 .main-action-button {
-    background-color: #5b56f8; 
+    background-color: #5b56f8;
     color: white;
     border: none;
     padding: 15px 30px;
@@ -100,6 +255,76 @@
     transition: background-color 0.3s;
 }
 
+@media screen and (max-width: 768px) {
+    .main-action-button {
+        padding: 12px 25px;
+        font-size: 1em;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .main-action-button {
+        padding: 12px 20px;
+        font-size: 0.9em;
+        width: 100%;
+        max-width: 250px;
+    }
+}
+
 .main-action-button:hover {
     background-color: #4540d6;
+}
+
+html[data-bs-theme="dark"] .landing-page-public-view {
+    background-color: #181a20;
+}
+
+html[data-bs-theme="dark"] .landing-header {
+    background-color: #23263a;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+}
+
+html[data-bs-theme="dark"] .landing-header .logo h1 {
+    color: #bfc8ff;
+}
+
+html[data-bs-theme="dark"] .nav-menu a {
+    color: #bfc8ff;
+}
+
+html[data-bs-theme="dark"] .nav-menu a:hover {
+    color: #8a7fff;
+}
+
+html[data-bs-theme="dark"] .access-button {
+    background-color: #8a7fff;
+    color: #181a20;
+}
+
+html[data-bs-theme="dark"] .nav-menu button:hover {
+    background-color: #5b56f8;
+}
+
+html[data-bs-theme="dark"] .hero-section {
+    background: linear-gradient(rgba(24,26,32,0.8), rgba(24,26,32,0.8)), url('https://picsum.photos/1200/600?random=4') center/cover;
+    color: #e2e6f7;
+}
+
+html[data-bs-theme="dark"] .hero-content .hero-title {
+    color: #e2e6f7;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+}
+
+html[data-bs-theme="dark"] .hero-content p {
+    color: #bfc8ff;
+}
+
+html[data-bs-theme="dark"] .main-action-button {
+    background-color: #8a7fff;
+    color: #181a20;
+}
+
+html[data-bs-theme="dark"] .main-action-button:hover {
+    background-color: #5b56f8;
+    color: #fff;
 }

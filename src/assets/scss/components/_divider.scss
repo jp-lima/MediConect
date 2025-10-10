@@ -35,3 +35,15 @@
         float: right;
     }
 }
+
+html[data-bs-theme="dark"] {
+    .divider {
+        .divider-text {
+            background-color: #232323 !important;
+            color: #e0e0e0 !important;
+            &:before, &:after {
+                border-top-color: #333 !important;
+            }
+        }
+    }
+}

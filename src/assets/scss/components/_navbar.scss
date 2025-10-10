@@ -299,3 +299,14 @@
 #topbarUserDropdown:after {
     margin-left: 1rem;
 }
+
+html[data-bs-theme="dark"] {
+  .navbar {
+    background-color: #181818 !important;
+    color: #e0e0e0 !important;
+    border-color: #333 !important;
+  }
+  .navbar-brand, .navbar-nav .nav-link {
+    color: #e0e0e0 !important;
+  }
+}

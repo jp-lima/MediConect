@@ -1,0 +1,271 @@
+/* Utilitários responsivos para melhorar a experiência em diferentes dispositivos */
+
+/* Breakpoints personalizados */
+$mobile: 576px;
+$tablet: 768px;
+$desktop-small: 992px;
+$desktop: 1200px;
+$desktop-large: 1400px;
+
+/* Utilitários de texto responsivo */
+.text-responsive {
+  @media screen and (max-width: $tablet - 1) {
+    font-size: 0.9rem !important;
+  }
+  
+  @media screen and (max-width: $mobile - 1) {
+    font-size: 0.85rem !important;
+  }
+}
+
+.heading-responsive {
+  @media screen and (max-width: $desktop - 1) {
+    font-size: 1.5rem !important;
+  }
+  
+  @media screen and (max-width: $tablet - 1) {
+    font-size: 1.3rem !important;
+  }
+  
+  @media screen and (max-width: $mobile - 1) {
+    font-size: 1.1rem !important;
+  }
+}
+
+/* Cards responsivos */
+.card-responsive {
+  @media screen and (max-width: $tablet - 1) {
+    margin-bottom: 1rem;
+  }
+  
+  .card-body {
+    @media screen and (max-width: $tablet - 1) {
+      padding: 1rem;
+    }
+    
+    @media screen and (max-width: $mobile - 1) {
+      padding: 0.75rem;
+    }
+  }
+}
+
+/* Botões responsivos */
+.btn-responsive {
+  @media screen and (max-width: $tablet - 1) {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  @media screen and (max-width: $mobile - 1) {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.85rem;
+    width: 100%;
+    max-width: 200px;
+  }
+}
+
+/* Tabelas responsivas */
+.table-responsive-custom {
+  @media screen and (max-width: $desktop - 1) {
+    font-size: 0.9rem;
+  }
+  
+  @media screen and (max-width: $tablet - 1) {
+    font-size: 0.8rem;
+    
+    th, td {
+      padding: 0.5rem !important;
+    }
+  }
+  
+  @media screen and (max-width: $mobile - 1) {
+    font-size: 0.75rem;
+    
+    th, td {
+      padding: 0.3rem !important;
+    }
+  }
+}
+
+/* Formulários responsivos */
+.form-responsive {
+  .form-control {
+    @media screen and (max-width: $tablet - 1) {
+      font-size: 0.9rem;
+      padding: 0.5rem 0.75rem;
+    }
+    
+    @media screen and (max-width: $mobile - 1) {
+      font-size: 0.85rem;
+      padding: 0.6rem 0.8rem;
+    }
+  }
+  
+  .form-label {
+    @media screen and (max-width: $tablet - 1) {
+      font-size: 0.9rem;
+      margin-bottom: 0.3rem;
+    }
+    
+    @media screen and (max-width: $mobile - 1) {
+      font-size: 0.85rem;
+      margin-bottom: 0.25rem;
+    }
+  }
+}
+
+/* Navegação responsiva */
+.nav-responsive {
+  @media screen and (max-width: $tablet - 1) {
+    .nav-link {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media screen and (max-width: $mobile - 1) {
+    .nav-link {
+      padding: 0.6rem 0.8rem;
+      font-size: 0.85rem;
+    }
+  }
+}
+
+/* Modais responsivos */
+.modal-responsive {
+  @media screen and (max-width: $tablet - 1) {
+    .modal-dialog {
+      margin: 1rem;
+      max-width: calc(100% - 2rem);
+    }
+    
+    .modal-header {
+      padding: 1rem;
+      
+      .modal-title {
+        font-size: 1.1rem;
+      }
+    }
+    
+    .modal-body {
+      padding: 1rem;
+      font-size: 0.9rem;
+    }
+    
+    .modal-footer {
+      padding: 0.75rem 1rem;
+    }
+  }
+  
+  @media screen and (max-width: $mobile - 1) {
+    .modal-dialog {
+      margin: 0.5rem;
+      max-width: calc(100% - 1rem);
+    }
+    
+    .modal-header {
+      padding: 0.75rem;
+      
+      .modal-title {
+        font-size: 1rem;
+      }
+    }
+    
+    .modal-body {
+      padding: 0.75rem;
+      font-size: 0.85rem;
+    }
+    
+    .modal-footer {
+      padding: 0.5rem 0.75rem;
+    }
+  }
+}
+
+/* Utilitários de espaçamento responsivo */
+.spacing-responsive {
+  @media screen and (max-width: $desktop - 1) {
+    margin: 1.5rem 0 !important;
+  }
+  
+  @media screen and (max-width: $tablet - 1) {
+    margin: 1rem 0 !important;
+  }
+  
+  @media screen and (max-width: $mobile - 1) {
+    margin: 0.75rem 0 !important;
+  }
+}
+
+/* Container responsivo personalizado */
+.container-responsive {
+  @media screen and (min-width: $desktop-large) {
+    max-width: 1320px;
+  }
+  
+  @media screen and (min-width: $desktop) and (max-width: $desktop-large - 1) {
+    max-width: 1140px;
+  }
+  
+  @media screen and (min-width: $desktop-small) and (max-width: $desktop - 1) {
+    max-width: 960px;
+  }
+  
+  @media screen and (min-width: $tablet) and (max-width: $desktop-small - 1) {
+    max-width: 720px;
+  }
+  
+  @media screen and (max-width: $tablet - 1) {
+    padding: 0 1rem;
+  }
+  
+  @media screen and (max-width: $mobile - 1) {
+    padding: 0 0.5rem;
+  }
+}
+
+/* Ocultar/mostrar elementos por breakpoint */
+.hide-mobile {
+  @media screen and (max-width: $tablet - 1) {
+    display: none !important;
+  }
+}
+
+.hide-tablet {
+  @media screen and (min-width: $tablet) and (max-width: $desktop - 1) {
+    display: none !important;
+  }
+}
+
+.hide-desktop {
+  @media screen and (min-width: $desktop) {
+    display: none !important;
+  }
+}
+
+.show-mobile-only {
+  display: none !important;
+  
+  @media screen and (max-width: $tablet - 1) {
+    display: block !important;
+  }
+}
+
+.show-tablet-only {
+  display: none !important;
+  
+  @media screen and (min-width: $tablet) and (max-width: $desktop - 1) {
+    display: block !important;
+  }
+}
+
+/* Ajustes específicos para touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .btn, .sidebar-link, .nav-link {
+    min-height: 44px; /* Tamanho mínimo recomendado para touch */
+  }
+  
+  .form-control {
+    min-height: 44px;
+  }
+}

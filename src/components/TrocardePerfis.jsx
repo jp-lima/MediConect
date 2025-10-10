@@ -1,82 +1,60 @@
-import {React, useState, useEffect} from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { UserInfos } from './utils/Functions-Endpoints/General';
-import { useAuth } from './utils/AuthProvider';
-import './Estilo/TrocardePerfis.css'
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { UserInfos } from "./utils/Functions-Endpoints/General";
+import { useAuth } from "./utils/AuthProvider";
+import "../pages/style/TrocardePerfis.css";
 
 const TrocardePerfis = () => {
   const location = useLocation();
-   
-  const [selectedProfile, setSelectedProfile] = useState('');
+  const navigate = useNavigate();
   const { getAuthorizationHeader } = useAuth();
+
+  const [selectedProfile, setSelectedProfile] = useState("");
   const [showProfiles, setShowProfiles] = useState([]);
-   const navigate = useNavigate();
 
-  let authHeader = getAuthorizationHeader();
-  console.log('AUTH HEADER', authHeader)
+  useEffect(() => {
+    const fetchData = async () => {
+      const authHeader = getAuthorizationHeader();
+      setSelectedProfile(location.pathname || "");
+      const userInfo = await UserInfos(authHeader);
+      setShowProfiles(userInfo?.roles || []);
+    };
+    fetchData();
+  }, [location.pathname, getAuthorizationHeader]);
 
-
-const handleProfileClick = (route) => {
- 
-  navigate(route);
-};
-
-
-useEffect(() => {
-  const fetchData = async () => {
-    setSelectedProfile(location.pathname);
-    const userInfo = await UserInfos(authHeader);
-    setShowProfiles(userInfo?.roles || []);
+  const handleSelectChange = (e) => {
+    const route = e.target.value;
+    setSelectedProfile(route);
+    if (route) navigate(route);
   };
 
-  fetchData();
-}, []);
+  const options = [
+    { key: "secretaria", label: "Secretaria", route: "/secretaria" },
+    { key: "medico", label: "Médico", route: "/medico" },
+    { key: "financeiro", label: "Financeiro", route: "/financeiro" },
+    { key: "admin", label: "Administração", route: "/admin" },
+  ].filter(
+    (opt) =>
+      showProfiles?.includes(opt.key) || showProfiles?.includes("admin")
+  );
 
   return (
-    
-    <div className='container-perfis'>
-
-      <p>Acesso aos modulos:</p>
-    <div id='primeiro-conjunto-botoes'>
-  {(showProfiles?.includes('secretaria') || showProfiles?.includes('admin')) && (
-    <button
-      className={`perfil-button${selectedProfile === '/secretaria' ? ' selecionado' : ''}`}
-      onClick={() => handleProfileClick('/secretaria')}
-    >
-      Secretaria
-    </button>
-  )}
-  {(showProfiles?.includes('medico') || showProfiles?.includes('admin')) && (
-    <button
-      className={`perfil-button${selectedProfile === '/medico' ? ' selecionado' : ''}`}
-      onClick={() => handleProfileClick('/medico')}
-    >
-      Médicos
-    </button>
-  )}
-</div>
-
-<div id='segundo-conjunto-botoes'>
-  {(showProfiles?.includes('financeiro') || showProfiles?.includes('admin')) && (
-    <button
-      className={`perfil-button${selectedProfile === '/financeiro' ? ' selecionado' : ''}`}
-      onClick={() => handleProfileClick('/financeiro')}
-    >
-      Financeiro
-    </button>
-  )}
-  {showProfiles?.includes('admin') && (
-    <button
-
-      className={`perfil-button${selectedProfile === '/admin' ? ' selecionado' : ''}`}
-      onClick={() => handleProfileClick('/admin')}
-    >
-      Administração
-    </button>
-  )}
-</div>
+    <div className="container-perfis">
+      <p className="acesso-text">Acesso aos módulos:</p>
+      <select
+        className="perfil-select"
+        value={selectedProfile}
+        onChange={handleSelectChange}
+      >
+        <option value="">Selecionar perfil</option>
+        {options.map((opt) => (
+          <option key={opt.key} value={opt.route}>
+            {opt.label}
+          </option>
+        ))}
+      </select>
     </div>
-  )
-}
+  );
+};
 
-export default TrocardePerfis
+export default TrocardePerfis;

@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import { Link,useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useRef } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
-function DoctorForm({ onSave, onCancel, formData, setFormData }) {
+function DoctorForm({ onSave, onCancel, formData, setFormData, isLoading }) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Funções para formatar telefone e CPF
   const FormatTelefones = (valor) => {
     const digits = String(valor).replace(/\D/g, '').slice(0, 11);
     return digits
@@ -23,19 +22,52 @@ function DoctorForm({ onSave, onCancel, formData, setFormData }) {
       .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
   };
 
+ 
+  const validarCPF = (cpf) => {
+    const cpfLimpo = cpf.replace(/\D/g, '');
+ 
+    if (cpfLimpo.length !== 11) return false;
+    
+
+    if (/^(\d)\1+$/.test(cpfLimpo)) return false;
+    
+    
+    let soma = 0;
+    for (let i = 0; i < 9; i++) {
+      soma += parseInt(cpfLimpo.charAt(i)) * (10 - i);
+    }
+    let resto = 11 - (soma % 11);
+    let digito1 = resto === 10 || resto === 11 ? 0 : resto;
+    
+
+    soma = 0;
+    for (let i = 0; i < 10; i++) {
+      soma += parseInt(cpfLimpo.charAt(i)) * (11 - i);
+    }
+    resto = 11 - (soma % 11);
+    let digito2 = resto === 10 || resto === 11 ? 0 : resto;
+    
+  
+    return digito1 === parseInt(cpfLimpo.charAt(9)) && digito2 === parseInt(cpfLimpo.charAt(10));
+  };
+
   const [avatarUrl, setAvatarUrl] = useState(null);
+  const [showRequiredModal, setShowRequiredModal] = useState(false);
+  const [emptyFields, setEmptyFields] = useState([]);
+  const [cpfError, setCpfError] = useState('');
+
+  const nomeRef = useRef(null);
+  const cpfRef = useRef(null);
+  const emailRef = useRef(null);
+  const telefoneRef = useRef(null);
+  const crmUfRef = useRef(null);
+  const crmRef = useRef(null);
 
   const [collapsedSections, setCollapsedSections] = useState({
     dadosPessoais: true,
-    infoMedicas: false,
-    infoConvenio: false,
-    endereco: false,
     contato: false,
+    endereco: false,
   });
-
-  const [showModal, setShowModal] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [errorModalMsg, setErrorModalMsg] = useState('');
 
   const handleToggleCollapse = (section) => {
     setCollapsedSections(prevState => ({
@@ -46,6 +78,16 @@ function DoctorForm({ onSave, onCancel, formData, setFormData }) {
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
+
+   
+    if (value && emptyFields.includes(name)) {
+      setEmptyFields(prev => prev.filter(field => field !== name));
+    }
+
+   
+    if (name === 'cpf' && cpfError) {
+      setCpfError('');
+    }
 
     if (type === 'checkbox') {
       setFormData(prev => ({ ...prev, [name]: checked }));
@@ -65,6 +107,16 @@ function DoctorForm({ onSave, onCancel, formData, setFormData }) {
     } else if (name.includes('cpf')) {
       let cpfFormatado = FormatCPF(value);
       setFormData(prev => ({ ...prev, [name]: cpfFormatado }));
+
+      
+      const cpfLimpo = cpfFormatado.replace(/\D/g, '');
+      if (cpfLimpo.length === 11) {
+        if (!validarCPF(cpfFormatado)) {
+          setCpfError('CPF inválido');
+        } else {
+          setCpfError('');
+        }
+      }
     } else if (name.includes('phone')) {
       let telefoneFormatado = FormatTelefones(value);
       setFormData(prev => ({ ...prev, [name]: telefoneFormatado }));
@@ -88,48 +140,133 @@ function DoctorForm({ onSave, onCancel, formData, setFormData }) {
             state: data.uf || ''
           }));
         } else {
-          setErrorModalMsg('CEP não encontrado!');
-          setShowModal(true);
+          setShowRequiredModal(true);
+          setEmptyFields(['cep']);
         }
       } catch (error) {
-        setErrorModalMsg('Erro ao buscar o CEP.');
-        setShowModal(true);
+        setShowRequiredModal(true);
+        setEmptyFields(['cep']);
       }
     }
   };
 
+ 
+  const scrollToEmptyField = (fieldName) => {
+    let fieldRef = null;
+    
+    switch (fieldName) {
+      case 'full_name':
+        fieldRef = nomeRef;
+        setCollapsedSections(prev => ({ ...prev, dadosPessoais: true }));
+        break;
+      case 'cpf':
+        fieldRef = cpfRef;
+        setCollapsedSections(prev => ({ ...prev, dadosPessoais: true }));
+        break;
+      case 'email':
+        fieldRef = emailRef;
+        setCollapsedSections(prev => ({ ...prev, contato: true }));
+        break;
+      case 'phone_mobile':
+        fieldRef = telefoneRef;
+        setCollapsedSections(prev => ({ ...prev, contato: true }));
+        break;
+      case 'crm_uf':
+        fieldRef = crmUfRef;
+        setCollapsedSections(prev => ({ ...prev, dadosPessoais: true }));
+        break;
+      case 'crm':
+        fieldRef = crmRef;
+        setCollapsedSections(prev => ({ ...prev, dadosPessoais: true }));
+        break;
+      default:
+        return;
+    }
+
+
+    setTimeout(() => {
+      if (fieldRef.current) {
+        fieldRef.current.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center' 
+        });
+        fieldRef.current.focus();
+        
+  
+        fieldRef.current.style.border = '2px solid #dc3545';
+        fieldRef.current.style.boxShadow = '0 0 0 0.2rem rgba(220, 53, 69, 0.25)';
+        
+   
+        setTimeout(() => {
+          if (fieldRef.current) {
+            fieldRef.current.style.border = '';
+            fieldRef.current.style.boxShadow = '';
+          }
+        }, 3000);
+      }
+    }, 300);
+  };
+
   const handleSubmit = async () => {
-    if (!formData.full_name || !formData.cpf || !formData.email || !formData.phone_mobile || !formData.crm_uf || !formData.crm) {
-      setErrorModalMsg('Por favor, preencha todos os campos obrigatórios.');
-      setShowModal(true);
+
+    const missingFields = [];
+    if (!formData.full_name) missingFields.push('full_name');
+    if (!formData.cpf) missingFields.push('cpf');
+    if (!formData.email) missingFields.push('email');
+    if (!formData.phone_mobile) missingFields.push('phone_mobile');
+    if (!formData.crm_uf) missingFields.push('crm_uf');
+    if (!formData.crm) missingFields.push('crm');
+
+    if (missingFields.length > 0) {
+      setEmptyFields(missingFields);
+      setShowRequiredModal(true);
+      
+  
+      setTimeout(() => {
+        if (missingFields.length > 0) {
+          scrollToEmptyField(missingFields[0]);
+        }
+      }, 500);
       return;
     }
 
+   
     const cpfLimpo = formData.cpf.replace(/\D/g, '');
     if (cpfLimpo.length !== 11) {
-      setErrorModalMsg('CPF inválido. Por favor, verifique o número digitado.');
-      setShowModal(true);
+      setShowRequiredModal(true);
+      setEmptyFields(['cpf']);
+      setCpfError('CPF deve ter 11 dígitos');
+      setTimeout(() => scrollToEmptyField('cpf'), 500);
       return;
     }
 
+   
+    if (!validarCPF(formData.cpf)) {
+      setShowRequiredModal(true);
+      setEmptyFields(['cpf']);
+      setCpfError('CPF inválido');
+      setTimeout(() => scrollToEmptyField('cpf'), 500);
+      return;
+    }
+
+  
     try {
       await onSave({ ...formData });
-      setShowSuccessModal(true);
+
     } catch (error) {
-      setErrorModalMsg('médico salvo com sucesso');
-      setShowModal(true);
+    
+      throw error;
     }
   };
 
-  const handleCloseSuccessModal = () => {
-    setShowSuccessModal(false);
-    const prefixo = location.pathname.split("/")[1]; 
-    navigate(`/${prefixo}/medicos`);
+  const handleModalClose = () => {
+    setShowRequiredModal(false);
   };
 
   return (
     <>
-      {showModal && (
+ 
+      {showRequiredModal && (
         <div
           style={{
             display: "flex",
@@ -165,7 +302,7 @@ function DoctorForm({ onSave, onCancel, formData, setFormData }) {
             >
               <h5 style={{ color: "#fff", margin: 0, fontSize: "1.2rem", fontWeight: "bold" }}>Atenção</h5>
               <button
-                onClick={() => setShowModal(false)}
+                onClick={handleModalClose}
                 style={{
                   background: "none",
                   border: "none",
@@ -179,9 +316,23 @@ function DoctorForm({ onSave, onCancel, formData, setFormData }) {
             </div>
 
             <div style={{ padding: "25px 20px" }}>
-              <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>
-                {errorModalMsg}
+              <p style={{ color: "#111", fontSize: "1.1rem", margin: "0 0 15px 0", fontWeight: "bold" }}>
+                {cpfError ? 'Problema com o CPF:' : 'Por favor, preencha:'}
               </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginLeft: '10px' }}>
+                {cpfError ? (
+                  <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>{cpfError}</p>
+                ) : (
+                  <>
+                    {!formData.full_name && <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>- Nome</p>}
+                    {!formData.cpf && <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>- CPF</p>}
+                    {!formData.email && <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>- Email</p>}
+                    {!formData.phone_mobile && <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>- Telefone</p>}
+                    {!formData.crm_uf && <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>- Estado do CRM</p>}
+                    {!formData.crm && <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>- CRM</p>}
+                  </>
+                )}
+              </div>
             </div>
 
             <div
@@ -193,91 +344,7 @@ function DoctorForm({ onSave, onCancel, formData, setFormData }) {
               }}
             >
               <button
-                onClick={() => setShowModal(false)}
-                style={{
-                  backgroundColor: "#1e3a8a",
-                  color: "#fff",
-                  border: "none",
-                  padding: "8px 20px",
-                  borderRadius: "6px",
-                  cursor: "pointer",
-                  fontSize: "1rem",
-                  fontWeight: "bold",
-                }}
-              >
-                Fechar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showSuccessModal && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0,0,0,0.5)",
-            zIndex: 9999,
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "#fff",
-              borderRadius: "10px",
-              width: "400px",
-              maxWidth: "90%",
-              boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
-              overflow: "hidden",
-            }}
-          >
-            <div
-              style={{
-                backgroundColor: "#1e3a8a",
-                padding: "15px 20px",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <h5 style={{ color: "#fff", margin: 0, fontSize: "1.2rem", fontWeight: "bold" }}>Sucesso</h5>
-              <button
-                onClick={handleCloseSuccessModal}
-                style={{
-                  background: "none",
-                  border: "none",
-                  fontSize: "20px",
-                  color: "#fff",
-                  cursor: "pointer",
-                  fontWeight: "bold",
-                }}
-              >
-                ×
-              </button>
-            </div>
-
-            <div style={{ padding: "25px 20px" }}>
-              <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>
-                Médico salvo com sucesso!
-              </p>
-            </div>
-
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                padding: "15px 20px",
-                borderTop: "1px solid #ddd",
-              }}
-            >
-              <button
-                onClick={handleCloseSuccessModal}
+                onClick={handleModalClose}
                 style={{
                   backgroundColor: "#1e3a8a",
                   color: "#fff",
@@ -352,7 +419,14 @@ function DoctorForm({ onSave, onCancel, formData, setFormData }) {
 
               <div className="col-md-6 mb-3">
                 <label style={{ fontSize: '1.1rem' }}>Nome: *</label>
-                <input type="text" className="form-control" name="full_name" value={formData.full_name || ''} onChange={handleChange} />
+                <input 
+                  ref={nomeRef}
+                  type="text" 
+                  className="form-control" 
+                  name="full_name" 
+                  value={formData.full_name || ''} 
+                  onChange={handleChange} 
+                />
               </div>
               <div className="col-md-6 mb-3">
                 <label style={{ fontSize: '1.1rem' }}>Data de nascimento:</label>
@@ -360,12 +434,30 @@ function DoctorForm({ onSave, onCancel, formData, setFormData }) {
               </div>
               <div className="col-md-6 mb-3">
                 <label style={{ fontSize: '1.1rem' }}>CPF: *</label>
-                <input type="text" className="form-control" name="cpf" value={formData.cpf || ''} onChange={handleChange} />
+                <input 
+                  ref={cpfRef}
+                  type="text" 
+                  className={`form-control ${cpfError ? 'is-invalid' : ''}`}
+                  name="cpf" 
+                  value={formData.cpf || ''} 
+                  onChange={handleChange} 
+                />
+                {cpfError && (
+                  <div className="invalid-feedback" style={{ display: 'block' }}>
+                    {cpfError}
+                  </div>
+                )}
               </div>
 
               <div className="col-md-6 mb-3">
                 <label style={{ fontSize: '1.1rem' }}>Estado do CRM: *</label>
-                <select className="form-control" name="crm_uf" value={formData.crm_uf || ''} onChange={handleChange}>
+                <select 
+                  ref={crmUfRef}
+                  className="form-control" 
+                  name="crm_uf" 
+                  value={formData.crm_uf || ''} 
+                  onChange={handleChange}
+                >
                   <option value="">Selecione</option>
                   <option value="AP">AP</option>
                   <option value="AL">AL</option>
@@ -398,7 +490,14 @@ function DoctorForm({ onSave, onCancel, formData, setFormData }) {
 
               <div className="col-md-6 mb-3">
                 <label style={{ fontSize: '1.1rem' }}>CRM: *</label>
-                <input type="text" className="form-control" name="crm" value={formData.crm || ''} onChange={handleChange} />
+                <input 
+                  ref={crmRef}
+                  type="text" 
+                  className="form-control" 
+                  name="crm" 
+                  value={formData.crm || ''} 
+                  onChange={handleChange} 
+                />
               </div>
 
               <div className="col-md-6 mb-3">
@@ -437,11 +536,25 @@ function DoctorForm({ onSave, onCancel, formData, setFormData }) {
             <div className="row mt-3">
               <div className="col-md-6 mb-3">
                 <label style={{ fontSize: '1.1rem' }}>Email: *</label>
-                <input type="email" className="form-control" name="email" value={formData.email || ''} onChange={handleChange} />
+                <input 
+                  ref={emailRef}
+                  type="email" 
+                  className="form-control" 
+                  name="email" 
+                  value={formData.email || ''} 
+                  onChange={handleChange} 
+                />
               </div>
               <div className="col-md-6 mb-3">
                 <label style={{ fontSize: '1.1rem' }}>Telefone: *</label>
-                <input type="text" className="form-control" name="phone_mobile" value={formData.phone_mobile || ''} onChange={handleChange} />
+                <input 
+                  ref={telefoneRef}
+                  type="text" 
+                  className="form-control" 
+                  name="phone_mobile" 
+                  value={formData.phone_mobile || ''} 
+                  onChange={handleChange} 
+                />
               </div>
               <div className="col-md-6 mb-3">
                 <label style={{ fontSize: '1.1rem' }}>Telefone 2:</label>
@@ -498,11 +611,20 @@ function DoctorForm({ onSave, onCancel, formData, setFormData }) {
           <button
             className="btn btn-success me-3"
             onClick={handleSubmit}
+            disabled={isLoading}
             style={{ fontSize: '1.2rem', padding: '0.75rem 1.5rem' }}
           >
-            Salvar Médico
+            {isLoading ? 'Salvando...' : 'Salvar Médico'}
           </button>
-         
+          
+          <Link to={`/${location.pathname.split("/")[1]}/medicos`}>
+            <button 
+              className="btn btn-light" 
+              style={{ fontSize: '1.2rem', padding: '0.75rem 1.5rem' }}
+            >
+              Cancelar
+            </button>
+          </Link>
         </div>
       </div>
     </>

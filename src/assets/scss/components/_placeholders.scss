@@ -54,3 +54,18 @@
 		mask-position: -200% 0%;
 	}
 }
+
+html[data-bs-theme="dark"] {
+	.placeholder {
+		background-color: #232323 !important;
+		color: #e0e0e0 !important;
+	}
+	.placeholder-wave {
+		mask-image: linear-gradient(
+			130deg,
+			#232323 55%,
+			rgba(35, 35, 35, (1 - $placeholder-opacity-min)) 75%,
+			#232323 95%
+		);
+	}
+}

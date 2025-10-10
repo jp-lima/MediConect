@@ -1,8 +1,7 @@
-
 .alert {
     border:none;
-    .alert-heading {
-    }
+    // .alert-heading {
+    // }
     p {
         margin-bottom: 0;
     }
@@ -50,4 +49,11 @@
             border: 1px solid darken($value, 3%);
         }
     }
+}
+html[data-bs-theme="dark"] {
+  .alert {
+    background-color: #232323 !important;
+    color: #e0e0e0 !important;
+    border-color: #333 !important;
+  }
 }

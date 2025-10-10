@@ -296,3 +296,79 @@
     max-width: 100%;
   }
 }
+
+html[data-bs-theme="dark"] .chat-app-container {
+  background-color: #121212 !important;
+  color: #e0e0e0 !important;
+}
+
+html[data-bs-theme="dark"] .sidebar,
+html[data-bs-theme="dark"] .chat-header,
+html[data-bs-theme="dark"] .message-footer {
+  background-color: #1a1a1a !important;
+  border-color: #222 !important;
+}
+
+html[data-bs-theme="dark"] .sidebar-header {
+  background-color: #1a1a1a !important;
+  border-bottom: 1px solid #222 !important;
+}
+
+html[data-bs-theme="dark"] .search-input,
+html[data-bs-theme="dark"] .message-input {
+  background-color: #232323 !important;
+  color: #e0e0e0 !important;
+  border-color: #333 !important;
+}
+
+html[data-bs-theme="dark"] .search-input:focus,
+html[data-bs-theme="dark"] .message-input:focus {
+  box-shadow: 0 0 0 2px #3B82F6 !important;
+}
+
+html[data-bs-theme="dark"] .conversation-item {
+  background-color: transparent !important;
+  color: #e0e0e0 !important;
+}
+
+html[data-bs-theme="dark"] .conversation-item:hover {
+  background-color: #232323 !important;
+}
+
+html[data-bs-theme="dark"] .conversation-item.active {
+  background-color: #3B82F6 !important;
+  color: #fff !important;
+}
+
+html[data-bs-theme="dark"] .timestamp,
+html[data-bs-theme="dark"] .last-message {
+  color: #bdbdbd !important;
+}
+
+html[data-bs-theme="dark"] .conversation-item.active .timestamp,
+html[data-bs-theme="dark"] .conversation-item.active .last-message {
+  color: #e0e0e0 !important;
+}
+
+html[data-bs-theme="dark"] .unread-badge {
+  background-color: #EF4444 !important;
+  color: #fff !important;
+}
+
+html[data-bs-theme="dark"] .messages-body {
+  background-color: #181818 !important;
+}
+
+html[data-bs-theme="dark"] .message-container.sent .message-bubble {
+  background-color: #2563EB !important;
+  color: #fff !important;
+}
+
+html[data-bs-theme="dark"] .message-container.received .message-bubble {
+  background-color: #232323 !important;
+  color: #e0e0e0 !important;
+}
+
+html[data-bs-theme="dark"] .no-conversation-selected {
+  color: #bdbdbd !important;
+}

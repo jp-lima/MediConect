@@ -1,0 +1,83 @@
+/* TrocardePerfis.css */
+.container-perfis {
+  /* certifique-se de que este arquivo esteja sendo importado corretamente */
+  position: relative;    /* evita sobrescrever posição do layout pai */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* empurra o select para a direita */
+  padding-right: 24px;
+  padding-left: 16px;
+  margin-top: 20px;
+  width: auto;           /* evita que ocupe 100% */
+  z-index: 60;
+}
+
+/* Alinha o label à direita para combinar com o select */
+.container-perfis .acesso-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e2b57;
+  margin-bottom: 8px;
+  text-align: right;
+}
+
+/* Estilo do select (mais específico para evitar overrides) */
+.container-perfis .perfil-select {
+  width: 220px;                   /* largura fixa similar ao exemplo */
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #d0d5dd;
+  background-color: #ffffff;
+  color: #344054;
+  font-weight: 600;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.16s ease-in-out;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+  margin-left: auto;              /* garante alinhamento à direita */
+  display: block;
+  appearance: none;               /* remove aparência nativa (melhora visual) */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #344054 50%),
+                    linear-gradient(135deg, #344054 50%, transparent 50%); /* seta */
+  background-position: calc(100% - 18px) calc(50% - 3px), calc(100% - 13px) calc(50% - 3px);
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 36px; /* espaço para a "seta" */
+}
+
+/* remove seta do select no IE */
+.container-perfis .perfil-select::-ms-expand {
+  display: none;
+}
+
+.container-perfis .perfil-select:hover {
+  border-color: #3366ff;
+  box-shadow: 0 4px 10px rgba(51, 102, 255, 0.06);
+}
+
+.container-perfis .perfil-select:focus {
+  border-color: #3366ff;
+  box-shadow: 0 0 0 3px rgba(51, 102, 255, 0.12);
+}
+
+/* placeholder option */
+.container-perfis .perfil-select option[value=""] {
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+/* responsivo */
+@media (max-width: 780px) {
+  .container-perfis {
+    align-items: flex-start;
+    padding-right: 8px;
+  }
+  .container-perfis .perfil-select {
+    width: 100%;
+    margin-left: 0;
+    padding-right: 14px;
+  }
+}

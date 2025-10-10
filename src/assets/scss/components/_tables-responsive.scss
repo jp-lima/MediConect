@@ -1,0 +1,338 @@
+/* Melhorias de responsividade para tabelas e componentes de dados */
+
+/* Tabelas responsivas melhoradas */
+.table-responsive-enhanced {
+  @media screen and (max-width: 1199px) {
+    font-size: 0.9rem;
+    
+    th, td {
+      padding: 0.6rem 0.5rem !important;
+    }
+  }
+  
+  @media screen and (max-width: 991px) {
+    font-size: 0.85rem;
+    
+    th, td {
+      padding: 0.5rem 0.4rem !important;
+    }
+    
+    /* Ocultar colunas menos importantes em tablet */
+    .hide-tablet {
+      display: none !important;
+    }
+  }
+  
+  @media screen and (max-width: 767px) {
+    font-size: 0.8rem;
+    
+    th, td {
+      padding: 0.4rem 0.3rem !important;
+    }
+    
+    /* Ocultar mais colunas em mobile */
+    .hide-mobile {
+      display: none !important;
+    }
+    
+    /* Estilo de card para mobile */
+    &.table-card-mobile {
+      thead {
+        display: none;
+      }
+      
+      tbody tr {
+        display: block;
+        border: 1px solid #dee2e6;
+        border-radius: 0.375rem;
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+        background: white;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+      }
+      
+      tbody td {
+        display: block;
+        border: none;
+        padding: 0.25rem 0 !important;
+        text-align: left !important;
+        
+        &:before {
+          content: attr(data-label) ": ";
+          font-weight: bold;
+          color: #495057;
+        }
+        
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+    }
+  }
+  
+  @media screen and (max-width: 576px) {
+    font-size: 0.75rem;
+    
+    th, td {
+      padding: 0.3rem 0.2rem !important;
+    }
+  }
+}
+
+/* Cards responsivos para dados */
+.data-card-responsive {
+  @media screen and (max-width: 991px) {
+    margin-bottom: 1rem;
+    
+    .card-header {
+      padding: 0.75rem 1rem;
+      
+      h5, h6 {
+        font-size: 1rem;
+        margin-bottom: 0;
+      }
+    }
+    
+    .card-body {
+      padding: 1rem;
+    }
+  }
+  
+  @media screen and (max-width: 767px) {
+    .card-header {
+      padding: 0.5rem 0.75rem;
+      
+      h5, h6 {
+        font-size: 0.9rem;
+      }
+    }
+    
+    .card-body {
+      padding: 0.75rem;
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media screen and (max-width: 576px) {
+    .card-header {
+      padding: 0.5rem;
+      
+      h5, h6 {
+        font-size: 0.85rem;
+      }
+    }
+    
+    .card-body {
+      padding: 0.5rem;
+      font-size: 0.85rem;
+    }
+  }
+}
+
+/* Paginação responsiva */
+.pagination-responsive {
+  @media screen and (max-width: 767px) {
+    .page-item {
+      &:not(.active):not(.disabled) {
+        &:nth-child(n+4):nth-last-child(n+4) {
+          display: none;
+        }
+      }
+    }
+    
+    .page-link {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+    }
+  }
+  
+  @media screen and (max-width: 576px) {
+    justify-content: center;
+    
+    .page-item {
+      &:not(.active):not(.disabled) {
+        &:nth-child(n+3):nth-last-child(n+3) {
+          display: none;
+        }
+      }
+    }
+    
+    .page-link {
+      padding: 0.4rem 0.6rem;
+      font-size: 0.8rem;
+    }
+  }
+}
+
+/* Filtros e controles responsivos */
+.filters-responsive {
+  @media screen and (max-width: 991px) {
+    .row {
+      margin-bottom: 1rem;
+    }
+    
+    .col-md-3, .col-md-4, .col-md-6 {
+      margin-bottom: 0.5rem;
+    }
+  }
+  
+  @media screen and (max-width: 767px) {
+    .form-control, .form-select {
+      font-size: 0.9rem;
+      padding: 0.5rem 0.75rem;
+    }
+    
+    .btn {
+      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+  }
+  
+  @media screen and (max-width: 576px) {
+    .form-control, .form-select {
+      font-size: 0.85rem;
+      padding: 0.6rem 0.8rem;
+    }
+    
+    .btn {
+      font-size: 0.85rem;
+      padding: 0.6rem 1rem;
+    }
+  }
+}
+
+/* Stats cards responsivos */
+.stats-card-responsive {
+  @media screen and (max-width: 1199px) {
+    .card-body {
+      padding: 1.25rem 1rem;
+    }
+    
+    h3, h4 {
+      font-size: 1.5rem;
+    }
+    
+    .stats-icon {
+      width: 3rem;
+      height: 3rem;
+    }
+  }
+  
+  @media screen and (max-width: 991px) {
+    margin-bottom: 1rem;
+    
+    .card-body {
+      padding: 1rem 0.75rem;
+    }
+    
+    h3, h4 {
+      font-size: 1.3rem;
+    }
+    
+    .stats-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+  }
+  
+  @media screen and (max-width: 767px) {
+    .card-body {
+      padding: 0.75rem;
+      text-align: center;
+    }
+    
+    h3, h4 {
+      font-size: 1.2rem;
+    }
+    
+    .stats-icon {
+      width: 2rem;
+      height: 2rem;
+      margin: 0 auto 0.5rem;
+    }
+    
+    p, small {
+      font-size: 0.85rem;
+    }
+  }
+  
+  @media screen and (max-width: 576px) {
+    .card-body {
+      padding: 0.5rem;
+    }
+    
+    h3, h4 {
+      font-size: 1.1rem;
+    }
+    
+    .stats-icon {
+      width: 1.8rem;
+      height: 1.8rem;
+    }
+    
+    p, small {
+      font-size: 0.8rem;
+    }
+  }
+}
+
+/* Breadcrumb responsivo */
+.breadcrumb-responsive {
+  @media screen and (max-width: 767px) {
+    font-size: 0.85rem;
+    padding: 0.5rem 0;
+    
+    .breadcrumb-item {
+      &:not(:last-child) {
+        &:nth-child(n+2):nth-last-child(n+2) {
+          display: none;
+        }
+        
+        &:nth-last-child(2):before {
+          content: "... / ";
+        }
+      }
+    }
+  }
+  
+  @media screen and (max-width: 576px) {
+    font-size: 0.8rem;
+    
+    .breadcrumb-item {
+      &:not(:last-child):not(:first-child) {
+        display: none;
+      }
+      
+      &:first-child:not(:last-child):after {
+        content: " / ...";
+      }
+    }
+  }
+}
+
+/* Alertas responsivos */
+.alert-responsive {
+  @media screen and (max-width: 767px) {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    
+    .alert-heading {
+      font-size: 1.1rem;
+    }
+  }
+  
+  @media screen and (max-width: 576px) {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+    
+    .alert-heading {
+      font-size: 1rem;
+    }
+    
+    .btn-close {
+      padding: 0.25rem;
+    }
+  }
+}

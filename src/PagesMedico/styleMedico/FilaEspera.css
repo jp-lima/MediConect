@@ -95,3 +95,54 @@
   font-size: 1.5rem;
   text-align: center;
 }
+
+html[data-bs-theme="dark"] .fila-container {
+  background: #232326 !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  border: 10px solid #232326 !important;
+}
+
+html[data-bs-theme="dark"] .fila-titulo {
+  color: #e0e0e0;
+  border-bottom: 2px solid #444;
+}
+
+html[data-bs-theme="dark"] .fila-tabela {
+  color: #e0e0e0;
+  background: #232326;
+}
+
+html[data-bs-theme="dark"] .fila-tabela th,
+html[data-bs-theme="dark"] .fila-tabela td {
+  border-bottom: 1px solid #444;
+  color: #e0e0e0;
+}
+
+html[data-bs-theme="dark"] .fila-tabela th {
+  background-color: #2c2c31;
+}
+
+html[data-bs-theme="dark"] .fila-tabela thead {
+  background-color: #232326;
+}
+
+html[data-bs-theme="dark"] .fila-tabela tbody tr:nth-child(even) {
+  background-color: #28282c;
+}
+html[data-bs-theme="dark"] .fila-tabela tbody tr:nth-child(odd) {
+  background-color: #232326;
+}
+
+html[data-bs-theme="dark"] .fila-tabela tbody tr:hover {
+  background-color: #31313a;
+}
+
+html[data-bs-theme="dark"] .busca-fila-espera {
+  background: #232326;
+  color: #e0e0e0;
+  border: 1px solid #444;
+}
+
+html[data-bs-theme="dark"] .busca-fila-espera:focus {
+  border-color: #888;
+}

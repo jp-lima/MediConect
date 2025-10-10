@@ -4,3 +4,14 @@
 .carousel-caption h5 {
     color: $carousel-caption-color
 }
+
+html[data-bs-theme="dark"] {
+    .carousel-inner {
+        background-color: #232323 !important;
+        color: #e0e0e0 !important;
+        border-color: #333 !important;
+    }
+    .carousel-caption h5 {
+        color: #e0e0e0 !important;
+    }
+}

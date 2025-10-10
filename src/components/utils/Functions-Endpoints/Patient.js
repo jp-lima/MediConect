@@ -2,7 +2,7 @@ import API_KEY from "../apiKeys";
 
 
 
-const GetByID = async (ID,authHeader) => {
+const GetPatientByID = async (ID,authHeader) => {
 
   console.log(authHeader, 'mostrando autorização dentro da função')
 
@@ -22,4 +22,34 @@ const DictPaciente = await result.json()
 return DictPaciente
 }
 
-export {GetByID}
+const GetAllPatients = async (authHeader) => {
+    var myHeaders = new Headers();
+  myHeaders.append("apikey", API_KEY);
+  myHeaders.append("Authorization", authHeader);
+
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
+
+  const result = await fetch("https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/patients", requestOptions)
+  const DictPacientes = await result.json()
+  return DictPacientes  
+  }
+
+  const GetPatientByCPF = async (cpf, authHeader) => {
+   const Pacientes = await GetAllPatients(authHeader)
+  
+    
+   for (let i = 0; i < Pacientes.length; i++) {
+       if (Pacientes[i].cpf === cpf) {
+          console.log('Paciente encontrado:', Pacientes[i]);
+           return Pacientes[i];
+       }
+       else{console.log("nada encontrado")}
+   }
+ 
+  }
+
+export {GetPatientByID, GetAllPatients, GetPatientByCPF}

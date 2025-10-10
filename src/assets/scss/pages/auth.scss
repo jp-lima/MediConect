@@ -13,7 +13,7 @@ body {
     }
     #auth-left {
         padding: 5rem;
-        
+
         .auth-title {
             font-size: 4rem;
             margin-bottom: 1rem;
@@ -30,13 +30,60 @@ body {
             }
         }
         @media screen and (max-width: 1399.9px) {
-            padding: 3rem ;
+            padding: 3rem;
+
+            .auth-title {
+                font-size: 3rem;
+            }
+            .auth-subtitle {
+                font-size: 1.4rem;
+                line-height: 2rem;
+            }
+            .auth-logo {
+                margin-bottom: 5rem;
+            }
+        }
+        @media screen and (max-width: 991px) {
+            padding: 2.5rem;
+
+            .auth-title {
+                font-size: 2.5rem;
+            }
+            .auth-subtitle {
+                font-size: 1.2rem;
+                line-height: 1.8rem;
+            }
+            .auth-logo {
+                margin-bottom: 3rem;
+            }
         }
         @media screen and (max-width: 767px) {
-            padding: 5rem ;
+            padding: 2rem;
+
+            .auth-title {
+                font-size: 2rem;
+            }
+            .auth-subtitle {
+                font-size: 1rem;
+                line-height: 1.5rem;
+            }
+            .auth-logo {
+                margin-bottom: 2rem;
+            }
         }
         @media screen and (max-width: 576px) {
-            padding: 5rem 3rem;
+            padding: 1.5rem 1rem;
+
+            .auth-title {
+                font-size: 1.8rem;
+            }
+            .auth-subtitle {
+                font-size: 0.9rem;
+                line-height: 1.4rem;
+            }
+            .auth-logo {
+                margin-bottom: 1.5rem;
+            }
         }
     }
 }
@@ -44,7 +91,77 @@ body {
 html[data-bs-theme="dark"] {
     @import "../themes/dark/variables-dark";
 
+    body {
+        background-color: var(--bs-body-bg-dark);
+    }
+
     #auth-right {
-        background:  url(../../static/images/bg/4853433.png), $page-auth-right-bg;
+        background: url(../../static/images/bg/4853433.png), $page-auth-right-bg-dark;
+    }
+
+    #auth-left {
+        .auth-title {
+            color: var(--bs-body-color-dark);
+        }
+        .auth-subtitle {
+            color: #cfd4e3;
+        }
+    }
+}
+
+/* Melhorias específicas para responsividade do login */
+.card-position {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 1rem;
+
+    @media screen and (max-width: 768px) {
+        padding: 0.5rem;
+        align-items: flex-start;
+        padding-top: 2rem;
+    }
+
+    @media screen and (max-width: 576px) {
+        padding: 0.25rem;
+        padding-top: 1rem;
+    }
+
+    .card {
+        width: 100%;
+        max-width: 500px;
+
+        @media screen and (max-width: 576px) {
+            margin: 0;
+            border-radius: 0.5rem;
+        }
+    }
+}
+
+/* Melhorias para formulários de autenticação */
+.form-control-xl {
+    @media screen and (max-width: 768px) {
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+    }
+
+    @media screen and (max-width: 576px) {
+        padding: 0.8rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+.btn-block {
+    @media screen and (max-width: 576px) {
+        padding: 0.8rem 1rem;
+        font-size: 1rem;
+    }
+}
+
+/* Ajustes para ícones em campos de formulário */
+.form-control-icon {
+    @media screen and (max-width: 576px) {
+        left: 0.8rem;
     }
 }

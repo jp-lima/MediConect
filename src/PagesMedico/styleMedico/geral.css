@@ -187,3 +187,106 @@ td {
   padding: 12px;
   border-bottom: 1px solid var(--cor-borda);
 }
+
+html[data-bs-theme="dark"] {
+  --cor-primaria: #3a86ff; /* Azul principal */
+  --cor-fundo: #121212;     /* Fundo escuro */
+  --cor-card: #1e1e1e;      /* Card escuro */
+  --cor-texto: #e0e0e0;     /* Texto claro */
+  --cor-borda: #333333;     /* Bordas escuras */
+  --sombra-card: 0 4px 12px rgba(0, 0, 0, 0.5); /* Sombra mais forte */
+}
+
+html[data-bs-theme="dark"] body {
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+}
+
+html[data-bs-theme="dark"] h1 {
+  color: var(--cor-primaria);
+  border-bottom: 2px solid var(--cor-borda);
+}
+
+html[data-bs-theme="dark"] h2 {
+  color: var(--cor-texto);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+html[data-bs-theme="dark"] .prontuario-container,
+html[data-bs-theme="dark"] .relatorios-container {
+  background-color: var(--cor-card);
+  border: 1px solid var(--cor-borda);
+  box-shadow: var(--sombra-card);
+}
+
+html[data-bs-theme="dark"] .prontuario-section {
+  background-color: #232323;
+  border: 1px solid var(--cor-borda);
+}
+
+html[data-bs-theme="dark"] .prontuario-section li {
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+html[data-bs-theme="dark"] .prontuario-section strong {
+  color: #b0b0b0;
+}
+
+html[data-bs-theme="dark"] .filtros-container,
+html[data-bs-theme="dark"] .info-text {
+  background-color: #232323;
+  border: 1px solid var(--cor-borda);
+  color: var(--cor-texto);
+}
+
+html[data-bs-theme="dark"] .btn-gerar {
+  background-color: var(--cor-primaria);
+  color: #fff;
+}
+
+html[data-bs-theme="dark"] .btn-gerar:hover {
+  background-color: #2656b8;
+}
+
+html[data-bs-theme="dark"] table {
+  background-color: var(--cor-card);
+}
+
+html[data-bs-theme="dark"] thead th {
+  background-color: var(--cor-primaria);
+  color: #fff;
+}
+
+html[data-bs-theme="dark"] tbody tr:nth-child(even) {
+  background-color: #232323;
+}
+
+html[data-bs-theme="dark"] tbody tr:hover {
+  background-color: #333;
+}
+
+html[data-bs-theme="dark"] td {
+  border-bottom: 1px solid var(--cor-borda);
+  color: var(--cor-texto);
+}
+.modal-tabela-relatorio{
+  width: 70rem;
+}
+
+.modal-dialog.modal-tabela-relatorio {
+  max-width: 900px; /* largura máxima da modal */
+  width: 100%; /* ocupa até o limite */
+  margin: 1.75rem auto; /* centraliza vertical e horizontalmente */
+}
+
+.modal-content {
+  height: auto; /* altura variável conforme o conteúdo */
+  max-height: none; /* remove limite interno */
+}
+
+.modal-body {
+  max-height: 70vh; /* limite vertical — 80% da altura da tela */
+  overflow-y: auto; /* ativa rolagem vertical */
+  overflow-x: hidden; /* impede rolagem horizontal */
+  padding: 20px; /* espaço interno mais agradável */
+}

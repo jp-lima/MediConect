@@ -24,3 +24,17 @@
         transform: translateX(-50%)
     }
 }
+html[data-bs-theme="dark"] {
+  .dropdown-menu {
+    background-color: #232323 !important;
+    color: #e0e0e0 !important;
+    border-color: #333 !important;
+  }
+  .dropdown-item {
+    color: #e0e0e0 !important;
+  }
+  .dropdown-item:hover, .dropdown-item:focus {
+    background-color: #333 !important;
+    color: #fff !important;
+  }
+}

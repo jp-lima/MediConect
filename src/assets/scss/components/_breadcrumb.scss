@@ -8,3 +8,11 @@
         margin-top: $breadcrumb-margin-top;
     }
 }
+
+html[data-bs-theme="dark"] {
+    .breadcrumb {
+        background-color: #232323 !important;
+        color: #e0e0e0 !important;
+        // Add more styles as needed for dark mode
+    }
+}

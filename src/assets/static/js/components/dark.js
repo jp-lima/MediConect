@@ -1,7 +1,6 @@
-
 const THEME_KEY = "theme"
 
-function toggleDarkTheme() {
+export function toggleDarkTheme() {
   setTheme(
     document.documentElement.getAttribute("data-bs-theme") === 'dark'
       ? "light"
@@ -14,7 +13,7 @@ function toggleDarkTheme() {
  * @param {"dark"|"light"} theme
  * @param {boolean} persist 
  */
-function setTheme(theme, persist = false) {
+export function setTheme(theme, persist = false) {
   document.body.classList.add(theme)
   document.documentElement.setAttribute('data-bs-theme', theme)
   
@@ -26,7 +25,7 @@ function setTheme(theme, persist = false) {
 /**
  * Init theme from setTheme()
  */
-function initTheme() {
+export function initTheme() {
   //If the user manually set a theme, we'll load that
   const storedTheme = localStorage.getItem(THEME_KEY)
   if (storedTheme) {
