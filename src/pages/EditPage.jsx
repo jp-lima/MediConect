@@ -7,7 +7,7 @@ import { GetPatientByID } from '../components/utils/Functions-Endpoints/Patient'
 import API_KEY from '../components/utils/apiKeys'
 import {useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../components/utils/AuthProvider'
-const EditPage = ( {id, setCurrentPage}) => {
+const EditPage = () => {
   const navigate = useNavigate()
   const Parametros = useParams()
   const [PatientToPUT, setPatientPUT] = useState({})
@@ -44,24 +44,23 @@ const HandlePutPatient = async () => {
   console.log("Enviando paciente para atualização:", PatientToPUT);
 
   var requestOptions = {
-    method: 'PUT',
+    method: 'PATCH',
     headers: myHeaders,
     body: raw,
     redirect: 'follow'
   };
 
   try {
-    const response = await fetch(`https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/patients?id=eq.${PatientID}`,requestOptions);
-
-    
+    const response = await fetch(`https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/patients?id=eq.${PatientID}`,requestOptions); 
+    console.log(response)   
+  
    
     if(response.ok === false){
       console.error("Erro ao atualizar paciente:");
     }
     else{
-      
       console.log("ATUALIZADO COM SUCESSO");
-      navigate('/pacientes')
+      navigate('/secretaria/pacientes')
     }
 
     return response;

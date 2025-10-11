@@ -205,9 +205,6 @@ function PatientForm({ onSave, onCancel, formData, setFormData, isLoading }) {
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  /*  if (!emailRegex.test(formData.email)) {
-      throw new Error('Email inválido. Por favor, verifique o email digitado.');
-    }*/
 
    
     await onSave({ ...formData, bmi: parseFloat(formData.bmi) || null });

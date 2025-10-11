@@ -49,6 +49,7 @@ const authHeader = getAuthorizationHeader()
 
   try {
     const response = await fetch(`https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/doctors?id=eq.${DoctorID}`,requestOptions);    
+    console.log(response)
      
   } catch (error) {
     console.error("Erro ao atualizar paciente:", error);
