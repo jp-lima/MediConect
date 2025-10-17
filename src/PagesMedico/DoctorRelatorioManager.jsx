@@ -5,6 +5,8 @@ import { useAuth } from '../components/utils/AuthProvider';
 import { GetPatientByID } from '../components/utils/Functions-Endpoints/Patient';
 import { useNavigate } from 'react-router-dom';
 import html2pdf from 'html2pdf.js';
+import TiptapViewer from './TiptapViewer';
+ 
 const DoctorRelatorioManager = () => {
   const navigate = useNavigate()
   const {getAuthorizationHeader} = useAuth();
@@ -13,7 +15,7 @@ const DoctorRelatorioManager = () => {
   const [PacientesComRelatorios, setPacientesComRelatorios] = useState([])
   const [showModal, setShowModal] = useState(false)
   const [index, setIndex] = useState()
-
+  // 1º useEffect: Busca os dados dos pacientes após carregar os relatórios
   useEffect( () => {
     let pacientesDosRelatorios = []
   
@@ -26,34 +28,32 @@ const DoctorRelatorioManager = () => {
         if (paciente.length > 0) {
           pacientesDosRelatorios.push(paciente[0]);
         }
-
       }
       setPacientesComRelatorios(pacientesDosRelatorios);
-
     }
-
     ListarPacientes()
-    console.log(PacientesComRelatorios, 'aqui')
-
-  }, [RelatoriosFiltrados]);
-
+    
+  }, [RelatoriosFiltrados, authHeader]); 
+  // NOVO: useEffect para logar PacientesComRelatorios após a atualização
+  useEffect(() => {
+     console.log(PacientesComRelatorios, 'aqui')
+  }, [PacientesComRelatorios])
+  
+  // 2º useEffect: Busca a lista de relatórios
   useEffect(() => {
     var myHeaders = new Headers();
 myHeaders.append("apikey", API_KEY);
 myHeaders.append("Authorization", authHeader);
-
 var requestOptions = {
    method: 'GET',
    headers: myHeaders,
    redirect: 'follow'
 };
-
 fetch("https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/reports?patient_id&status", requestOptions)
    .then(response => response.json())
    .then(data => { setRelatorios(data); console.log(data) })
    .catch(error => console.log('error', error));
-  }, [])
-
+  }, [authHeader]) 
    const BaixarPDFdoRelatorio = (nome_paciente) => {
         const elemento = document.getElementById("folhaA4"); // tua div do relatório
     const opt = {
@@ -62,10 +62,8 @@ fetch("https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/reports?patient_id&statu
     html2canvas: { scale: 2 },
     jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
   };
-
   html2pdf().set(opt).from(elemento).save();
     }
-
     return (
     <div>
       {showModal && (
@@ -82,36 +80,36 @@ fetch("https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/reports?patient_id&statu
                 </div>
                 <div className="modal-body">
                   <div id="folhaA4">
-
                       <div id='header-relatorio'>
                           <p>Clinica Rise up</p>
                           <p>Dr  - CRM/SP 123456</p>
                           <p>Avenida - (79) 9 4444-4444</p>
                       </div>
-
                       <div id='infoPaciente'>
                           <p>Paciente: {PacientesComRelatorios[index]?.full_name}</p>
                           <p>Data de nascimento: {PacientesComRelatorios[index]?.birth_date} </p>
-
                           <p>Data do exame: {}</p>
-
                           <p>Exame: {RelatoriosFiltrados[index]?.exam}</p>
-
-                          <p>Diagnostico: {RelatoriosFiltrados[index]?.diagnosis}</p>
-                          <p>Conclusão: {RelatoriosFiltrados[index]?.conclusion}</p>
+                          {/* INÍCIO DA MUDANÇA (da resposta anterior) */}
+                          <p style={{ marginTop: '15px', fontWeight: 'bold' }}>Conteúdo do Relatório:</p>
+                          <TiptapViewer 
+                            htmlContent={
+                              RelatoriosFiltrados[index]?.content || 
+                              RelatoriosFiltrados[index]?.diagnosis || 
+                              RelatoriosFiltrados[index]?.conclusion || 
+                              'Relatório não preenchido.'
+                            } 
+                          />
+                          {/* FIM DA MUDANÇA */}
                       </div>
-
                       <div>
                           <p>Dr {RelatoriosFiltrados[index]?.required_by}</p>
                           <p>Emitido em: 0</p>
                       </div>
-
                   </div>
                 </div>
                 <div className="modal-footer">
-
                   <button className="btn btn-primary" onClick={() => BaixarPDFdoRelatorio(PacientesComRelatorios[index]?.full_name)}><i className='bi bi-file-pdf-fill'></i> baixar em pdf</button>                  
-
                   <button 
                     type="button" 
                     className="btn btn-primary" 
@@ -124,8 +122,6 @@ fetch("https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/reports?patient_id&statu
             </div>
           </div>
       )}
-
-
       <div className="page-heading">
         <h3>Lista de Relatórios</h3>
       </div>
@@ -143,14 +139,12 @@ fetch("https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/reports?patient_id&statu
                   </button>
                 </Link>
               </div>
-
               <div className="card-body">
                 <div className="card p-3 mb-3">
                   <h5 className="mb-3">
                     <i className="bi bi-funnel-fill me-2 text-primary"></i>{" "}
                     Filtros
                   </h5>
-
                   <div
                     className="d-flex flex-nowrap align-items-center gap-2"
                     style={{ overflowX: "auto", paddingBottom: "6px" }}
@@ -170,7 +164,6 @@ fetch("https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/reports?patient_id&statu
                     />         
                   </div>
                 </div>
-
                 <div className="table-responsive">
                   <table className="table table-striped table-hover">
                     <thead>
@@ -178,7 +171,6 @@ fetch("https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/reports?patient_id&statu
                         
                         <th>Paciente</th>
                         <th>CPF</th>
-
                         <th>Exame</th>
                        
                         <th></th>
@@ -210,7 +202,6 @@ fetch("https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/reports?patient_id&statu
                                     <i className="bi bi-eye me-1"></i> Ver Detalhes
                                   </button>
                                 
-
                                 
                                   <button
                                     className="btn btn-sm"
@@ -220,6 +211,7 @@ fetch("https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/reports?patient_id&statu
                                     }}
                                     onClick={() => {
                                       
+                                      // MANTIDO: Uso de string template para a navegação
                                       navigate(`/medico/relatorios/${relatorio.id}/edit`)
                                     }}
                                   >
@@ -247,10 +239,7 @@ fetch("https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/reports?patient_id&statu
           </div>
         </section>
       </div>
-
     </div>
-
   )
 }
-
 export default DoctorRelatorioManager

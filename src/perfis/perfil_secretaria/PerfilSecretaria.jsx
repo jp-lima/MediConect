@@ -15,6 +15,8 @@ import Details from "../../pages/Details";
 import EditPage from "../../pages/EditPage";
 import DoctorDetails from "../../pages/DoctorDetails";
 import DoctorEditPage from "../../pages/DoctorEditPage";
+import FormDisponibilidade from "../../components/AgendarConsulta/FormDisponibilidade";
+import AgendamentoEditPage from "../../pages/AgendamentoEditPage";
 
 function PerfilSecretaria({ onLogout }) {
   return (
@@ -33,8 +35,10 @@ function PerfilSecretaria({ onLogout }) {
             <Route path="medicos/:id" element={<DoctorDetails />} />
             <Route path="medicos/:id/edit" element={<DoctorEditPage />} />
             <Route path="agendamento" element={<Agendamento />} />
-            <Route path="laudo" element={<LaudoManager />} />
+            <Route path="agendamento/:id/edit" element={<AgendamentoEditPage/>} />
+             <Route path="laudo" element={<LaudoManager />} />
             <Route path="*" element={<h2>Página não encontrada</h2>} />
+            <Route path="form-disponibilidade" element={<FormDisponibilidade />} />
           </Routes>
         </div>
       </div>

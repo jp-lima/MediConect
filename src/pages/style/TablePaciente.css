@@ -1,0 +1,234 @@
+
+.table-paciente-container {
+  line-height: 2.5;
+}
+
+.table-paciente-card {
+  border: none;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.table-paciente-card .card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  padding: 1rem 1.25rem;
+}
+
+.table-paciente-filters {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+}
+
+.table-paciente-filters h5 {
+  color: #495057;
+  font-weight: 600;
+}
+
+.table-paciente-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-paciente-table th {
+  background-color: #f8f9fa;
+  color: #495057;
+  font-weight: 600;
+  padding: 15px 8px;
+  border-bottom: 2px solid #dee2e6;
+  vertical-align: middle;
+}
+
+.table-paciente-table td {
+  padding: 15px 8px;
+  vertical-align: middle;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.table-paciente-table tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.025);
+}
+
+
+.insurance-badge {
+  background-color: #6c757d !important;
+  color: white !important;
+  padding: 0.35em 0.65em;
+  font-size: 0.75em;
+  font-weight: 500;
+}
+
+.vip-badge {
+  background-color: #1e3a8a !important;
+  color: white !important;
+  padding: 0.35em 0.65em;
+  font-size: 0.75em;
+  font-weight: 500;
+}
+
+.results-badge {
+  background-color: #1e3a8a;
+  color: white;
+  padding: 0.5em 0.75em;
+  font-size: 0.875em;
+  font-weight: 500;
+}
+
+.anniversary-badge {
+  background-color: #ffc107;
+  color: #000;
+  padding: 0.35em 0.65em;
+  font-size: 0.75em;
+}
+
+
+.btn-view {
+  background-color: #E6F2FF !important;
+  color: #004085 !important;
+  border: 1px solid #B8D4F0;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.btn-view:hover {
+  background-color: #D1E7FF !important;
+  border-color: #9EC5FE;
+}
+
+.btn-edit {
+  background-color: #FFF3CD !important;
+  color: #856404 !important;
+  border: 1px solid #FFEAA7;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.btn-edit:hover {
+  background-color: #FFEEBA !important;
+  border-color: #FFE087;
+}
+
+.btn-delete {
+  background-color: #F8D7DA !important;
+  color: #721C24 !important;
+  border: 1px solid #F5C6CB;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.btn-delete:hover {
+  background-color: #F1B0B7 !important;
+  border-color: #ED969E;
+}
+
+
+.advanced-filters {
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+  background-color: white;
+}
+
+.advanced-filters h6 {
+  color: #495057;
+  font-weight: 600;
+}
+
+.form-label.fw-bold {
+  color: #495057;
+  font-size: 0.875rem;
+}
+
+.delete-modal .modal-header {
+  background-color: rgba(220, 53, 69, 0.1);
+  border-bottom: 1px solid rgba(220, 53, 69, 0.2);
+}
+
+.delete-modal .modal-title {
+  color: #dc3545;
+  font-weight: 600;
+}
+
+
+.empty-state {
+  padding: 2rem;
+  text-align: center;
+  color: #6c757d;
+}
+
+.empty-state td {
+  border-bottom: none;
+  padding: 2rem !important;
+}
+
+.filters-active .badge {
+  font-size: 0.75em;
+  padding: 0.4em 0.65em;
+}
+
+
+.table-paciente-table tbody tr {
+  transition: background-color 0.15s ease-in-out;
+}
+
+.btn-view,
+.btn-edit,
+.btn-delete {
+  transition: all 0.15s ease-in-out;
+}
+
+
+@media (max-width: 768px) {
+  .table-paciente-table {
+    font-size: 0.875rem;
+  }
+  
+  .table-paciente-table th,
+  .table-paciente-table td {
+    padding: 10px 6px;
+  }
+  
+  .btn-view,
+  .btn-edit,
+  .btn-delete {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  .table-paciente-filters .d-flex {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .table-paciente-filters .form-select {
+    min-width: 100% !important;
+  }
+  
+  .patient-name-container {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 0.25rem;
+  }
+  
+  .patient-badges {
+    margin-left: 0 !important;
+  }
+}
+.compact-select {
+  font-size: 1.0rem;
+  padding: 0.45rem 0.5rem;
+}
+
+.compact-select option {
+  font-size: 0.875rem;
+}
+
+.table-paciente-filters .btn-sm {
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+
+.table-paciente-filters .d-flex {
+  align-items: center;
+  gap: 8px;
+}

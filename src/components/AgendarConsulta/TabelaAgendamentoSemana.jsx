@@ -1,31 +1,149 @@
 import React from 'react';
 import CardConsulta from './CardConsulta';
 import "./style/styleTabelas/tabelasemana.css";
+import dayjs from 'dayjs';
+import { useEffect, useState, useMemo } from 'react';
+import weekOfYear from 'dayjs/plugin/weekOfYear'
+dayjs.extend(weekOfYear)
 
+const TabelaAgendamentoSemana = ({ agendamentos, ListarDiasdoMes }) => {
 
-const TabelaAgendamentoSemana = ({ agendamentos }) => {
+  // Armazena o objeto COMPLETO das semanas organizadas
+  const [semanasOrganizadas, setSemanasOrganizadas] = useState({});
+  // Controla qual semana está sendo exibida (o índice da chave no objeto)
+  const [Indice, setIndice] = useState(0); 
 
+  const dataHoje = dayjs();
+  const AnoAtual = dataHoje.year();
+  const mes = dataHoje.month() + 1;
+
+  let DiasdoMes = ListarDiasdoMes(AnoAtual, mes)
+  
+  // Array de chaves (ex: ['semana40', 'semana41', ...])
+  const chavesDasSemanas = Object.keys(semanasOrganizadas);
+
+  // Armazena o total de semanas que foram organizadas (para definir os limites de navegação)
+  const totalSemanas = chavesDasSemanas.length; 
+
+  // --- LÓGICA DE ORGANIZAÇÃO (useMemo mantido para otimização) ---
+
+  const OrganizarAgendamentosSemanais = useMemo(() => {
+    if (!agendamentos || Object.keys(agendamentos).length === 0) return {};
+
+    const DiasComAtendimentos = Object.keys(agendamentos)
+    const semanas = {}
+
+    for (let i = 0; i < DiasComAtendimentos.length; i++) {
+      const DiaComAtendimento = DiasComAtendimentos[i]
+      const [_, MesDoAgendamento, DiaDoAgendamento] = DiaComAtendimento.split("-")
+
+      const data = dayjs(`${AnoAtual}-${MesDoAgendamento}-${DiaDoAgendamento}`)
+      const diaSemana = data.format('dddd') 
+      const semanaKey = `semana${data.week()}`
+
+      if (!semanas[semanaKey]) {
+        semanas[semanaKey] = {
+          segunda: [], terça: [], quarta: [], quinta: [], sexta: []
+        }
+      }
+
+      switch (diaSemana) {
+        case 'Monday':
+          semanas[semanaKey].segunda.push(...agendamentos[DiaComAtendimento])
+          break
+        case 'Tuesday':
+          semanas[semanaKey].terça.push(...agendamentos[DiaComAtendimento])
+          break
+        case 'Wednesday':
+          semanas[semanaKey].quarta.push(...agendamentos[DiaComAtendimento])
+          break
+        case 'Thursday':
+          semanas[semanaKey].quinta.push(...agendamentos[DiaComAtendimento])
+          break
+        case 'Friday':
+          semanas[semanaKey].sexta.push(...agendamentos[DiaComAtendimento])
+          break
+        default:
+          break
+      }
+    }
+
+    return semanas
+  }, [agendamentos, AnoAtual]) // Adicionei AnoAtual como dependência por segurança
+
+  // --- EFEITO PARA POPULAR O ESTADO ---
+
+  useEffect(() => {
+    setSemanasOrganizadas(OrganizarAgendamentosSemanais);
+    // NOTA: Ao carregar, o Indice é 0, que é a primeira semana.
+  }, [OrganizarAgendamentosSemanais])
+
+  // --- NOVAS FUNÇÕES DE NAVEGAÇÃO ---
+
+  const avancarSemana = () => {
+    // Avança se o índice atual não for o último (totalSemanas - 1)
+    if (Indice < totalSemanas - 1) {
+      setIndice(Indice + 1);
+    }
+  };
+
+  const voltarSemana = () => {
+    // Volta se o índice atual não for o primeiro (0)
+    if (Indice > 0) {
+      setIndice(Indice - 1);
+    }
+  };
  
-  const agendamentoSemana = agendamentos?.semana1 || {};
-
   
-  const agendamentosDeSegunda = agendamentoSemana.segunda || [];
-  const agendamentosDeTerca = agendamentoSemana.terca || [];
-  const agendamentosDeQuarta = agendamentoSemana.quarta || [];
-  const agendamentosDeQuinta = agendamentoSemana.quinta || [];
-  const agendamentosDeSexta = agendamentoSemana.sexta || [];
+  // --- PREPARAÇÃO DOS DADOS PARA RENDERIZAÇÃO ---
 
-  
+  // Pega a chave da semana que deve ser exibida (usa o estado Indice)
+  const chaveDaSemanaAtual = chavesDasSemanas[Indice];
+
+  // Extrai os agendamentos da semana atual (ou um objeto vazio se não existir)
+  const semanaParaRenderizar = semanasOrganizadas[chaveDaSemanaAtual] || {
+    segunda: [], terça: [], quarta: [], quinta: [], sexta: []
+  };
+
+  // Determina o número máximo de linhas/consultas
   const numLinhas = Math.max(
-    agendamentosDeSegunda.length,
-    agendamentosDeTerca.length,
-    agendamentosDeQuarta.length,
-    agendamentosDeQuinta.length,
-    agendamentosDeSexta.length
+    semanaParaRenderizar.segunda.length,
+    semanaParaRenderizar.terça.length,
+    semanaParaRenderizar.quarta.length,
+    semanaParaRenderizar.quinta.length,
+    semanaParaRenderizar.sexta.length
   );
 
+  // Array de índices para iterar sobre as LINHAS da tabela
+  const indicesDeLinha = Array.from({ length: numLinhas }, (_, i) => i);
+  
+  // Título da semana (para mostrar ao usuário)
+  const tituloSemana = chaveDaSemanaAtual 
+    ? `Semana ${chaveDaSemanaAtual.replace('semana', '')} / ${AnoAtual}` 
+    : 'Nenhuma semana encontrada';
+
+  // --- RENDERIZAÇÃO ---
   return (
     <div>
+      {/* Container de Navegação */}
+      <div id='tabela-seletor-container'>
+        
+        <button 
+          onClick={voltarSemana} 
+          disabled={Indice === 0} // Desabilita se for a primeira semana
+        >
+         <i className='bi bi-chevron-compact-left'></i>
+        </button>
+          <p>{tituloSemana}</p>
+        <button 
+          onClick={avancarSemana} 
+          disabled={Indice === totalSemanas - 1 || totalSemanas === 0} // Desabilita se for a última semana ou se não houver semanas
+        >
+        <i className='bi bi-chevron-compact-right'></i> 
+        </button>
+      </div>
+
+      {/* Tabela de Agendamentos */}
       <table className='tabelasemanal'>
         <thead>
           <tr>
@@ -38,28 +156,44 @@ const TabelaAgendamentoSemana = ({ agendamentos }) => {
           </tr>
         </thead>
         <tbody>
-          {Array.from({ length: numLinhas }).map((_, index) => {
-            
-            const consultaSeg = agendamentosDeSegunda[index];
-            const consultaTer = agendamentosDeTerca[index];
-            const consultaQua = agendamentosDeQuarta[index];
-            const consultaQui = agendamentosDeQuinta[index];
-            const consultaSex = agendamentosDeSexta[index];
+          {indicesDeLinha.map((indiceLinha) => (
+            <tr key={indiceLinha}>
+              {/* Célula para Horário (Pode ser ajustado para mostrar o horário real) */}
+              <td></td> 
 
-            
-            const horarioDaLinha = consultaSeg?.horario || consultaTer?.horario || consultaQua?.horario || consultaQui?.horario || consultaSex?.horario;
-
-            return (
-              <tr key={index}>
-                <td>{horarioDaLinha}</td>
-                <td>{consultaSeg && <CardConsulta DadosConsulta={consultaSeg} />}</td>
-                <td>{consultaTer && <CardConsulta DadosConsulta={consultaTer} />}</td>
-                <td>{consultaQua && <CardConsulta DadosConsulta={consultaQua} />}</td>
-                <td>{consultaQui && <CardConsulta DadosConsulta={consultaQui} />}</td>
-                <td>{consultaSex && <CardConsulta DadosConsulta={consultaSex} />}</td>
-              </tr>
-            );
-          })}
+              {/* Mapeamento de COLUNAS (dias) */}
+              <td>
+                {semanaParaRenderizar.segunda[indiceLinha] 
+                  ? <CardConsulta DadosConsulta={semanaParaRenderizar.segunda[indiceLinha]} />
+                  : null
+                }
+              </td>
+              <td>
+                {semanaParaRenderizar.terça[indiceLinha]
+                  ? <CardConsulta DadosConsulta={semanaParaRenderizar.terça[indiceLinha]} />
+                  : null
+                }
+              </td>
+              <td>
+                {semanaParaRenderizar.quarta[indiceLinha]
+                  ? <CardConsulta DadosConsulta={semanaParaRenderizar.quarta[indiceLinha]} />
+                  : null
+                }
+              </td>
+              <td>
+                {semanaParaRenderizar.quinta[indiceLinha]
+                  ? <CardConsulta DadosConsulta={semanaParaRenderizar.quinta[indiceLinha]} />
+                  : null
+                }
+              </td>
+              <td>
+                {semanaParaRenderizar.sexta[indiceLinha]
+                  ? <CardConsulta DadosConsulta={semanaParaRenderizar.sexta[indiceLinha]} />
+                  : null
+                }
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

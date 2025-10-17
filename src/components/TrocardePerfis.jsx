@@ -33,6 +33,7 @@ const TrocardePerfis = () => {
     { key: "medico", label: "Médico", route: "/medico" },
     { key: "financeiro", label: "Financeiro", route: "/financeiro" },
     { key: "admin", label: "Administração", route: "/admin" },
+    { key: "paciente", label: "Paciente", route: "/paciente" },
   ].filter(
     (opt) =>
       showProfiles?.includes(opt.key) || showProfiles?.includes("admin")

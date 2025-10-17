@@ -1,0 +1,13 @@
+[
+{
+    "name": "Minhas consulta",
+    "icon": "calendar-plus-fill",
+    "url": "/paciente/agendamento"
+  },
+  
+  {
+    "name": "Meus laudos",
+    "icon": "table",
+    "url": "/paciente/laudo"
+  }
+]

@@ -1,58 +1,19 @@
 import InputMask from "react-input-mask";
 import "./style/formagendamentos.css";
 import { useState, useEffect } from "react";
+import { GetPatientByCPF } from "../utils/Functions-Endpoints/Patient";
+import { GetDoctorByName } from "../utils/Functions-Endpoints/Doctor";
+import { useAuth } from "../utils/AuthProvider";
 
+const FormNovaConsulta = ({ onCancel, onSave, setAgendamento, agendamento }) => {
+  const {getAuthorizationHeader} = useAuth()
 
-const FormNovaConsulta = ({ onCancel, patientID }) => {
-  
   const [selectedFile, setSelectedFile] = useState(null);
   const [anexos, setAnexos] = useState([]);
   const [loadingAnexos, setLoadingAnexos] = useState(false);
-  const [paciente, setPaciente] = useState({})
+  
   const [acessibilidade, setAcessibilidade] = useState({cadeirante:false,idoso:false,gravida:false,bebe:false, autista:false })
-
-    useEffect(() => {
-    if (!patientID) return;
-
-    const fetchAnexos = async () => {
-      setLoadingAnexos(true);
-      try {
-        const res = await fetch(`https://mock.apidog.com/m1/1053378-0-default/pacientes/${patientID}/anexos`);
-        const data = await res.json();
-        setAnexos(data.data || []);
-      } catch (err) {
-        console.error("Erro ao buscar anexos:", err);
-      } finally {
-        setLoadingAnexos(false);
-      }
-    };
-
-    fetchAnexos();
-  }, [patientID]);
-
-  const handleUpload = async () => {
-    if (!selectedFile) return;
-
-    const formData = new FormData();
-    formData.append("file", selectedFile);
-
-    try {
-      const res = await fetch(`https://mock.apidog.com/m1/1053378-0-default/pacientes/${patientID}/anexos`, {
-        method: "POST",
-        body: formData
-      });
-      if (res.ok) {
-        const novoAnexo = await res.json();
-        setAnexos(prev => [...prev, novoAnexo]);
-        setSelectedFile(null);
-      } else {
-        console.error("Erro ao enviar anexo");
-      }
-    } catch (err) {
-      console.error("Erro ao enviar anexo:", err);
-    }
-  }; 
-
+  let authHeader = getAuthorizationHeader()
 
   const handleclickAcessibilidade = (id) => {
     let resultado = acessibilidade[id]
@@ -62,112 +23,64 @@ const FormNovaConsulta = ({ onCancel, patientID }) => {
     else if(resultado === true){ setAcessibilidade({...acessibilidade, [id]:false})}
     console.log(id)
   }
-
   
-  const FormatCPF = (valor) => {
-    console.log(valor)
 
+  const FormatCPF = (valor) => {
     const digits = String(valor).replace(/\D/g, '').slice(0, 11);
-    BuscarPacienteExistentePeloCPF(valor)
-    
     return digits
       .replace(/(\d{3})(\d)/, '$1.$2')
       .replace(/(\d{3})(\d)/, '$1.$2')
       .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
   }
 
-  
-  const FormatTelefones = (valor) => {
-    const digits = String(valor).replace(/\D/g, '').slice(0, 11);
-    return digits
-      .replace(/(\d)/, '($1')
-      .replace(/(\d{2})(\d)/, '$1) $2' )
-      .replace(/(\d)(\d{4})/, '$1 $2')
-      .replace(/(\d{4})(\d{4})/, '$1-$2')
-  }
-
-
-  const BuscarCPFnoBancodeDados = async (cpf) => {
-
-      var myHeaders = new Headers();
-  myHeaders.append("Authorization", "Bearer <token>");
-  myHeaders.append("Content-Type", "application/json");
-
-  var raw = JSON.stringify({
-    "cpf": cpf
-  });
-
-  var requestOptions = {
-    method: 'POST',
-    headers: myHeaders,
-    body: raw,
-    redirect: 'follow'
-  };
-
-   const response = await fetch("https://mock.apidog.com/m1/1053378-0-default/pacientes/validar-cpf", requestOptions);
-  const result = await response.json();
-  return result
-
-  
-  }
-
-  const BuscarPacienteExistentePeloCPF = async (value) => {
-   
-   if(isNaN(value[13]) === false && value.length === 14)try {
-      const result = await BuscarCPFnoBancodeDados(value);
-      console.log("Resultado:", result);
-      
-      if (result.data.existe === true){
-
-      var myHeaders = new Headers();
-    myHeaders.append("Authorization", "Bearer <token>");
-
-    var requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow'
-    };
-
-    fetch("https://mock.apidog.com/m1/1053378-0-default/pacientes/", requestOptions)
-      .then(response => response.json())
-      .then(result => setPaciente(result.data))
-      .catch(error => console.log('error', error));
-    }
-      
-
-
-    } catch (error) {
-      console.log("error", error);
-    }
-    //BuscarCPFnoBancodeDados(value)
-  }
+     
 
   const handleChange = (e) => {
-
     const {value, name} = e.target;
-
     console.log(value, name)
-
+    
     if(name === 'email'){
-      setPaciente({...paciente, contato:{
-        ...paciente.contato,
+      setAgendamento({...agendamento, contato:{
+        ...agendamento.contato,
         email:value
       }})
 
-    } else if(name === 'telefone'){
-      setPaciente({...paciente, contato:{
-        ...paciente.contato,
-        telefone1:FormatTelefones(value)
-      }})
+    }else if(name === 'cpf'){
+
+      let cpfFormatted = FormatCPF(value)
+       const fetchPatient = async () => {
+                  let patientData = await GetPatientByCPF(cpfFormatted, authHeader);
+                  if (patientData) {
+                    setAgendamento((prev) => ({
+                      ...prev,
+                      nome: patientData.full_name,
+                      patient_id: patientData.id
+                    }));
+                  }}
+      setAgendamento(prev => ({ ...prev, cpf: cpfFormatted }))
+      fetchPatient()
+    }else if(name==='convenio'){
+      setAgendamento({...agendamento,insurance_provider:value})
+    }else if(name ==='profissional'){
+      const fetchDoctor = async () => {
+        let DoctorData =  await GetDoctorByName(value, authHeader)
+        if(DoctorData){
+         setAgendamento((prev) => ({
+                      ...prev,
+                      doctor_id:DoctorData.id
+                    }))
+      }}
+      fetchDoctor()
     }
     else{
-    setPaciente({...paciente,[name]:value})
+    setAgendamento({...agendamento,[name]:value})
     }
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     alert("Agendamento salvo!");
+    onSave(agendamento)
   };
 
   return (
@@ -178,59 +91,35 @@ const FormNovaConsulta = ({ onCancel, patientID }) => {
         <h2 className="section-title">Informações do paciente</h2>
 
       <div className="campos-informacoes-paciente" id="informacoes-paciente-linha-um">
+          
           <div className="campo-de-input">
-            <label>Nome *</label>
-            <input type="text" name="nome" value={paciente.nome} placeholder="Insira o nome do paciente" required onChange={handleChange} />
-          </div>
-
-          <div className="campo-de-input">
-            <label>CPF do paciente</label>
-            
-               <input  type="text" name="cpf"  placeholder="000.000.000-00" onChange={(e) => e.target.value = FormatCPF(e.target.value)}  />
+            <label>CPF do paciente</label> 
+               <input  type="text" name="cpf"  placeholder="000.000.000-00" onChange={handleChange}  value={agendamento.cpf}/>
            
           </div>
-
+          
           <div className="campo-de-input">
-            <label>RG</label>
-            <input type="text" name="rg" placeholder="Insira o nº do RG" maxLength={9} />
-          </div>
+            <label>Nome *</label>
+            <input type="text" name="nome" value={agendamento.nome} placeholder="Insira o nome do paciente" required onChange={handleChange} />
+          </div>        
+
+         
       </div>
 
-      <div className="campos-informacoes-paciente" id="informacoes-paciente-linha-dois">
-          <div className="campo-de-input">
-            <label>Data de nascimento *</label>
-            <input type="date" name="data_nascimento" value={paciente.data_nascimento} required onChange={handleChange}/>
-          </div>
-
-          <div className="campo-de-input">
-            <label>Telefone</label>
-            <input type="tel" name="telefone" placeholder="(99) 99999-9999" value={paciente.contato?.telefone1} onChange={handleChange} />
-          </div>
-
-          <div className="campo-de-input">
-            <label>E-mail</label>
-            <input type="email" name="email" placeholder="Email" value={paciente.contato?.email} onChange={handleChange} />
-          </div>
-      </div>
+     
 
       <div className="campos-informacoes-paciente" id="informacoes-paciente-linha-tres">
        
         <div className="campo-de-input">
           <label>Convênio</label>
-          <select name="convenio">
-            <option value="particular">Particular</option>
+          <select name="convenio" onChange={handleChange}>
             <option value="publico">Público</option>
+            <option value="unimed">Unimed</option>
+            <option value="bradesco_saude">Bradesco Saúde</option>
+            <option value="hapvida">Hapvida</option>
           </select>
         </div>
-        <div className="campo-de-input">
-          <label>Matrícula</label>
-          <input type="text" name="matricula" placeholder="000000000" />
-        </div>
-    
-        <div className="campo-de-input">
-        <label>Validade</label>
-          <input type="date" name="validade" />
-        </div>
+        
       </div>
 
         <h3 className="section-subtitle">Informações adicionais</h3>
@@ -243,20 +132,11 @@ const FormNovaConsulta = ({ onCancel, patientID }) => {
             onChange={(e) => setSelectedFile(e.target.files[0])}
           />
           {selectedFile && (
-            <button type="button" className="btn btn-primary ms-2" onClick={handleUpload}>
+            <button type="button" className="btn btn-primary ms-2" >
               Enviar
             </button>
           )}
         <div className="anexos-list">
-          {loadingAnexos ? (
-            <p>Carregando anexos...</p>
-          ) : (
-            anexos.map((anexo, index) => (
-              <div key={index} className="anexo-item">
-                <span>{anexo.nome || anexo.fileName}</span>
-              </div>
-            ))
-          )}
         </div>
         <h2 className="section-title">Informações do atendimento</h2>
        
@@ -291,13 +171,18 @@ const FormNovaConsulta = ({ onCancel, patientID }) => {
             
             <div className="campo-de-input">
               <label>Nome do profissional *</label>
-              <input type="text" name="profissional" required />
+              <input type="text" name="profissional" onChange={handleChange} value={agendamento.nome_medico}required />
             </div>
           
 
           <div className="campo-de-input">
             <label>Tipo de atendimento *</label>
-            <input type="text" name="tipoAtendimento" required />
+            <select onChange={handleChange} >
+              <option value="presencial" selected>Presencial</option>
+              <option value="teleconsulta">Teleconsulta</option>
+              
+
+            </select>
           </div>
         </div>
 
@@ -318,7 +203,7 @@ const FormNovaConsulta = ({ onCancel, patientID }) => {
           
             <div className="campo-de-input">
               <label>Data *</label>
-              <input type="date" name="dataAtendimento" required />
+              <input type="date" name="dataAtendimento" onChange={handleChange} required />
             </div>
           </div>
 
@@ -333,14 +218,6 @@ const FormNovaConsulta = ({ onCancel, patientID }) => {
               <input type="time" name="termino" required />
             </div>
           
-            <div className="campo-de-input">
-              <label>Profissional solicitante</label>
-              <select name="solicitante">
-                <option value="" disabled invisible selected>Selecione o solicitante</option>
-                <option value="secretaria">Secretária</option>
-                <option value="medico">Médico</option>
-              </select>
-            </div>
           </div>
       </section>
 

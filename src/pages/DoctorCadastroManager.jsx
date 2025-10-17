@@ -3,6 +3,7 @@ import { useAuth } from '../components/utils/AuthProvider';
 import DoctorForm from '../components/doctors/DoctorForm';
 import API_KEY from '../components/utils/apiKeys';
 import { useNavigate, useLocation } from 'react-router-dom';
+import './style/DoctorCadastroManager.css';
 
 function DoctorCadastroManager() {
   const [doctorData, setDoctorData] = useState({});
@@ -65,7 +66,6 @@ function DoctorCadastroManager() {
       if (!response.ok) {
         let errorMessage = `Erro ao salvar médico (${response.status})`;
         
-   
         const responseText = await response.text();
         console.log("Conteúdo da resposta:", responseText);
         
@@ -75,7 +75,6 @@ function DoctorCadastroManager() {
             console.error("Erro detalhado:", errorData);
             errorMessage = errorData.message || errorData.details || errorMessage;
           } catch (jsonError) {
-      
             errorMessage = responseText || errorMessage;
           }
         } else {
@@ -101,7 +100,6 @@ function DoctorCadastroManager() {
         result = { success: true, status: response.status };
       }
 
-  
       setShowSuccessModal(true);
 
     } catch (error) {
@@ -110,7 +108,7 @@ function DoctorCadastroManager() {
       let userFriendlyMessage = error.message;
       
       if (error.message.includes('doctors_cpf_key') || error.message.includes('duplicate key')) {
-        userFriendlyMessage = 'Já existe um médico cadastrado com este CPF. Verifique os dados ou edite o médico existente.';
+        userFriendlyMessage = 'Já existe um médico cadastrado com este CPF.';
       } else if (error.message.includes('Unexpected end of JSON input')) {
         userFriendlyMessage = 'Erro de comunicação com o servidor. Tente novamente.';
       }
@@ -124,7 +122,6 @@ function DoctorCadastroManager() {
 
   const handleCloseSuccessModal = () => {
     setShowSuccessModal(false);
- 
     const prefixo = location.pathname.split("/")[1];
     navigate(`/${prefixo}/medicos`);
   };
@@ -135,83 +132,35 @@ function DoctorCadastroManager() {
 
   return (
     <>
+      {isLoading && (
+        <div className="loading-overlay">
+          <div className="loading-spinner"></div>
+        </div>
+      )}
 
       {showSuccessModal && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0,0,0,0.5)",
-            zIndex: 9999,
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "#fff",
-              borderRadius: "10px",
-              width: "400px",
-              maxWidth: "90%",
-              boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
-              overflow: "hidden",
-            }}
-          >
-            <div
-              style={{
-                backgroundColor: "#28a745",
-                padding: "15px 20px",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <h5 style={{ color: "#fff", margin: 0, fontSize: "1.2rem", fontWeight: "bold" }}>Sucesso</h5>
+        <div className="modal-overlay">
+          <div className="modal-container">
+            <div className="modal-header modal-header-success">
+              <h5 className="modal-title">Sucesso</h5>
               <button
                 onClick={handleCloseSuccessModal}
-                style={{
-                  background: "none",
-                  border: "none",
-                  fontSize: "20px",
-                  color: "#fff",
-                  cursor: "pointer",
-                  fontWeight: "bold",
-                }}
+                className="modal-close-button"
               >
                 ×
               </button>
             </div>
 
-            <div style={{ padding: "25px 20px" }}>
-              <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>
+            <div className="modal-body">
+              <p className="modal-message">
                 Médico cadastrado com sucesso!
               </p>
             </div>
 
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                padding: "15px 20px",
-                borderTop: "1px solid #ddd",
-              }}
-            >
+            <div className="modal-footer">
               <button
                 onClick={handleCloseSuccessModal}
-                style={{
-                  backgroundColor: "#28a745",
-                  color: "#fff",
-                  border: "none",
-                  padding: "8px 20px",
-                  borderRadius: "6px",
-                  cursor: "pointer",
-                  fontSize: "1rem",
-                  fontWeight: "bold",
-                }}
+                className="modal-button modal-button-success"
               >
                 Fechar
               </button>
@@ -220,82 +169,29 @@ function DoctorCadastroManager() {
         </div>
       )}
 
-  
       {showErrorModal && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0,0,0,0.5)",
-            zIndex: 9999,
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "#fff",
-              borderRadius: "10px",
-              width: "400px",
-              maxWidth: "90%",
-              boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
-              overflow: "hidden",
-            }}
-          >
-            <div
-              style={{
-                backgroundColor: "#dc3545",
-                padding: "15px 20px",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <h5 style={{ color: "#fff", margin: 0, fontSize: "1.2rem", fontWeight: "bold" }}>Erro</h5>
+        <div className="modal-overlay">
+          <div className="modal-container">
+            <div className="modal-header modal-header-error">
+              <h5 className="modal-title">Erro</h5>
               <button
                 onClick={handleCloseErrorModal}
-                style={{
-                  background: "none",
-                  border: "none",
-                  fontSize: "20px",
-                  color: "#fff",
-                  cursor: "pointer",
-                }}
+                className="modal-close-button"
               >
                 ×
               </button>
             </div>
 
-            <div style={{ padding: "25px 20px" }}>
-              <p style={{ color: "#111", fontSize: "1.1rem", margin: 0, fontWeight: "600" }}>
+            <div className="modal-body">
+              <p className="modal-message">
                 {errorMessage}
               </p>
             </div>
 
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                padding: "15px 20px",
-                borderTop: "1px solid #ddd",
-              }}
-            >
+            <div className="modal-footer">
               <button
                 onClick={handleCloseErrorModal}
-                style={{
-                  backgroundColor: "#dc3545",
-                  color: "#fff",
-                  border: "none",
-                  padding: "8px 20px",
-                  borderRadius: "6px",
-                  cursor: "pointer",
-                  fontSize: "1rem",
-                  fontWeight: "bold",
-                }}
+                className="modal-button modal-button-error"
               >
                 Fechar
               </button>

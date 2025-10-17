@@ -1,0 +1,178 @@
+/* src/pages/ProfilePage.css */
+
+/* Overlay que cobre toda a tela */
+.profile-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20000; /* acima de header, vlibras, botões de acessibilidade */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Card central (estilo modal amplo parecido com a 4ª foto) */
+.profile-modal {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 18px;
+  width: min(1100px, 96%);
+  max-width: 1100px;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.5);
+  position: relative;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+/* Botão fechar (X) no canto do card */
+.profile-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: none;
+  border: none;
+  font-size: 26px;
+  color: #666;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* Conteúdo dividido em 2 colunas: esquerda avatar / direita infos */
+.profile-content {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  padding: 22px 18px;
+}
+
+/* Coluna esquerda - avatar */
+.profile-left {
+  width: 220px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Avatar quadrado com sombra (estilo da foto 4) */
+.avatar-wrapper {
+  position: relative;
+  width: 180px;
+  height: 180px;
+}
+
+.avatar-square {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  background-color: #d0d0d0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'><path fill='%23FFFFFF' d='M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm-45.7 48C79.8 304 0 383.8 0 482.3c0 16.7 13.5 30.2 30.2 30.2h387.6c16.7 0 30.2-13.5 30.2-30.2 0-98.5-79.8-178.3-178.3-178.3h-45.7z'/></svg>");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 55%;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+}
+
+/* Botão editar sobre o avatar — círculo pequeno */
+.avatar-edit-btn {
+  position: absolute;
+  right: -8px;
+  bottom: -8px;
+  transform: translate(0, 0);
+  border: none;
+  background: #ffffff;
+  padding: 8px 9px;
+  border-radius: 50%;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.18);
+  cursor: pointer;
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+/* Coluna direita - informações */
+.profile-right {
+  flex: 1;
+  min-width: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Nome e botão de editar inline */
+.profile-name-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.profile-username {
+  margin: 0;
+  font-size: 1.9rem;
+  color: #222;
+}
+
+.profile-edit-inline {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.05rem;
+  color: #444;
+}
+
+/* input de edição do nome */
+.profile-name-input {
+  font-size: 1.6rem;
+  padding: 6px 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+}
+
+/* email/role  */
+.profile-email,
+.profile-role {
+  margin: 6px 0;
+  color: #555;
+  font-size: 1rem;
+}
+
+.profile-role {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #f1f1f1;
+  color: #333;
+}
+
+/* ações (apenas fechar aqui) */
+.profile-actions-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+/* botões */
+.btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.btn-close {
+  background: #f0f0f0;
+  color: #222;
+  border: 1px solid #e6e6e6;
+}
+
+/* responsividade */
+@media (max-width: 880px) {
+  .profile-content {
+    flex-direction: column;
+    gap: 14px;
+    align-items: center;
+  }
+  .profile-left { width: 100%; }
+  .avatar-wrapper { width: 140px; height: 140px; }
+  .profile-right { width: 100%; text-align: center; }
+}

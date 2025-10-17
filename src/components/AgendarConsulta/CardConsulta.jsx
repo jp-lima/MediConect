@@ -1,23 +1,92 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';import { GetDoctorByID } from '../utils/Functions-Endpoints/Doctor';
+import { GetPatientByID } from '../utils/Functions-Endpoints/Patient';
+import { useAuth } from '../utils/AuthProvider';
+import { useNavigate } from 'react-router-dom';
+import { useMemo } from 'react';
 
-const CardConsulta = ( {DadosConsulta, TabelaAgendamento} ) => {
+const CardConsulta = ( {DadosConsulta, TabelaAgendamento, setShowDeleteModal} ) => {
+  const navigate = useNavigate();
 
+  const {getAuthorizationHeader} = useAuth()
+  const authHeader = getAuthorizationHeader()
+  const [Paciente, setPaciente] = useState()
+  const [Medico, setMedico] = useState()
 
-  // Status (agendado, confirmado, realizado, cancelado)
+  const ids = useMemo(() => {
+    return {
+      doctor_id: DadosConsulta?.doctor_id,
+      patient_id: DadosConsulta?.patient_id,
+      status: DadosConsulta?.status
+    };
+  }, [DadosConsulta]);
+   
+  
+   useEffect(() => {
+    const BuscarMedicoEPaciente = async () => {
+      if (!ids.doctor_id || !ids.patient_id || ids.status === 'nada') return;
 
+      try {
+        const [Doctor, Patient] = await Promise.all([
+          GetDoctorByID(ids.doctor_id, authHeader),
+          GetPatientByID(ids.patient_id, authHeader)
+        ]);
+
+        setMedico(Doctor?.[0] || null);
+        setPaciente(Patient?.[0] || null);
+      } catch (error) {
+        console.error('Erro ao buscar médico/paciente:', error);
+      }
+    };
+
+    BuscarMedicoEPaciente();
+  }, [ids, authHeader]);
+
+  let nameArrayPaciente = Paciente?.full_name.split(' ')
+
+  let nameArrayMedico = Medico?.full_name.split(' ')
+
+  console.log(DadosConsulta.status)
 
   return (
     <div className={`container-cardconsulta-${TabelaAgendamento}`}>
 
-      {DadosConsulta.status !== 'vazio'?
+      {DadosConsulta.id?
+      
       <div className='cardconsulta' id={`status-card-consulta-${DadosConsulta.status}`}> 
-      <section className='cardconsulta-infosecundaria'>
-        <p>{DadosConsulta.horario}|GEAP| {DadosConsulta.medico}</p>
-      </section>
 
-      <section className='cardconsulta-infoprimaria'>
-        <p>{DadosConsulta.paciente} - {DadosConsulta.motivo} - 23 anos</p>
-      </section>
+      <div>
+        <section className='cardconsulta-infosecundaria'>
+          <p>{DadosConsulta.horario} {nameArrayMedico && nameArrayMedico.length > 0 ? nameArrayMedico[0] : ''} {nameArrayMedico && nameArrayMedico.length > 1 ? ` ${nameArrayMedico[1]}` : ''} </p>
+        </section>
+
+        <section className='cardconsulta-infoprimaria'>
+          
+          <p>{nameArrayPaciente && nameArrayPaciente.length > 0 ? nameArrayPaciente[0] : ''} {nameArrayPaciente && nameArrayPaciente.length > 1 ? ` ${nameArrayPaciente[1]}` : ''}- {}</p>
+        </section>
+      </div>
+
+      <div className='container-botons'>        
+        <button className="btn btn-sm btn-edit-custom"
+            
+            onClick={() => {navigate(`${DadosConsulta.id}/edit`)}}
+          >
+            <i className="bi bi-pencil me-1"></i> Editar
+          </button>
+        
+
+           
+            <button
+              className="btn btn-sm btn-delete-custom"
+                            onClick={() => {
+                console.log(DadosConsulta.id)
+                              //setSelectedPatientId(DadosConsulta.id);
+               setShowDeleteModal(true);
+              }}
+            >
+              <i className="bi bi-trash me-1"></i> Excluir
+            </button>
+        </div>
+
       </div>
       : 
      null

@@ -1,0 +1,278 @@
+.page-heading {
+  margin-bottom: 2rem;
+}
+
+.page-heading h3 {
+  color: #1e3a8a;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.page-content {
+  padding: 1rem 0;
+}
+
+.alert-info {
+  background-color: #d1ecf1;
+  border-color: #bee5eb;
+  color: #0c5460;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.375rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+  border-width: 0.15em;
+}
+
+.section {
+  margin-bottom: 2rem;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -0.75rem;
+  margin-left: -0.75rem;
+}
+
+.col-12 {
+  flex: 0 0 100%;
+  max-width: 100%;
+  padding-right: 0.75rem;
+  padding-left: 0.75rem;
+}
+
+/* Estilos do modal */
+.modal-overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.modal-content {
+  background-color: #fff;
+  border-radius: 10px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  animation: modal-appear 0.3s ease-out;
+}
+
+@keyframes modal-appear {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-header {
+  background-color: #1e3a8a;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header.success {
+  background-color: #28a745 !important;
+}
+
+.modal-header.error {
+  background-color: #dc3545 !important;
+}
+
+.modal-header h5 {
+  color: #fff;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.modal-close-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #fff;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.modal-close-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.modal-body {
+  padding: 25px 20px;
+}
+
+.modal-message {
+  color: #111;
+  font-size: 1.1rem;
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.modal-submessage {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 10px 0 0 0;
+  line-height: 1.4;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 15px 20px;
+  border-top: 1px solid #ddd;
+}
+
+.modal-confirm-button {
+  background-color: #1e3a8a;
+  color: #fff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.modal-confirm-button:hover {
+  background-color: #1e40a5;
+}
+
+.modal-confirm-button.success {
+  background-color: #28a745 !important;
+}
+
+.modal-confirm-button.success:hover {
+  background-color: #218838 !important;
+}
+
+.modal-confirm-button.error {
+  background-color: #dc3545 !important;
+}
+
+.modal-confirm-button.error:hover {
+  background-color: #c82333 !important;
+}
+
+@media (max-width: 768px) {
+  .page-heading {
+    margin-bottom: 1.5rem;
+  }
+  
+  .page-heading h3 {
+    font-size: 1.5rem;
+  }
+  
+  .modal-content {
+    width: 95%;
+    margin: 1rem;
+  }
+  
+  .modal-body {
+    padding: 20px 15px;
+  }
+  
+  .modal-message {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-heading h3 {
+    font-size: 1.3rem;
+  }
+  
+  .modal-header {
+    padding: 12px 15px;
+  }
+  
+  .modal-header h5 {
+    font-size: 1.1rem;
+  }
+  
+  .modal-body {
+    padding: 15px;
+  }
+  
+  .modal-footer {
+    padding: 12px 15px;
+  }
+  
+  .modal-confirm-button {
+    padding: 6px 16px;
+    font-size: 0.9rem;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.loading-state {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.loading-state::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  z-index: 10;
+}

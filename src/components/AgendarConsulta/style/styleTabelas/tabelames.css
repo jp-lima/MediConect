@@ -220,3 +220,14 @@ html[data-bs-theme="dark"] .usuario-default {
 html[data-bs-theme="dark"] .cards-que-faltam {
   color: #90caf9;
 }
+
+.cabecalho-tabela{
+  color: white;
+  background-color: #005a9e;
+}
+
+.container-botons{
+  margin-left: 5rem;
+ 
+}
+
