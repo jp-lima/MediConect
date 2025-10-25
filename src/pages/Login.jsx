@@ -116,7 +116,7 @@ function Login({ onEnterSystem }) {
       if (data.access_token) {
         const UserData = await UserInfos(`bearer ${data.access_token}`);
         console.log(UserData, "Dados do usuário");
-
+        
         if (UserData?.roles?.includes("admin")) {
           navigate(`/admin/`);
         } else if (UserData?.roles?.includes("secretaria")) {
@@ -135,9 +135,9 @@ function Login({ onEnterSystem }) {
   return (
     <>
       <div className="mt-3 card-position">
-        <div className="col-lg-5 col-md-7 col-sm-9 col-12 mx-auto">
-          <div className="card shadow-sm d-flex justify-content-between align-items-center">
-            <div id="auth-left" className="w-100">
+        <div className="col-lg-5 col-md-7 col-sm-9 col-5 mx-auto">
+          <div className="card w-10 shadow-sm d-flex justify-content-between align-items-center">
+            <div id="auth-left" className="w-10">
               <div className="auth-logo">
                 <br />
                 <Link to="/">

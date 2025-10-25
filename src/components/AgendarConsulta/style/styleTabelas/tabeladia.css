@@ -7,6 +7,47 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border: 4px solid #4a90e2; /* borda azul, altere para a cor desejada */
 }
+/* 1. Estilização do TD (Container) */
+.coluna-horario {
+    /* Garante que o TD tenha um preenchimento generoso para parecer maior */
+    padding: 20px 10px; /* Ajuste estes valores conforme a necessidade */
+    
+    /* Centraliza o conteúdo (o <p>) vertical e horizontalmente */
+    text-align: center;
+    vertical-align: middle; 
+    
+    /* Cor de fundo clara para contrastar levemente, se desejar */
+    /* background-color: #f9f9f9; */ 
+    
+    /* Garante que a coluna não fique muito estreita */
+    width: 15%; /* Exemplo, ajuste se necessário */
+}
+
+/* 2. Estilização do P (O texto do horário) */
+.horario-texto {
+    /* Remove a margem padrão do <p> para alinhamento preciso */
+    margin: 0; 
+    
+    /* Aplica a cor azul condizente com o "10:30" da imagem */
+    color: #007bff; /* Tonalidade de azul Bootstrap/padrão */
+    
+    /* Aumenta a fonte para dar mais destaque */
+    font-size: 1.3em; /* 1.3 vezes o tamanho normal */
+    
+    /* Deixa a fonte mais pesada para ser mais visível */
+    font-weight: bold; 
+    
+    /* Se você quiser garantir que a fonte seja a mesma do resto do site */
+    /* font-family: 'Arial', sans-serif; */
+}
+
+/* 3. Estilização do cabeçalho (opcional, para consistência) */
+.cabecalho-horario {
+    background-color: #007bff; /* Cor de fundo azul como na imagem */
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
 
 /* Células da tabela */
 .tabeladiaria th, .tabeladiaria td {
@@ -51,7 +92,6 @@ font-weight: 600;
   padding: 8px;
 }
 
-/* Ajuste para a classe calendario, se for usada */
 
 
 

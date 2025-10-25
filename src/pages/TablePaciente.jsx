@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import API_KEY from "../components/utils/apiKeys";
 import { useAuth } from "../components/utils/AuthProvider";
 import "./style/TablePaciente.css"; 
-
+import ModalErro from "../components/utils/fetchErros/ModalErro";
 function TablePaciente({ setCurrentPage, setPatientID }) {
 
-  const { getAuthorizationHeader, isAuthenticated } = useAuth();
+  const { getAuthorizationHeader, isAuthenticated, RefreshingToken } = useAuth();
 
   const [pacientes, setPacientes] = useState([]);
   const [search, setSearch] = useState("");
@@ -23,6 +23,10 @@ function TablePaciente({ setCurrentPage, setPatientID }) {
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedPatientId, setSelectedPatientId] = useState(null);
+
+  const [showModalError, setShowModalError] = useState(false);
+
+  const [ ErrorInfo, setErrorInfo] = useState({})
 
   const GetAnexos = async (id) => {
     var myHeaders = new Headers();
@@ -100,7 +104,6 @@ function TablePaciente({ setCurrentPage, setPatientID }) {
   };
 
   useEffect(() => {
-
     const authHeader = getAuthorizationHeader()
 
     console.log(authHeader, 'aqui autorização')
@@ -114,10 +117,47 @@ function TablePaciente({ setCurrentPage, setPatientID }) {
       redirect: 'follow'
     };
 
-    fetch("https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/patients", requestOptions)
-      .then(response => response.json())
-      .then(result => setPacientes(result))
-      .catch(error => console.log('error', error));
+    fetch("https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/patients", requestOptions) 
+  .then(response => {
+    
+    // 1. VERIFICAÇÃO DO STATUS HTTP (Se não for 2xx)
+    if (!response.ok) {
+        
+      return response.json().then(errorData => {
+        
+        const errorObject = {
+            httpStatus: response.status,
+            apiCode: errorData.code,     
+            message: errorData.message || response.statusText,
+            details: errorData.details,
+            hint: errorData.hint
+        };
+        
+        console.error("ERRO DETALHADO:", errorObject);
+        throw errorObject;
+      });
+    }
+
+    // 3. Se a resposta for OK (2xx), processamos o JSON normalmente
+    return response.json();
+  })
+  .then(result => {
+    // 4. Bloco de SUCESSO
+    setPacientes(result); 
+    console.log("Sucesso:", result);
+    
+    // IMPORTANTE: Se o modal estava aberto, feche-o no sucesso
+    setShowModalError(false); 
+  })
+  .catch(error => {
+    // 5. Bloco de ERRO (Captura erros de rede ou o erro lançado pelo 'throw')
+    //console.error('Falha na requisição:', error.message);
+    if(error.httpStatus === 401){
+      RefreshingToken()
+    }
+    setErrorInfo(error)
+    setShowModalError(true);
+  });
   }, [isAuthenticated, getAuthorizationHeader]);
 
   const ehAniversariante = (dataNascimento) => {
@@ -199,11 +239,12 @@ function TablePaciente({ setCurrentPage, setPatientID }) {
   }) : [];
 
   useEffect(() => {
-    console.log(` Pacientes totais: ${pacientes.length}, Filtrados: ${pacientesFiltrados.length}`);
+    console.log(` Pacientes totais: ${pacientes?.length}, Filtrados: ${pacientesFiltrados?.length}`);
   }, [pacientes, pacientesFiltrados, search]);
 
   return (
     <>
+    <ModalErro showModal={showModalError} setShowModal={setShowModalError} ErrorData={ErrorInfo}/>
       <div className="page-heading">
         <h3>Lista de Pacientes</h3>
       </div>
@@ -382,7 +423,7 @@ function TablePaciente({ setCurrentPage, setPatientID }) {
 
                 <div className="mb-3">
                   <span className="badge results-badge">
-                    {pacientesFiltrados.length} de {pacientes.length} pacientes encontrados
+                    {pacientesFiltrados?.length} de {pacientes?.length} pacientes encontrados
                   </span>
                 </div>
 

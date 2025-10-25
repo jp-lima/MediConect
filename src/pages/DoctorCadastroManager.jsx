@@ -21,10 +21,11 @@ function DoctorCadastroManager() {
     const authHeader = getAuthorizationHeader();
 
     try {
+      console.log(authHeader)
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
       myHeaders.append("apikey", API_KEY);
-      myHeaders.append("Authorization", authHeader);
+      myHeaders.append("Authorization",`Bearer ${authHeader.split(` `)[1]}` );
 
       console.log('Dados recebidos do Form:', doctorData);
 
@@ -58,7 +59,7 @@ function DoctorCadastroManager() {
         redirect: 'follow'
       };
 
-      const response = await fetch("https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/doctors", requestOptions);
+      const response = await fetch("https://yuanqfswhberkoevtmfr.supabase.co/functions/v1/create-doctor", requestOptions);
       
       console.log("Status da resposta:", response.status);
       console.log("Response ok:", response.ok);

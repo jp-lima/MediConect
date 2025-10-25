@@ -6,7 +6,7 @@ import "./style/styleTabelas/tabelames.css";
 import { useEffect, useState } from 'react';
 import { useMemo } from 'react';
 
-const TabelaAgendamentoMes = ({ ListarDiasdoMes, agendamentos }) => {
+const TabelaAgendamentoMes = ({ ListarDiasdoMes, agendamentos, setShowDeleteModal, setSelectedId ,setDictInfo }) => {
 
   const dataHoje = dayjs();
   const AnoAtual = dataHoje.year();
@@ -88,8 +88,6 @@ const TabelaAgendamentoMes = ({ ListarDiasdoMes, agendamentos }) => {
 
       useEffect(() => {
         console.log(OrganizarAgendamentosMensais)
-        
-
       }, [])
 
       useEffect(() => {
@@ -183,13 +181,13 @@ const TabelaAgendamentoMes = ({ ListarDiasdoMes, agendamentos }) => {
         </div>
       </div>
       <table className='tabelamensal'>
-        <thead>
+       <thead>
           <tr>
-            <td className='cabecalho-tabela'>Seg</td>
-            <th>Ter</th>
-            <th>Qua</th>
-            <th>Qui</th>
-            <th>Sex</th>
+            <th className='cabecalho-tabela'>Segunda</th>
+            <th>Terça</th>
+            <th>Quarta</th>
+            <th>Quinta</th>
+            <th>Sexta</th>
           </tr>
         </thead>
         <tbody>
@@ -204,9 +202,9 @@ const TabelaAgendamentoMes = ({ ListarDiasdoMes, agendamentos }) => {
       {
         semana && typeof semana === "object" && Object.keys(semana).map((dia) => (
           <td key={dia} >
-            <CardConsulta DadosConsulta={((semana[dia]|| [])[0]) || {status:'vazio'}}/>
-            <CardConsulta DadosConsulta={((semana[dia]|| [])[1]) || {status:'vazio'}}/>
-            <CardConsulta DadosConsulta={((semana[dia]|| [])[2]) || {status:'vazio'}}/>
+            <CardConsulta DadosConsulta={((semana[dia]|| [])[0]) || {status:'vazio'}} setShowDeleteModal={setShowDeleteModal} setSelectedId={setSelectedId} setDictInfo={setDictInfo}/>
+            <CardConsulta DadosConsulta={((semana[dia]|| [])[1]) || {status:'vazio'}} setShowDeleteModal={setShowDeleteModal} setSelectedId={setSelectedId} setDictInfo={setDictInfo}/>
+            <CardConsulta DadosConsulta={((semana[dia]|| [])[2]) || {status:'vazio'}} setShowDeleteModal={setShowDeleteModal} setSelectedId={setSelectedId} setDictInfo={setDictInfo}/>
             {semana[dia].length > 3 ? (
               <div>
                 <p>{` +${semana[dia].length - 2}`}</p>

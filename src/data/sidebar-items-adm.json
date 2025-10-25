@@ -14,6 +14,17 @@
     "icon": "hospital-fill",
     "url": "/admin/medicos"
   },
+  {
+    "name": "Agendamentos",
+    "icon": "calendar-plus-fill",
+    "url": "/admin/agendamento"
+  },
+
+  {
+    "name": "Relatórios",
+    "icon": "table",
+    "url": "/admin/laudo"
+  },
   
   {
     "name": "Gestão de Usuários",
@@ -25,12 +36,5 @@
     "name": "Painel Administrativo",
     "icon": "file-bar-graph-fill",
     "url": "/admin/painel"
-  },
-
-  {
-    "name": "Laudo do Paciente",
-    "icon": "table",
-    "url": "/admin/laudo"
   }
-
 ]

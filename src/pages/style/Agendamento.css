@@ -91,7 +91,7 @@
   background-color: #2c5e37;
 }
 
-.legenda-item-confirmado{
+.legenda-item-confirmed{
   background-color: #1e90ff;
 }
 .legenda-item-cancelado{
@@ -110,7 +110,7 @@
   border-radius: 10px;
 }
 
-#status-card-consulta-cancelado, .legenda-item-cancelado {
+#status-card-consulta-cancelled, .legenda-item-cancelado {
   background-color: #ffb7cc;
   border:3px solid #ff6c84;
   padding: 5px;
@@ -118,7 +118,7 @@
   border-radius: 10px;
 }
 
-#status-card-consulta-confirmado, .legenda-item-confirmed {
+#status-card-consulta-confirmed, .legenda-item-confirmed {
   background-color: #eef8fb;
   border:3px solid #d8dfe7;
   padding: 5px;

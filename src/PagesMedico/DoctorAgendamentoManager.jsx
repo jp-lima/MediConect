@@ -1,12 +1,11 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API_KEY from '../components/utils/apiKeys.js';
-import AgendamentoCadastroManager from './AgendamentoCadastroManager.jsx';
+import AgendamentoCadastroManager from '../pages/AgendamentoCadastroManager.jsx';
 import TabelaAgendamentoDia from '../components/AgendarConsulta/TabelaAgendamentoDia';
 import TabelaAgendamentoSemana from '../components/AgendarConsulta/TabelaAgendamentoSemana';
 import TabelaAgendamentoMes from '../components/AgendarConsulta/TabelaAgendamentoMes';
 import FormNovaConsulta from '../components/AgendarConsulta/FormNovaConsulta';
-// Importação de endpoints para lógica da Fila de Espera e Médicos (versão main)
 import { GetPatientByID } from '../components/utils/Functions-Endpoints/Patient.js';
 import { GetAllDoctors, GetDoctorByID } from '../components/utils/Functions-Endpoints/Doctor.js';
 
@@ -14,9 +13,10 @@ import { useAuth } from '../components/utils/AuthProvider.js';
 // ✨ NOVO: Caminho de importação corrigido com base na sua estrutura de pastas
 import AgendamentosMes from '../components/AgendarConsulta/DadosConsultasMock.js';
 
+
 import dayjs from 'dayjs';
-import "./style/Agendamento.css";
-import './style/FilaEspera.css';
+import "../pages/style/Agendamento.css";
+import '../pages/style/FilaEspera.css';
 import { Search } from 'lucide-react';
 
 
@@ -24,16 +24,15 @@ import { Search } from 'lucide-react';
 const Agendamento = ({setDictInfo}) => {
   const navigate = useNavigate();
 
- 
-  const [selectedID, setSelectedId] = useState('0') 
+  const [selectedID, setSelectedId] = useState('0')
   const [filaEsperaData, setfilaEsperaData] = useState([])
-  const [FiladeEspera, setFiladeEspera] = useState(false);
+    const [FiladeEspera, setFiladeEspera] = useState(false);
   const [tabela, setTabela] = useState('diario');
   const [PageNovaConsulta, setPageConsulta] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [agendamentos, setAgendamentos] = useState() 
+  const [agendamentos, setAgendamentos] = useState()
   const {getAuthorizationHeader} = useAuth()
-  const [DictAgendamentosOrganizados, setAgendamentosOrganizados ] = useState({})
+   const [DictAgendamentosOrganizados, setAgendamentosOrganizados ] = useState({})
 
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [AgendamentoFiltrado, setAgendamentoFiltrado] = useState()
@@ -45,20 +44,17 @@ const Agendamento = ({setDictInfo}) => {
 
   let authHeader = getAuthorizationHeader() 
 
-
  const FiltrarAgendamentos = async (listaTodosAgendamentos) => {
     const ConfigurarFiladeEspera = async (patient_id, doctor_id, agendamento) => {
-
+      // Assumindo que GetDoctorByID e GetPatientByID estão definidos no seu escopo
       let medico = await GetDoctorByID(doctor_id, authHeader);
       let paciente = await GetPatientByID(patient_id, authHeader);
-
-      console.log(medico)
 
       let dicionario = {
           agendamento: agendamento,
           Infos: {
-              nome_medico: medico[0]?.full_name,
-              doctor_id: medico[0]?.id,
+              nome_nedico: medico.full_name,
+              doctor_id: medico.id,
               patient_id: paciente[0].id,
               paciente_nome: paciente[0].full_name,
               paciente_cpf: paciente[0].cpf
@@ -70,9 +66,11 @@ const Agendamento = ({setDictInfo}) => {
     let DictAgendamentosOrganizados = {};
     let ListaFilaDeEspera = [];
 
-
+    // 1. Agrupamento (igual ao seu código original)
     for (const agendamento of listaTodosAgendamentos) {
         if (agendamento.status === 'requested') {
+            // Recomenda-se usar Promise.all para melhorar a performance
+            // mas, para manter a estrutura, mantemos o await no loop.
             let v = await ConfigurarFiladeEspera(agendamento.patient_id, agendamento.doctor_id, agendamento);
             ListaFilaDeEspera.push(v);
         } else {
@@ -86,30 +84,42 @@ const Agendamento = ({setDictInfo}) => {
         }
     }
 
+// ----------------------------------------------------------------------
+    // 2. Ordenação Interna: Ordenar os agendamentos por HORÁRIO (do menor para o maior)
     for (const DiaAgendamento in DictAgendamentosOrganizados) {
         DictAgendamentosOrganizados[DiaAgendamento].sort((a, b) => {
+            // Compara as strings de data/hora (ISO 8601) diretamente,
+            // que funcionam para ordenação cronológica.
             if (a.scheduled_at < b.scheduled_at) return -1;
             if (a.scheduled_at > b.scheduled_at) return 1;
             return 0;
         });
     }
 
+// ----------------------------------------------------------------------
+    // 3. Ordenação Externa: Ordenar os DIAS (as chaves do objeto)
+    // Para garantir que as chaves fiquem na sequência cronológica correta.
 
+    // Pega as chaves (datas)
     const chavesOrdenadas = Object.keys(DictAgendamentosOrganizados).sort((a, b) => {
+        // Compara as chaves de data (strings 'YYYY-MM-DD')
         if (a < b) return -1;
         if (a > b) return 1;
         return 0;
     });
 
+    // Cria um novo objeto no formato desejado, garantindo a ordem das chaves
     let DictAgendamentosFinal = {};
     for (const data of chavesOrdenadas) {
         DictAgendamentosFinal[data] = DictAgendamentosOrganizados[data];
     }
-    setAgendamentosOrganizados(DictAgendamentosFinal); 
+    setAgendamentosOrganizados(DictAgendamentosFinal); // Use o objeto final ordenado
     setfilaEsperaData(ListaFilaDeEspera);
 };
+
+  // Requisição inicial para mostrar os agendamentos do banco de dados
   useEffect(() => {
-    var myHeaders = new Headers();
+        var myHeaders = new Headers();
     myHeaders.append("Authorization", authHeader);
     myHeaders.append("apikey", API_KEY)
 
@@ -121,7 +131,7 @@ const Agendamento = ({setDictInfo}) => {
 
     fetch("https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/appointments?select&doctor_id&patient_id&status&scheduled_at&order&limit&offset", requestOptions)
       .then(response => response.json())
-      .then(result => {FiltrarAgendamentos(result);console.log(result)})
+      .then(result => {FiltrarAgendamentos(result);})
       .catch(error => console.log('error', error));
 
     const PegarTodosOsMedicos = async () => {
@@ -135,6 +145,7 @@ const Agendamento = ({setDictInfo}) => {
     PegarTodosOsMedicos()
 
   }, [])
+
  useEffect(() => {
       console.log("mudou FiltredTodosMedicos:", FiltredTodosMedicos);
    if (FiltredTodosMedicos.length === 1) {  
@@ -155,33 +166,38 @@ const Agendamento = ({setDictInfo}) => {
   }, [FiltredTodosMedicos]); 
 
 const deleteConsulta = (selectedPatientId) => {
-   var myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
-            myHeaders.append('apikey', API_KEY)
-            myHeaders.append("authorization", authHeader)
-    
-    
-            var raw = JSON.stringify({ "status":"cancelled"      
-            });
-    
-    
-            var requestOptions = {
-            method: 'PATCH',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-            };
-    
-            fetch(`https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/appointments?id=eq.${selectedPatientId}`, requestOptions)
-            .then(response => {if(response.status !== 200)(console.log(response))})
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error));
+  console.log("tentando apagar")
+     var myHeaders = new Headers();
+    myHeaders.append("Authorization", authHeader);
+    myHeaders.append("apikey", API_KEY)
 
+var requestOptions = {
+   method: 'DELETE',
+   redirect: 'follow',
+   headers: myHeaders
+};
+
+fetch(`https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/appointments?id=eq.${selectedPatientId}`, requestOptions)
+   .then(response => response.json())
+   .then(result => console.log(result))
+   .catch(error => console.log('error', error));
+  
 }
+  
 
+/**
+ * Filtra todos os agendamentos em um objeto aninhado (data -> [agendamentos]) 
+ * com base no ID do médico.
+ *
+ * @param {Object} dictAgendamentos - O dicionário de agendamentos.
+ * @param {string} idMedicoFiltrado - O ID do médico (doctor_id) para ser usado como filtro.
+ * @returns {Array} Um array contendo todos os agendamentos que correspondem ao idMedicoFiltrado.
+ */
 const filtrarAgendamentosPorMedico = (dictAgendamentos, idMedicoFiltrado) => { 
     
+    // O corpo da função deve usar esses nomes de variáveis:
     const todasAsListasDeAgendamentos = Object.values(dictAgendamentos);
+    
     const todosOsAgendamentos = todasAsListasDeAgendamentos.flat();
 
     const agendamentosFiltrados = todosOsAgendamentos.filter(agendamento => 
@@ -191,7 +207,9 @@ const filtrarAgendamentosPorMedico = (dictAgendamentos, idMedicoFiltrado) => {
     return agendamentosFiltrados;
 };
 
+ 
 
+  // Lógica para filtrar os dados da AGENDA (AgendamentosMes)
   const filteredAgendamentos = useMemo(() => {
     if (!searchTerm.trim()) {
       return AgendamentosMes;
@@ -231,7 +249,6 @@ const filtrarAgendamentosPorMedico = (dictAgendamentos, idMedicoFiltrado) => {
     return ListaDiasDatas
   }
 
-
   const handleClickAgendamento = (agendamento) => {
     if (agendamento.status !== 'vazio') return
     else setPageConsulta(true)
@@ -245,6 +262,7 @@ const handleSearchMedicos = (term) => {
         return;
     }
     
+    // Lógica simples de filtragem:
     const filtered = ListaDeMedicos.filter(medico => 
         medico.nomeMedico.toLowerCase().includes(term.toLowerCase())
     );
@@ -257,65 +275,66 @@ const handleSearchMedicos = (term) => {
   return (
     <div>
       <h1>Agendar nova consulta</h1>
-      
-  
-      <div className="btns-gerenciamento-e-consulta" style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-          <button className="btn btn-primary" onClick={() => setPageConsulta(true)}>
-             <i className="bi bi-plus-circle"></i> Adicionar Consulta
-          </button>
-          
-          <button
-              className="manage-button btn"
-              onClick={() => navigate("/secretaria/excecoes-disponibilidade")}
-          >
-              <i className="bi bi-gear-fill me-1"></i>
-              Gerenciar Exceções
-          </button>
-          
-          <button className='manage-button btn' onClick={() => navigate('/secretaria/disponibilidade')}>
-            <i className="bi bi-gear-fill me-1"></i>
-            Mudar Disponibilidade
-          </button>
-      </div>
+
+      <button className='manage-button btn' onClick={() => navigate('/secretaria/excecoes-disponibilidade')}>
+        <i className="bi bi-gear-fill me-1"></i>
+        Mudar Disponibilidade
+      </button>
+
+       <button className="btn btn-primary" onClick={() => setPageConsulta(true)}>
+           <i className="bi bi-plus-circle"></i> Adicionar Paciente
+        </button>
 
       {!PageNovaConsulta ? (
         <div className='atendimento-eprocura'>
-           <div className='unidade-selecionarprofissional'>
           
-          {/* Bloco de busca por médico */}
           <div className='busca-atendimento-container'> 
-            <div className='input-e-dropdown-wrapper'>
-              <div className='busca-atendimento'>
-                  <div>
-                      <i className="fa-solid fa-calendar-day"></i>
-                      <input
-                          type="text"
-                          placeholder="Filtrar atendimento por médico..."
-                          value={searchTermDoctor}
-                          onChange={(e) => handleSearchMedicos(e.target.value)} 
-                      />
-                  </div>
+        
+        <div className='input-e-dropdown-wrapper'>
+
+          <div className='busca-atendimento'>
+              <div>
+                  <i className="fa-solid fa-calendar-day"></i>
+                  <input
+                      type="text"
+                      placeholder="Filtrar atendimento por médico..."
+                      value={searchTermDoctor}
+                      onChange={(e) => handleSearchMedicos(e.target.value)} // Chama a nova função de filtro
+                  />
               </div>
-              
-              {/* DROPDOWN (RENDERIZAÇÃO CONDICIONAL) */}
-                {searchTermDoctor && FiltredTodosMedicos.length > 0 && (
-                  <div className='dropdown-medicos'>
-                      {FiltredTodosMedicos.map((medico) => (
-                          <div 
-                              key={medico.id} 
-                              className='dropdown-item'
-                              onClick={() => {
-                                  setSearchTermDoctor(medico.nomeMedico); 
-                              }}
-                          >
-                              <p>{medico.nomeMedico} </p>
-                          </div>
-                      ))}
-                  </div>
-                 )}
-            </div>
           </div>
-           
+          
+          {/* DROPDOWN (RENDERIZAÇÃO CONDICIONAL) */}
+            {searchTermDoctor && FiltredTodosMedicos.length > 0 && (
+              <div className='dropdown-medicos'>
+                  {FiltredTodosMedicos.map((medico) => (
+                      <div 
+                          key={medico.id} 
+                          className='dropdown-item'
+                          onClick={() => {
+                              // Ação ao selecionar o médico
+                              setSearchTermDoctor(medico.nomeMedico); // Preenche o input
+                              //setFiltredTodosMedicos([]); // Fecha o dropdown
+                              // Lógica adicional, como selecionar o ID do médico...
+                          }}
+                      >
+                          <p>{medico.nomeMedico} </p>
+                      </div>
+                  ))}
+              </div>
+             )}
+        </div>
+    </div>
+
+
+          <div className='unidade-selecionarprofissional'>
+            <select>
+              <option value="" disabled selected >Unidade</option>
+              <option value="">Unidade Central</option>
+              <option value="">Unidade Zona Norte</option>
+              <option value="">Unidade Zona Oeste</option>
+            </select>
+            <input type="text" placeholder='Selecionar profissional' />
           </div>
 
           <div className='container-btns-agenda-fila_esepera'>
@@ -364,7 +383,6 @@ const handleSearchMedicos = (term) => {
                       </div>
                     </section>
                     
-                    {/* Componentes de Tabela - Adicionado props de delete da main */}
                     {tabela === "diario" && <TabelaAgendamentoDia handleClickAgendamento={handleClickAgendamento} agendamentos={DictAgendamentosOrganizados} setShowDeleteModal={setShowDeleteModal} setSelectedId={setSelectedId} setDictInfo={setDictInfo} />}
                     {tabela === 'semanal' && <TabelaAgendamentoSemana agendamentos={DictAgendamentosOrganizados} ListarDiasdoMes={ListarDiasdoMes} setShowDeleteModal={setShowDeleteModal} setSelectedId={setSelectedId} setDictInfo={setDictInfo}/>}
                     {tabela === 'mensal' && <TabelaAgendamentoMes ListarDiasdoMes={ListarDiasdoMes} aplicarCores={true} agendamentos={DictAgendamentosOrganizados} setShowDeleteModal={setShowDeleteModal} setSelectedId={setSelectedId} setDictInfo={setDictInfo} />}
@@ -387,10 +405,11 @@ const handleSearchMedicos = (term) => {
                   <table className="fila-tabela">
                     <thead>
                       <tr>
-                        <th>Nome do Paciente</th> {/* Ajustado o cabeçalho */}
-                        <th>CPF</th> {/* Ajustado o cabeçalho */}
-                        <th>Médico Solicitado</th> {/* Ajustado o cabeçalho */}
-                        <th>Data da Solicitação</th> {/* Ajustado o cabeçalho */}
+                        <th>Nome</th>
+                        <th>Telefone</th>
+                      
+                        <th>Telefone</th>
+                        <th>Entrou na fila de espera</th>
                         <th>Ações</th>
                       </tr>
                     </thead>
@@ -398,15 +417,15 @@ const handleSearchMedicos = (term) => {
                       {filaEsperaData.map((item, index) => (
                         <tr key={index}>
                           <td> <p>{item.Infos?.paciente_nome} </p>  </td>
-                          <td><p>{item.Infos?.paciente_cpf} </p></td>
-                          <td><p>{item.Infos?.nome_medico} </p></td>
-                          <td>{dayjs(item.agendamento.created_at).format('DD/MM/YYYY HH:mm')}</td> 
+                          <td><p>{} </p></td>
+                          <td>{}</td>
+                          <td>{}</td>
                           <td> <div className="d-flex gap-2">
                             
                               <button className="btn btn-sm btn-edit"
                               onClick={() => {
                                 console.log(item, 'item')
-                                navigate(`${2}/edit`) 
+                                navigate(`${2}/edit`)
                                 setDictInfo(item)
                               }}
                               >
@@ -437,7 +456,6 @@ const handleSearchMedicos = (term) => {
         <AgendamentoCadastroManager setPageConsulta={setPageConsulta} />
       )}
 
-       {/* Modal de Confirmação de Exclusão */}
        {showDeleteModal && (
         <div
           className="modal fade show"

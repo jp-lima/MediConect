@@ -24,4 +24,9 @@ import API_KEY from "../apiKeys";
     return userInfoData 
 }
 
+const UploadFotoAvatar = ( userID,access_token,file)  => {
+
+
+}
+
 export {UserInfos}

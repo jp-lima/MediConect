@@ -1,0 +1,61 @@
+.actions-container {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 10px;
+  margin-left: 2rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in-out;
+
+  /* 🎨 Glassmorphism */
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(80px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Mostra no hover do card */
+.container-cardconsulta:hover .actions-container {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-2px);
+}
+
+/* 3. Estilos base para o botão de edição (amarelo) */
+.btn-edit-custom-style {
+    background-color: #ffc107; /* Amarelo da sua imagem */
+    color: #343a40;           /* Cor do ícone (cinza escuro para contraste) */
+    border: none;
+    padding: 8px 12px;       /* Ajuste o padding para o tamanho do botão */
+    border-radius: 0.25rem;  /* Leve arredondamento de borda */
+    transition: background-color 0.2s ease-in-out; /* Suaviza a transição de cor */
+}
+
+
+/* 5. Estilos base para o botão de exclusão (vermelho) */
+.btn-delete-custom-style {
+    background-color: #dc3545; /* Vermelho da sua imagem */
+    color: #ffffff;           /* Cor do ícone (branco para contraste) */
+    border: none;
+    padding: 8px 12px;       /* Ajuste o padding para o tamanho do botão */
+    border-radius: 0.25rem;  /* Leve arredondamento de borda */
+    transition: background-color 0.2s ease-in-out; /* Suaviza a transição de cor */
+
+    font-weight:bold ;
+    
+}
+
+/* 6. Estilo de hover para o botão de exclusão */
+.btn-delete-custom-style:hover {
+    background-color: #c82333; /* Um vermelho um pouco mais escuro para o hover */
+    filter: brightness(90%); /* Alternativa: escurecer um pouco mais */
+}
+
+/* 7. Estilos para os ícones dentro dos botões (já está no JSX com fs-4) */
+/* .fs-4 do Bootstrap já cuida do tamanho do ícone. Se precisar de mais controle, adicione aqui. */
+.action-button .bi {
+    /* Exemplo: se precisar de um ajuste fino além do fs-4 */
+    /* font-size: 1.5rem; */
+}

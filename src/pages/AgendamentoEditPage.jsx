@@ -1,23 +1,44 @@
 import React from 'react'
 import FormNovaConsulta from '../components/AgendarConsulta/FormNovaConsulta'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import API_KEY from '../components/utils/apiKeys'
 import { useAuth } from '../components/utils/AuthProvider'
 import dayjs from 'dayjs'
+import { UserInfos } from '../components/utils/Functions-Endpoints/General'
 
+const AgendamentoEditPage = ({setDictInfo, DictInfo}) => {
 
-const AgendamentoEditPage = () => {
-
-    let DataAtual = dayjs()
+    const [idUsuario, setIDusuario] = useState('0')
+    //let DataAtual = dayjs()
     const {getAuthorizationHeader} = useAuth()
     const params = useParams()
     const [PatientToPatch, setPatientToPatch] = useState({})
 
     let id = params.id
 
-    console.log(id)
+    console.log(DictInfo, "DENTRO DO EDITAR")
 
+    //console.log(DictInfo, 'aqui')    
+
+    useEffect(() => {
+      setDictInfo({...DictInfo?.Infos,...DictInfo?.agendamento})
+
+
+        const ColherInfoUsuario =async () => {
+          const result = await UserInfos(authHeader)
+        
+          setIDusuario(result?.profile?.id)
+        
+        }
+        ColherInfoUsuario()
+        
+
+
+    }, [])
+
+
+    
     let authHeader = getAuthorizationHeader() 
 
     const handleSave = (DictParaPatch) => {
@@ -30,13 +51,21 @@ const AgendamentoEditPage = () => {
 
         var raw = JSON.stringify({"patient_id": DictParaPatch.patient_id,
        "doctor_id": DictParaPatch.doctor_id,
-       "scheduled_at": DataAtual,
+       
        "duration_minutes": 30,
-       "appointment_type": "presencial",
+    
        "chief_complaint": "Dor de cabeça há 3 ",
+       
+       "created_by": idUsuario,
+
+        "scheduled_at": `${DictParaPatch.dataAtendimento}T${DictParaPatch.horarioInicio}:00.000Z`,
+       
+       "appointment_type": DictParaPatch.tipo_consulta,
+       
        "patient_notes": "Prefiro horário pela manhã",
-       "insurance_provider": "Unimed",
-       "created_by": "87f2662c-9da7-45c0-9e05-521d9d92d105"
+       "insurance_provider": DictParaPatch.convenio,
+       "status": DictParaPatch.status,
+       "created_by": idUsuario
 
     
         });
@@ -51,7 +80,7 @@ const AgendamentoEditPage = () => {
         redirect: 'follow'
         };
 
-        fetch(`https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/appointments?id=eq.${id}`, requestOptions)
+        fetch(`https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/appointments?id=eq.${DictInfo.id}`, requestOptions)
         .then(response => response.text())
         .then(result => console.log(result))
         .catch(error => console.log('error', error));
@@ -60,7 +89,7 @@ const AgendamentoEditPage = () => {
 
   return (
     <div>
-        <FormNovaConsulta onSave={handleSave} agendamento={PatientToPatch} setAgendamento={setPatientToPatch}/>
+        <FormNovaConsulta onSave={handleSave} agendamento={DictInfo} setAgendamento={setDictInfo}/>
 
 
     </div>

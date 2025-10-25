@@ -1,21 +1,23 @@
 import React from 'react'
-import FormNovaConsulta from '../components/AgendarConsulta/FormNovaConsulta'
-import API_KEY from '../components/utils/apiKeys'
+import FormConsultaPaciente from './FormConsultaPaciente'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../components/utils/AuthProvider'
-import { useEffect,useState } from 'react'
+import API_KEY from '../components/utils/apiKeys'
+
 import dayjs from 'dayjs'
 import { UserInfos } from '../components/utils/Functions-Endpoints/General'
-const AgendamentoCadastroManager = ({setPageConsulta}) => {
-
+const ConsultaCadastroManager = () => {
+    
     const {getAuthorizationHeader} = useAuth()
-    const [agendamento, setAgendamento] = useState({status:'confirmed'})
-    const [idUsuario, setIDusuario] = useState('0')
-
-  let authHeader = getAuthorizationHeader() 
-
+    const [Dict, setDict] = useState({})
+    const navigate = useNavigate()
+    const [idUsuario, setIDusuario] = useState("")  
+    
+      let authHeader = getAuthorizationHeader() 
+    
 
   useEffect(() => {
-
     const ColherInfoUsuario =async () => {
       const result = await UserInfos(authHeader)
     
@@ -26,8 +28,6 @@ const AgendamentoCadastroManager = ({setPageConsulta}) => {
     
 
   }, [])
-
-
 
       const handleSave = (Dict) => {
         let DataAtual = dayjs()
@@ -63,13 +63,19 @@ const AgendamentoCadastroManager = ({setPageConsulta}) => {
     
       }
 
-  return (
+
+    
+  
+  
+  
+    return (
+
+
+
     <div>
-
-    <FormNovaConsulta onSave={handleSave} agendamento={agendamento} setAgendamento={setAgendamento} onCancel={() => setPageConsulta(false)}/>
-
+        <FormConsultaPaciente agendamento={Dict} setAgendamento={setDict} onSave={handleSave} onCancel={() => navigate("/paciente/agendamento/")}/>
     </div>
   )
 }
 
-export default AgendamentoCadastroManager
+export default ConsultaCadastroManager

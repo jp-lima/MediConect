@@ -104,7 +104,7 @@ function TableDoctor() {
 
     fetch("https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/doctors", requestOptions)
       .then(response => response.json())
-      .then(result => setMedicos(result))
+      .then(result => {setMedicos(result); console.log(result)})
       .catch(error => console.log('error', error));
   }, [isAuthenticated, getAuthorizationHeader]);
 

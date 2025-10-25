@@ -72,7 +72,7 @@ function PatientCadastroManager({ setCurrentPage }) {
 
       const cleanedData = {
         full_name: patientData.full_name,
-        cpf: cpfLimpo,
+        cpf: patientData.cpf,
         email: patientData.email,
         phone_mobile: patientData.phone_mobile,
         birth_date: patientData.birth_date || null,

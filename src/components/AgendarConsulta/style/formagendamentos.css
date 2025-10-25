@@ -110,6 +110,7 @@ svg{
   margin-top: 25px;
   display: flex;
   gap: 12px;
+  justify-content: flex-end;
 }
 
 .btn-primary {
@@ -304,3 +305,170 @@ html[data-bs-theme="dark"] .icon,
 html[data-bs-theme="dark"] svg {
   color: #e0e0e0 !important;
 }
+
+/* CONTAINER PAI - ESSENCIAL PARA POSICIONAMENTO */
+.campo-de-input-container {
+    position: relative; /* Define o contexto para o dropdown */
+    /* ... outros estilos de layout (display, margin, etc.) ... */
+}
+
+/* ESTILO DA LISTA DROPDOWN */
+.dropdown-profissionais {
+    position: absolute; /* Flutua em relação ao pai (.campo-de-input-container) */
+    top: 100%; /* Começa logo abaixo do input */
+    left: 0;
+    width: 100%; /* Ocupa toda a largura do container pai */
+    
+    /* Estilos visuais */
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 100; /* Alto z-index para garantir que fique acima de outros elementos */
+    max-height: 200px;
+    overflow-y: auto; 
+}
+
+/* ESTILO DE CADA ITEM DO DROPDOWN */
+.dropdown-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #f0f0f0; 
+}
+
+.tipo_atendimento{
+  margin-left: 3rem;
+  
+}
+
+
+
+/* 1. Estilização Básica e Tamanho (Estado Padrão - Antes de Clicar) */
+.checkbox-customs {
+  /* Remove a aparência padrão do navegador/Bootstrap */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  /* Define o tamanho desejado */
+  width: 1.2rem;   /* Ajuste conforme o seu gosto (ex: 1.2rem = 19.2px) */
+  height: 1.2rem;
+
+  /* Define o visual "branco com borda preta" */
+  background-color: #fff; /* Fundo branco */
+  border: 1px solid #000; /* Borda preta de 1px */
+  border-radius: 0.25rem; /* Borda levemente arredondada (opcional, imita Bootstrap) */
+
+  /* Centraliza o 'check' (quando aparecer) */
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer; /* Indica que é clicável */
+
+  /* Adiciona a transição suave */
+  transition: all 0.5s ease; /* Transição em 0.5 segundos para todas as propriedades */
+}
+
+/* 2. Estilização no Estado Clicado (:checked) */
+.checkbox-customs:checked {
+  /* Quando clicado, mantém o fundo branco (se quiser mudar, altere aqui) */
+  background-color: #fff;
+
+  /* Se você quiser que a borda mude de cor ao clicar, altere aqui. */
+  /* border-color: #007bff; */ /* Exemplo: borda azul */
+}
+
+/* 3. Ocultar o 'Check' Padrão e Criar um Check Customizado */
+/* O Bootstrap/Navegador insere um ícone de 'check'. Vamos controlá-lo com background-image. */
+.checkbox-customs:checked {
+  /* Este código do Bootstrap usa um SVG para o ícone de 'check' */
+  /* Aqui, estamos forçando o ícone de 'check' a ser preto para combinar com a borda preta. */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
+
+  /* Garante que o ícone fique centralizado e preencha o espaço */
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+/* Container dos três elementos na linha */
+.linha {
+    display: flex;
+    align-items: flex-end; /* Garante que os campos de input e o seletor fiquem alinhados pela base */
+    gap: 20px; /* Espaçamento entre os campos */
+}
+
+/* ------------------------------------------- */
+/* ESTILIZAÇÃO DO SELETOR DE SESSÕES */
+/* ------------------------------------------- */
+
+.seletor-wrapper {
+    /* Garante que o label e o contador fiquem alinhados verticalmente com os selects */
+    display: flex;
+    flex-direction: column;
+}
+
+.sessao-contador {
+    /* Estilo de "campo de input" */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    /* Cores e Bordas */
+    background-color: #e9ecef; /* Cor cinza claro dos inputs do Bootstrap */
+    border: 1px solid #ced4da; /* Borda sutil */
+    border-radius: 0.25rem; /* Bordas arredondadas (Padrão Bootstrap) */
+
+    /* Garante a mesma altura dos selects */
+    height: 40px; /* Ajuste este valor para corresponder à altura exata do seu select */
+    width: 100px; /* Largura ajustável */
+    padding: 0 5px; /* Padding interno */
+    
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.sessao-valor {
+    /* Estilo do número de sessões */
+    margin: 0;
+    padding: 0 5px;
+    font-size: 1.1rem; /* Um pouco maior que o texto dos selects */
+    color: #007bff; /* Cor azul destacada (como na sua imagem) */
+}
+
+.sessao-contador button {
+    /* Estilo dos botões de chevron */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0 2px;
+    color: #495057; /* Cor do ícone */
+    font-size: 1.5rem; /* Aumenta o tamanho dos ícones do chevron */
+    line-height: 1; /* Alinha o ícone verticalmente */
+    transition: color 0.2s;
+}
+
+.sessao-contador button:hover:not(:disabled) {
+    color: #007bff; /* Cor azul ao passar o mouse */
+}
+
+.sessao-contador button:disabled {
+    cursor: not-allowed;
+    color: #adb5bd; /* Cor mais clara quando desabilitado */
+}
+
+/* ------------------------------------------- */
+/* GARANTINDO COERÊNCIA NOS SELECTS */
+/* ------------------------------------------- */
+
+.campo-de-input select {
+    /* Se seus selects estiverem com estilos diferentes, este bloco garante que eles se pareçam */
+    /* com o seletor de sessões (se já usarem classes do Bootstrap, podem não precisar disso) */
+    background-color: #e9ecef; /* Fundo cinza claro */
+    border: 1px solid #ced4da; /* Borda sutil */
+    border-radius: 0.25rem;
+    height: 40px; /* Garante a mesma altura do sessao-contador */
+    /* Adicione mais estilos do seu input/select se necessário (ex: font-size, padding) */
+}
+
+

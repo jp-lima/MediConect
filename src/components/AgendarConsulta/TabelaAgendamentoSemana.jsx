@@ -6,7 +6,7 @@ import { useEffect, useState, useMemo } from 'react';
 import weekOfYear from 'dayjs/plugin/weekOfYear'
 dayjs.extend(weekOfYear)
 
-const TabelaAgendamentoSemana = ({ agendamentos, ListarDiasdoMes }) => {
+const TabelaAgendamentoSemana = ({ agendamentos, ListarDiasdoMes, setShowDeleteModal ,setSelectedId ,setDictInfo}) => {
 
   // Armazena o objeto COMPLETO das semanas organizadas
   const [semanasOrganizadas, setSemanasOrganizadas] = useState({});
@@ -75,7 +75,8 @@ const TabelaAgendamentoSemana = ({ agendamentos, ListarDiasdoMes }) => {
 
   useEffect(() => {
     setSemanasOrganizadas(OrganizarAgendamentosSemanais);
-    // NOTA: Ao carregar, o Indice é 0, que é a primeira semana.
+    
+    //console.log(semanasOrganizadas, `aqui`)
   }, [OrganizarAgendamentosSemanais])
 
   // --- NOVAS FUNÇÕES DE NAVEGAÇÃO ---
@@ -156,44 +157,56 @@ const TabelaAgendamentoSemana = ({ agendamentos, ListarDiasdoMes }) => {
           </tr>
         </thead>
         <tbody>
-          {indicesDeLinha.map((indiceLinha) => (
+          {indicesDeLinha.map((indiceLinha) => {
+
+            let schedulet_at = semanaParaRenderizar.segunda[indiceLinha].scheduled_at.split("T")
+
+            let horario = schedulet_at[1].split(":")
+
+            console.log(horario)
+
+            return(
             <tr key={indiceLinha}>
               {/* Célula para Horário (Pode ser ajustado para mostrar o horário real) */}
-              <td></td> 
+              <td>
+
+               <p className='horario-texto'> {`${horario[0]}:${horario[1]}`} </p>
+                  
+              </td> 
 
               {/* Mapeamento de COLUNAS (dias) */}
               <td>
                 {semanaParaRenderizar.segunda[indiceLinha] 
-                  ? <CardConsulta DadosConsulta={semanaParaRenderizar.segunda[indiceLinha]} />
+                  ? <CardConsulta DadosConsulta={semanaParaRenderizar.segunda[indiceLinha]} setShowDeleteModal={setShowDeleteModal} setSelectedId={setSelectedId} setDictInfo={setDictInfo} />
                   : null
                 }
               </td>
               <td>
                 {semanaParaRenderizar.terça[indiceLinha]
-                  ? <CardConsulta DadosConsulta={semanaParaRenderizar.terça[indiceLinha]} />
+                  ? <CardConsulta DadosConsulta={semanaParaRenderizar.terça[indiceLinha]} setShowDeleteModal={setShowDeleteModal} setSelectedId={setSelectedId} setDictInfo={setDictInfo}/>
                   : null
                 }
               </td>
               <td>
                 {semanaParaRenderizar.quarta[indiceLinha]
-                  ? <CardConsulta DadosConsulta={semanaParaRenderizar.quarta[indiceLinha]} />
+                  ? <CardConsulta DadosConsulta={semanaParaRenderizar.quarta[indiceLinha]} setShowDeleteModal={setShowDeleteModal} setSelectedId={setSelectedId} setDictInfo={setDictInfo}/>
                   : null
                 }
               </td>
               <td>
                 {semanaParaRenderizar.quinta[indiceLinha]
-                  ? <CardConsulta DadosConsulta={semanaParaRenderizar.quinta[indiceLinha]} />
+                  ? <CardConsulta DadosConsulta={semanaParaRenderizar.quinta[indiceLinha]} setShowDeleteModal={setShowDeleteModal} setSelectedId={setSelectedId} setDictInfo={setDictInfo} />
                   : null
                 }
               </td>
               <td>
                 {semanaParaRenderizar.sexta[indiceLinha]
-                  ? <CardConsulta DadosConsulta={semanaParaRenderizar.sexta[indiceLinha]} />
+                  ? <CardConsulta DadosConsulta={semanaParaRenderizar.sexta[indiceLinha]}  setShowDeleteModal={setShowDeleteModal} setSelectedId={setSelectedId} setDictInfo={setDictInfo} />
                   : null
                 }
               </td>
             </tr>
-          ))}
+)})}
         </tbody>
       </table>
     </div>

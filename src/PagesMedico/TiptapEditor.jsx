@@ -1,74 +1,55 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
-// Componente da barra de menu (Menu Bar)
+
+// MenuBar simples
 const MenuBar = ({ editor }) => {
-  if (!editor) {
-    return null;
-  }
-  // Estilos simples para os botões. Você pode e deve estilizar melhor com CSS/Bootstrap.
-  const buttonStyle = {
-    marginRight: '4px',
-    padding: '4px 8px',
-    cursor: 'pointer',
-    border: '1px solid #ccc',
-    borderRadius: '4px',
-    backgroundColor: editor.isActive('bold') || editor.isActive('italic') ? '#ddd' : 'white',
-  };
+  if (!editor) return null;
+  const btn = { marginRight: '6px', padding: '4px 8px', cursor: 'pointer', border: '1px solid #ccc', borderRadius: 4 };
   return (
-    <div style={{ padding: '8px', borderBottom: '1px solid #ccc', display: 'flex', flexWrap: 'wrap' }}>
-      <button
-        onClick={() => editor.chain().focus().toggleBold().run()}
-        disabled={!editor.can().chain().focus().toggleBold().run()}
-        style={{ ...buttonStyle, fontWeight: 'bold' }}
-      >
-        B
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleItalic().run()}
-        disabled={!editor.can().chain().focus().toggleItalic().run()}
-        style={{ ...buttonStyle, fontStyle: 'italic' }}
-      >
-        I
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleBulletList().run()}
-        style={{ ...buttonStyle, backgroundColor: editor.isActive('bulletList') ? '#ddd' : 'white' }}
-      >
-        Lista
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-        style={{ ...buttonStyle, backgroundColor: editor.isActive('heading', { level: 2 }) ? '#ddd' : 'white' }}
-      >
-        Título 2
-      </button>
-      {/* Adicione mais botões conforme a necessidade (link, código, etc.) */}
+    <div style={{ padding: 8, borderBottom: '1px solid #e6e6e6', display: 'flex', flexWrap: 'wrap' }}>
+      <button style={{ ...btn, fontWeight: 'bold' }} onClick={() => editor.chain().focus().toggleBold().run()}>B</button>
+      <button style={{ ...btn }} onClick={() => editor.chain().focus().toggleItalic().run()}>I</button>
+      <button style={{ ...btn }} onClick={() => editor.chain().focus().toggleBulletList().run()}>Lista</button>
+      <button style={{ ...btn }} onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}>Título 2</button>
+      <button style={{ ...btn }} onClick={() => { const url = prompt('URL'); if (url) editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run(); }}>Link</button>
     </div>
   );
 };
-// Componente principal do Editor
+
 const TiptapEditor = ({ content, onChange }) => {
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({
-        // Desativa 'hardBreak' e 'blockquote' se não forem necessários para simplificar
-        hardBreak: false,
-      }),
-      Link, // Adiciona suporte para links
+      StarterKit.configure({ hardBreak: false }),
+      Link,
     ],
     content: content || '<p>Inicie o relatório aqui...</p>',
     onUpdate: ({ editor }) => {
-      // Quando o conteúdo muda, chama a função onChange com o HTML
-      onChange(editor.getHTML());
+      onChange && onChange(editor.getHTML());
     },
   });
+
+  // Se o pai mudar 'content', atualizamos o editor
+  useEffect(() => {
+    if (!editor) return;
+    // Só setContent se for diferente para evitar perda de edição
+    try {
+      const current = editor.getHTML();
+      if ((content || '').trim() && content !== current) {
+        editor.commands.setContent(content);
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, [editor, content]);
+
   return (
-    <div className='tiptap-editor-container' style={{ border: '1px solid #ccc', borderRadius: '4px' }}>
+    <div className='tiptap-editor-container' style={{ border: '1px solid #ddd', borderRadius: 6, overflow: 'hidden' }}>
       <MenuBar editor={editor} />
-      <EditorContent editor={editor} style={{ minHeight: '300px', padding: '10px' }} />
+      <EditorContent editor={editor} style={{ minHeight: 360, padding: 12, background: 'white' }} />
     </div>
   );
 };
+
 export default TiptapEditor;

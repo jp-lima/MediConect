@@ -1,25 +1,17 @@
-import API_KEY from "../apiKeys";
+import API_KEY from '../apiKeys';
 
-
-
-const GetDoctorByID = async (ID,authHeader) => {
-
+const GetDoctorByID = async (ID, authHeader) => {
   var myHeaders = new Headers();
-  myHeaders.append('apikey', API_KEY)
-  myHeaders.append('Authorization', authHeader)
+  myHeaders.append('apikey', API_KEY);
+  if (authHeader) myHeaders.append('Authorization', authHeader);
 
-  var requestOptions = {
-   method: 'GET',
-   redirect: 'follow',
-   headers:myHeaders
+  const requestOptions = { method: 'GET', redirect: 'follow', headers: myHeaders };
+  const res = await fetch(`https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/doctors?id=eq.${ID}`, requestOptions);
+  const DictMedico = await res.json();
+  return DictMedico;
 };
 
 
-const result = await fetch(`https://yuanqfswhberkoevtmfr.supabase.co/rest/v1/doctors?id=eq.${ID}`, requestOptions)
-const DictMedico = await result.json()    
-return DictMedico
-
-}
 
 const GetAllDoctors = async (authHeader) => {
     var myHeaders = new Headers();

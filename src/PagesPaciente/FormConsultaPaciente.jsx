@@ -1,19 +1,17 @@
 import InputMask from "react-input-mask";
-import "./style/formagendamentos.css";
-import { useState, useEffect } from "react";
-import { GetPatientByCPF } from "../utils/Functions-Endpoints/Patient";
-import { GetDoctorByName, GetAllDoctors } from "../utils/Functions-Endpoints/Doctor";
-import { useAuth } from "../utils/AuthProvider";
-import API_KEY from "../utils/apiKeys";
 
-const FormNovaConsulta = ({ onCancel, onSave, setAgendamento, agendamento }) => {
+import { useState, useEffect } from "react";
+import { GetPatientByCPF } from "../components/utils/Functions-Endpoints/Patient";
+import { GetDoctorByName, GetAllDoctors } from "../components/utils/Functions-Endpoints/Doctor";
+import { useAuth } from "../components/utils/AuthProvider";
+import API_KEY from "../components/utils/apiKeys";
+import { useNavigate } from "react-router-dom";
+const FormConsultaPaciente = ({ onCancel, onSave, setAgendamento, agendamento }) => {
   const {getAuthorizationHeader} = useAuth()
 
-  console.log(agendamento, 'aqui2')
+  console.log(agendamento?.dataAtendimento, 'aqui2')
 
-  const [sessoes,setSessoes] = useState(1)
-  const [tempoBaseConsulta, setTempoBaseConsulta] = useState(30); // NOVO: Tempo base da consulta em minutos
-
+  const navigate = useNavigate()
   const [selectedFile, setSelectedFile] = useState(null);
   const [anexos, setAnexos] = useState([]);
   const [loadingAnexos, setLoadingAnexos] = useState(false);
@@ -149,7 +147,7 @@ const handleSelectProfissional = async (profissional) => {
     setAgendamento(prev => ({
         ...prev,
         doctor_id: profissional.id,
-        nome_medico: profissional.full_name
+        medico_nome: profissional.full_name
     }));
         // 2. Fecha o dropdown
     setProfissionaisFiltrados([]);
@@ -168,36 +166,10 @@ const formatarHora = (datetimeString) => {
     disabled: !item.available
   }));
 
-const calcularHorarioTermino = (inicio, sessoes, tempoBase) => {
-    if (!inicio || inicio.length !== 5 || !inicio.includes(':')) return '';
-
-    const [horas, minutos] = inicio.split(':').map(Number);
-    const minutosInicio = (horas * 60) + minutos;
-    const duracaoTotalMinutos = sessoes * tempoBase;
-    const minutosTermino = minutosInicio + duracaoTotalMinutos;
-
-    const horaTermino = Math.floor(minutosTermino / 60) % 24;
-    const minutoTermino = minutosTermino % 60;
-
-    const formatar = (num) => String(num).padStart(2, '0');
-
-    return `${formatar(horaTermino)}:${formatar(minutoTermino)}`;
-  };
-
-  useEffect(() => {
-    // Recalcula o horário de término sempre que houver alteração nas variáveis dependentes
-    const novoTermino = calcularHorarioTermino(horarioInicio, sessoes, tempoBaseConsulta);
-    setHorarioTermino(novoTermino);
-
-    setAgendamento(prev => ({
-        ...prev,
-        horarioTermino: novoTermino 
-    }));
-  }, [horarioInicio, sessoes, tempoBaseConsulta, setAgendamento]);
-
 const handleSubmit = (e) => {
     e.preventDefault();
     alert("Agendamento salvo!");
+    navigate("/paciente/agendamento")
     onSave({...agendamento, horarioInicio:horarioInicio})
   };
 
@@ -206,34 +178,7 @@ const handleSubmit = (e) => {
       
 
       <form className="form-agendamento" onSubmit={handleSubmit}>
-        <h2 className="section-title">Informações do paciente</h2>
-
-      <div className="campos-informacoes-paciente" id="informacoes-paciente-linha-um">
-          
-          <div className="campo-de-input">
-            <label>CPF do paciente</label> 
-               <input  type="text" name="paciente_cpf"  placeholder="000.000.000-00" onChange={handleChange}  value={agendamento.paciente_cpf}/>
-           
-          </div>
-          
-          <div className="campo-de-input">
-            <label>Nome *</label>
-            <input type="text" name="paciente_nome" value={agendamento.paciente_nome} placeholder="Insira o nome do paciente" required onChange={handleChange} />
-          </div>        
-      </div>
-      <div className="campos-informacoes-paciente" id="informacoes-paciente-linha-tres">
-       
-        <div >
-          <label>Convênio</label>
-          <select name="convenio" onChange={handleChange}>
-            <option value="publico">Público</option>
-            <option value="unimed">Unimed</option>
-            <option value="bradesco_saude">Bradesco Saúde</option>
-            <option value="hapvida">Hapvida</option>
-          </select>
-        </div>
-        
-      </div>
+        1
       
         <h2 className="section-title">Informações do atendimento</h2>
        
@@ -245,9 +190,9 @@ const handleSubmit = (e) => {
         <label>Nome do profissional *</label>
         <input 
             type="text" 
-            name="nome_medico" // Use o nome correto da propriedade no estado `agendamento`
+            name="medico_nome" // Use o nome correto da propriedade no estado `agendamento`
             onChange={handleSearchProfissional} 
-            value={agendamento?.nome_medico} 
+            value={agendamento.medico_nome} 
             autoComplete="off" // Ajuda a evitar o autocomplete nativo do navegador
             required 
         />
@@ -277,82 +222,78 @@ const handleSubmit = (e) => {
             </select>
           </div>
 
+            
         </div>
 
         <section id="informacoes-atendimento-segunda-linha">
           <section id="informacoes-atendimento-segunda-linha-esquerda">
         
-          <div className="campo-informacoes-atendimento">
-            
+          <div className="campo-informacoes-atendimento">    
+
           
             <div className="campo-de-input">
               <label>Data *</label>
-              <input type="date" name="dataAtendimento" onChange={handleChange} required />
+              <input type="date" name="dataAtendimento" value={agendamento.dataAtendimento} onChange={handleChange} required />
             </div>
           </div>
-<div className="linha">
-    {/* Dropdown de Início (Não modificado) */}
-    <div className="campo-de-input">
-        <label htmlFor="inicio">Início *</label>
-        <select 
+
+
+        <div className="row">
+       <div className="campo-de-input">
+          <label htmlFor="inicio">Início *</label>
+          <select 
             id="inicio"
             name="inicio" 
             required
             value={horarioInicio}
             onChange={(e) => setHorarioInicio(e.target.value)}
-        >
+          >
             <option value="" disabled>Selecione a hora de início</option>
             {opcoesDeHorario?.map((opcao, index) => (
-                <option 
-                    key={index} 
-                    value={opcao.value} 
-                    disabled={opcao.disabled}
-                >
-                    {opcao.label}
-                    {opcao.disabled && " (Indisponível)"} 
-                </option>
+              <option 
+                key={index} 
+                value={opcao.value} 
+                disabled={opcao.disabled}
+              >
+                {opcao.label}
+                {opcao.disabled && " (Indisponível)"} 
+              </option>
             ))}
-        </select>
-    </div>
-
-    {/* SELETOR DE SESSÕES MODIFICADO */}
-    {/* Removemos o 'label' para evitar o desalinhamento e colocamos o texto acima */}
-    <div className='seletor-wrapper'>
-        <label>Número de Sessões *</label> {/* Novo label para o seletor */}
-        <div className='sessao-contador'>
-            <button 
-                type="button" /* Adicionado para evitar submissão de formulário */
-                onClick={() => {if(sessoes === 0)return; else(setSessoes(sessoes - 1))}}
-                disabled={sessoes === 0} /* Desabilita o botão no limite */
-            > 
-                <i className="bi bi-chevron-compact-left"></i>
-            </button>
-            
-            <p className='sessao-valor'>{sessoes}</p> {/* Adicionada classe para estilização */}
-            
-            <button 
-                type="button" /* Adicionado para evitar submissão de formulário */
-                onClick={() => {if(sessoes === 3 )return; else(setSessoes(sessoes + 1))}}
-                disabled={sessoes === 3} /* Desabilita o botão no limite */
-            >  
-                <i className="bi bi-chevron-compact-right"></i>
-            </button>
+          </select>
         </div>
-    </div>
-      <div className="campo-de-input">
-        <label htmlFor="termino">Término *</label>
-                    <input
-                        type="text"
-                        id="termino"
-                        name="termino"
-                        value={horarioTermino || '— —'}
-                        readOnly
-                        className="horario-termino-readonly"
-                    />
+
+        <div>
+
+        </div>
+
        
-    
-    </div>
-</div>
+
+        {/* Dropdown de Término */}
+        <div className="campo-de-input">
+          <label htmlFor="termino">Término *</label>
+          <select 
+            id="termino"
+            name="termino" 
+            required
+            value={horarioTermino}
+            onChange={(e) => setHorarioTermino(e.target.value)}
+          >
+            <option value="" disabled>Selecione a hora de término</option>
+            {opcoesDeHorario?.map((opcao, index) => (
+              <option 
+                key={index} 
+                value={opcao.value} 
+                disabled={opcao.disabled}
+              >
+                {opcao.label}
+                {opcao.disabled && " (Indisponível)"} 
+              </option>
+            ))}
+          </select>
+        </div>
+        </div>
+      
+      
     
       </section>
 
@@ -364,24 +305,16 @@ const handleSubmit = (e) => {
           <textarea name="observacoes" rows="4" cols="1"></textarea>
         </div>
       </section>
-      
     </section>
-    
 
       <div className="form-actions">
         <button type="submit" className="btn-primary">Salvar agendamento</button>
           <button type="button" className="btn-cancel" onClick={onCancel}>Cancelar</button>
         </div>
       </form>
-        <div className="campo-de-input-check">
-                <input className="form-check-input form-custom-check" type="checkbox" name="status" onChange={handleChange} />
-                <label className="form-check-label checkbox-label" htmlFor="status">
-                 Adicionar a fila de espera
-                </label>
-              </div>
       
     </div>
   );
 };
 
-export default FormNovaConsulta;
+export default FormConsultaPaciente;

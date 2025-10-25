@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-
+import API_KEY from './apiKeys';
 // 1. Criação do Contexto
 const AuthContext = createContext(null);
 
@@ -41,6 +41,8 @@ export function AuthProvider({ children }) {
    * @param {Object} tokenResponse O objeto completo retornado pelo Supabase Auth.
    */
   const setAuthTokens = (tokenResponse) => {
+    console.log("TOKEN ADICIONADO")
+
     if (tokenResponse && tokenResponse.access_token && tokenResponse.token_type) {
       // 1. Atualiza o estado do React
       setAccessToken(tokenResponse.access_token);
@@ -77,6 +79,29 @@ export function AuthProvider({ children }) {
   
   // --- VALOR DO CONTEXTO ---
 
+  const RefreshingToken = () => {
+    console.log("refresh token", refreshToken)
+    var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("apikey", API_KEY)
+
+      var raw = JSON.stringify({
+        "refresh_token": refreshToken
+      });
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+      };
+
+    fetch(`https://yuanqfswhberkoevtmfr.supabase.co/auth/v1/token?grant_type=refresh_token`, requestOptions)
+      .then(response => response.json())
+      .then(result => setAuthTokens(result))
+      .catch(error => console.log('error', error));
+  }
+
   const contextValue = {
     accessToken,
     tokenType,
@@ -85,7 +110,10 @@ export function AuthProvider({ children }) {
     setAuthTokens, // Usado para CRIAR/MUDAR (Login/Refresh)
     clearAuthTokens, // Usado para MUDAR (Logout)
     getAuthorizationHeader, // Usado para PEGAR (Endpoints)
+    RefreshingToken
   };
+
+
 
   return (
     <AuthContext.Provider value={contextValue}>

@@ -1,0 +1,106 @@
+
+/* Estilo geral do card para agrupar e dar um formato */
+.card-consulta {
+    background-color: #007bff; /* Um tom de azul padrão */
+    display: flex; /* Para   colocar horário e info lado a lado */
+    border-radius: 10px; /* Cantos arredondados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    overflow: hidden; /* Garante que o fundo azul não 'vaze' */
+   /* width: 280px; /* Largura de exemplo */
+    margin: 20px;
+    font-family: Arial, sans-serif; /* Fonte legível */
+}
+
+/* 1. Estilo para o Horário (Fundo Azul e Texto Branco/Grande) */
+.horario-container {
+    background-color: #007bff; /* Um tom de azul padrão */
+    color: white; /* Texto branco */
+    padding: 15px 20px; /* Espaçamento interno */
+    display: flex;
+    align-items: center; /* Centraliza verticalmente */
+    justify-content: center; /* Centraliza horizontalmente */
+    flex-shrink: 0; /* Impede que o container do horário encolha */
+    border-right: 1px solid #0056b3; /* Uma linha sutil de separação */
+}
+
+.horario {
+    font-size: 2.2em; /* Torna o horário grande */
+    font-weight: bold; /* Deixa em negrito */
+}
+
+/* 2. Estilo para as Informações (Fundo Branco) */
+.info-container {
+    border-radius: 20px 0px 0px 20px;
+    background-color: white; /* Fundo branco, como solicitado */
+    color: #333; /* Cor escura para o texto para bom contraste */
+    padding: 15px; /* Espaçamento interno */
+    display: flex;
+    align-items: center;
+    flex-grow: 1; /* Faz com que a div de informações preencha o espaço restante */
+
+    gap:6rem;
+ 
+}
+
+.informacao {
+    font-size: 1.1em;
+}
+
+
+
+.actions-container {
+     margin: auto;
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 10px;
+  margin-left: 2rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in-out;
+
+  /* 🎨 Glassmorphism */
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(80px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+ 
+}
+
+/* Mostra no hover do card */
+.card-consulta:hover .actions-container {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-2px);
+}
+
+/* 3. Estilos base para o botão de edição (amarelo) */
+.btn-edit-custom-style {
+    background-color: #ffc107; /* Amarelo da sua imagem */
+    color: #343a40;           /* Cor do ícone (cinza escuro para contraste) */
+    border: none;
+    padding: 8px 12px;       /* Ajuste o padding para o tamanho do botão */
+    border-radius: 0.25rem;  /* Leve arredondamento de borda */
+    transition: background-color 0.2s ease-in-out; /* Suaviza a transição de cor */
+}
+
+
+/* 5. Estilos base para o botão de exclusão (vermelho) */
+.btn-delete-custom-style {
+    background-color: #dc3545; /* Vermelho da sua imagem */
+    color: #ffffff;           /* Cor do ícone (branco para contraste) */
+    border: none;
+    padding: 8px 12px;       /* Ajuste o padding para o tamanho do botão */
+    border-radius: 0.25rem;  /* Leve arredondamento de borda */
+    transition: background-color 0.2s ease-in-out; /* Suaviza a transição de cor */
+
+    font-weight:bold ;
+    
+}
+
+/* 6. Estilo de hover para o botão de exclusão */
+.btn-delete-custom-style:hover {
+    background-color: #c82333; /* Um vermelho um pouco mais escuro para o hover */
+    filter: brightness(90%); /* Alternativa: escurecer um pouco mais */
+}

@@ -9,12 +9,25 @@ function ForgotPassword() {
         setEmail(e.target.value);
     };
     
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (email) {
-            // Simulate sending email
-            setAlert("E-mail de verificação enviado!");
-            // You can add your actual email logic here
+            try {
+                const response = await fetch("https://mock.apidog.com/m1/1053378-0-default/auth/v1/otp", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email })
+                });
+                if (response.ok) {
+                    setAlert("E-mail de verificação enviado!");
+                    console.log("Magic link enviado para:", email);
+                } else {
+                    setAlert("Não foi possível enviar o e-mail. Tente novamente.");
+                }
+            } catch (error) {
+                setAlert("Erro ao enviar e-mail. Tente novamente.");
+                console.error("Falha ao enviar magic link:", error);
+            }
         } else {
             setAlert("Preencha o campo de e-mail!");
         }

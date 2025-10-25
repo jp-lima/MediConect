@@ -3,8 +3,8 @@ import { GetPatientByID } from '../utils/Functions-Endpoints/Patient';
 import { useAuth } from '../utils/AuthProvider';
 import { useNavigate } from 'react-router-dom';
 import { useMemo } from 'react';
-
-const CardConsulta = ( {DadosConsulta, TabelaAgendamento, setShowDeleteModal} ) => {
+import "./style/card-consulta.css"
+const CardConsulta = ( {DadosConsulta, TabelaAgendamento, setShowDeleteModal, setDictInfo, setSelectedId} ) => {
   const navigate = useNavigate();
 
   const {getAuthorizationHeader} = useAuth()
@@ -48,7 +48,7 @@ const CardConsulta = ( {DadosConsulta, TabelaAgendamento, setShowDeleteModal} ) 
   console.log(DadosConsulta.status)
 
   return (
-    <div className={`container-cardconsulta-${TabelaAgendamento}`}>
+    <div className={`container-cardconsulta container-cardconsulta-${TabelaAgendamento}`}>
 
       {DadosConsulta.id?
       
@@ -65,25 +65,25 @@ const CardConsulta = ( {DadosConsulta, TabelaAgendamento, setShowDeleteModal} ) 
         </section>
       </div>
 
-      <div className='container-botons'>        
+      <div className='actions-container'>        
         <button className="btn btn-sm btn-edit-custom"
             
-            onClick={() => {navigate(`${DadosConsulta.id}/edit`)}}
-          >
-            <i className="bi bi-pencil me-1"></i> Editar
-          </button>
-        
+            onClick={() => {navigate(`2/edit`)
+                setDictInfo({...DadosConsulta,paciente_cpf:Paciente.cpf, paciente_nome:Paciente.full_name, nome_medico:Medico.full_name})
+            }}
 
-           
+          >
+            <i className="bi bi-pencil me-1"></i>
+          </button>           
             <button
-              className="btn btn-sm btn-delete-custom"
+              className="btn btn-sm btn-delete-custom-style "
                             onClick={() => {
                 console.log(DadosConsulta.id)
-                              //setSelectedPatientId(DadosConsulta.id);
+                setSelectedId(DadosConsulta.id);
                setShowDeleteModal(true);
               }}
             >
-              <i className="bi bi-trash me-1"></i> Excluir
+              <i className="bi bi-trash me-1"></i>
             </button>
         </div>
 
